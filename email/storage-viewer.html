@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Email Storage Viewer</title>
+<title>Ticket History Manager</title>
 
 <style>
 
@@ -12,14 +12,80 @@ body{
   font-family:Arial,sans-serif;
   padding:24px;
   background:#f4f1ec;
+  color:#2c2926;
 }
 
-pre{
+h1{
+  margin-top:0;
+}
+
+.ticket{
+  background:white;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+.ticket-number{
+  font-size:22px;
+  font-weight:bold;
+  color:#7d8e71;
+  margin-bottom:8px;
+}
+
+.meta{
+  color:#766d65;
+  font-size:14px;
+  margin-bottom:4px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.edit-btn{
+  background:#7d8e71;
+  color:white;
+}
+
+.delete-btn{
+  background:#d9534f;
+  color:white;
+}
+
+.save-btn{
+  background:#a56f45;
+  color:white;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.topbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:24px;
+}
+
+.empty{
   background:white;
   padding:20px;
-  border-radius:10px;
-  overflow:auto;
-  white-space:pre-wrap;
+  border-radius:12px;
 }
 
 </style>
@@ -27,17 +93,183 @@ pre{
 
 <body>
 
-<h1>kilnWeeklyHistory</h1>
+<h1>Ticket History Manager</h1>
 
-<pre id="output"></pre>
+<div class="topbar">
+
+  <button class="save-btn" onclick="addTicket()">
+    + Add Ticket
+  </button>
+
+  <button onclick="loadTickets()">
+    Refresh
+  </button>
+
+</div>
+
+<div id="container"></div>
 
 <script>
 
-const raw =
-  localStorage.getItem("kilnWeeklyHistory");
+function getTickets(){
 
-document.getElementById("output").textContent =
-  raw || "No data found.";
+  return JSON.parse(
+    localStorage.getItem("kilnWeeklyHistory") || "[]"
+  );
+
+}
+
+function saveTickets(tickets){
+
+  localStorage.setItem(
+    "kilnWeeklyHistory",
+    JSON.stringify(tickets)
+  );
+
+}
+
+function loadTickets(){
+
+  const container =
+    document.getElementById("container");
+
+  container.innerHTML = "";
+
+  const tickets = getTickets();
+
+  if(!tickets.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        No saved tickets found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  tickets.reverse().forEach((ticket,reversedIndex)=>{
+
+    const actualIndex =
+      tickets.length - 1 - reversedIndex;
+
+    const div = document.createElement("div");
+
+    div.className = "ticket";
+
+    div.innerHTML = `
+
+      <div class="ticket-number">
+        ${ticket.ticket || ""}
+      </div>
+
+      <div class="meta">
+        Week: ${ticket.weekKey || ""}
+      </div>
+
+      <div class="meta">
+        Submitted:
+        ${
+          ticket.submittedAt
+          ? new Date(ticket.submittedAt).toLocaleString()
+          : ""
+        }
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="edit-btn"
+          onclick="editTicket(${actualIndex})"
+        >
+          Edit
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="deleteTicket(${actualIndex})"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+    container.appendChild(div);
+
+  });
+
+}
+
+function deleteTicket(index){
+
+  const confirmed =
+    confirm("Delete this ticket?");
+
+  if(!confirmed) return;
+
+  const tickets = getTickets();
+
+  tickets.splice(index,1);
+
+  saveTickets(tickets);
+
+  loadTickets();
+
+}
+
+function editTicket(index){
+
+  const tickets = getTickets();
+
+  const ticket = tickets[index];
+
+  const newTicket =
+    prompt("Ticket Number:",ticket.ticket);
+
+  if(newTicket === null) return;
+
+  const newWeek =
+    prompt("Week Key:",ticket.weekKey);
+
+  if(newWeek === null) return;
+
+  ticket.ticket = newTicket;
+  ticket.weekKey = newWeek;
+
+  saveTickets(tickets);
+
+  loadTickets();
+
+}
+
+function addTicket(){
+
+  const tickets = getTickets();
+
+  const ticket =
+    prompt("Ticket Number:");
+
+  if(!ticket) return;
+
+  const weekKey =
+    prompt("Week Key:","2026-W1");
+
+  tickets.push({
+    ticket,
+    weekKey,
+    submittedAt:new Date().toISOString()
+  });
+
+  saveTickets(tickets);
+
+  loadTickets();
+
+}
+
+loadTickets();
 
 </script>
 
