@@ -59,7 +59,8 @@ body.platform-body > .app {
 
 /* PLATFORM MAIN */
 
-.main {
+.platform-main,
+.platform-page {
   flex: 1;
   overflow-y: auto;
 }
@@ -139,14 +140,6 @@ body.platform-body > .app {
 .platform-page .muted {
   color: #6e726d;
   font-size: 14px;
-}
-
-.paint-map-app {
-  font-family: Arial, sans-serif;
-}
-
-.paint-map-app * {
-  box-sizing: border-box;
 }
 
 @media (max-width: 1100px) {
