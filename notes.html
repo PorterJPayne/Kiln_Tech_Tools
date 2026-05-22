@@ -1,485 +1,103 @@
-<div class="notes-app">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <!-- SIDEBAR -->
+  <title>Kiln Tools - Notes</title>
 
-    <div class="notes-sidebar">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 
-        <div class="notes-header">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-            <h2>Kiln Notes</h2>
+  <link rel="stylesheet" href="platform.css">
 
-            <button 
-                class="new-note-btn"
-                onclick="createNewNote()"
-            >
-                + New Note
-            </button>
+  <style>
 
-        </div>
+    .notes-frame{
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:18px;
+      background:#111827;
+    }
 
-        <input 
-            type="text"
-            id="searchInput"
-            class="notes-search"
-            placeholder="Search notes..."
-        >
+    .notes-container{
+      height:calc(100vh - 140px);
+    }
 
-        <div 
-            id="noteList"
-            class="note-list"
-        ></div>
+  </style>
+
+</head>
+
+<body class="platform-body">
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+
+  <aside class="platform-sidebar">
+
+    <div class="logo">
+      <h1>kiln | tools</h1>
+    </div>
+
+    <div class="nav-section">
+
+      <a class="nav-item" href="index.html">
+        Dashboard
+      </a>
+
+      <a class="nav-item" href="paint-map.html">
+        Paint Map
+      </a>
+
+      <a class="nav-item" href="email-generator.html">
+        Email Generator
+      </a>
+
+      <a class="nav-item" href="calendar.html">
+        Calendar
+      </a>
+
+      <a class="nav-item active" href="notes.html">
+        Notes
+      </a>
 
     </div>
 
-    <!-- MAIN -->
+  </aside>
 
-    <div class="notes-main">
+  <!-- MAIN -->
 
-        <div class="note-topbar">
+  <main class="main platform-page">
 
-            <input
-                type="text"
-                id="titleInput"
-                class="title-input"
-                placeholder="Untitled Note"
-            >
+    <div class="topbar">
 
-        </div>
+      <h2>Notes</h2>
 
-        <div
-            id="editor"
-            class="note-editor"
-            contenteditable="true"
-            spellcheck="true"
-        ></div>
+      <p>
+        Operational notes, projects, and workflow tracking.
+      </p>
 
     </div>
+
+    <div class="content">
+
+      <div class="notes-container">
+
+        <iframe
+          class="notes-frame"
+          src="notes/index.html"
+        ></iframe>
+
+      </div>
+
+    </div>
+
+  </main>
 
 </div>
 
-<style>
-
-.notes-app{
-    display:flex;
-    height:100%;
-    width:100%;
-    overflow:hidden;
-    background:#111827;
-    color:white;
-}
-
-/* SIDEBAR */
-
-.notes-sidebar{
-    width:300px;
-    min-width:300px;
-    border-right:1px solid rgba(255,255,255,0.08);
-    display:flex;
-    flex-direction:column;
-    background:rgba(255,255,255,0.02);
-}
-
-.notes-header{
-    padding:20px;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.notes-header h2{
-    font-size:22px;
-    margin-bottom:14px;
-}
-
-.new-note-btn{
-    width:100%;
-    border:none;
-    background:#2563eb;
-    color:white;
-    padding:12px;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:14px;
-    font-weight:600;
-    transition:.15s;
-}
-
-.new-note-btn:hover{
-    background:#3b82f6;
-}
-
-.notes-search{
-    margin:16px;
-    padding:12px;
-    border-radius:12px;
-    border:none;
-    background:rgba(255,255,255,0.06);
-    color:white;
-    outline:none;
-    font-size:14px;
-}
-
-.notes-search::placeholder{
-    color:rgba(255,255,255,0.4);
-}
-
-.note-list{
-    flex:1;
-    overflow-y:auto;
-    padding:0 12px 12px;
-}
-
-.note-item{
-    padding:14px;
-    border-radius:12px;
-    margin-bottom:8px;
-    cursor:pointer;
-    transition:.15s;
-    background:transparent;
-    border:1px solid transparent;
-}
-
-.note-item:hover{
-    background:rgba(255,255,255,0.05);
-}
-
-.note-item.active{
-    background:rgba(37,99,235,0.18);
-    border-color:rgba(59,130,246,0.4);
-}
-
-.note-item-title{
-    font-size:15px;
-    font-weight:600;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-/* MAIN */
-
-.notes-main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-}
-
-.note-topbar{
-    padding:20px 24px;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.title-input{
-    width:100%;
-    background:none;
-    border:none;
-    outline:none;
-    color:white;
-    font-size:30px;
-    font-weight:700;
-}
-
-.title-input::placeholder{
-    color:rgba(255,255,255,0.35);
-}
-
-.note-editor{
-    flex:1;
-    overflow-y:auto;
-    padding:28px;
-    line-height:1.8;
-    font-size:16px;
-    outline:none;
-    white-space:pre-wrap;
-}
-
-.note-editor:empty:before{
-    content:"Start typing...";
-    color:rgba(255,255,255,0.35);
-}
-
-.note-editor a{
-    color:#60a5fa;
-}
-
-.note-editor ul{
-    padding-left:22px;
-}
-
-.note-editor li{
-    margin-bottom:6px;
-}
-
-.note-editor:focus{
-    outline:none;
-}
-
-/* SCROLLBAR */
-
-.note-list::-webkit-scrollbar,
-.note-editor::-webkit-scrollbar{
-    width:10px;
-}
-
-.note-list::-webkit-scrollbar-track,
-.note-editor::-webkit-scrollbar-track{
-    background:transparent;
-}
-
-.note-list::-webkit-scrollbar-thumb,
-.note-editor::-webkit-scrollbar-thumb{
-    background:rgba(255,255,255,0.12);
-    border-radius:20px;
-}
-
-.note-list::-webkit-scrollbar-thumb:hover,
-.note-editor::-webkit-scrollbar-thumb:hover{
-    background:rgba(255,255,255,0.2);
-}
-
-</style>
-
-<script>
-
-/* STORAGE */
-
-let notes = JSON.parse(
-    localStorage.getItem("kilnNotes")
-) || [];
-
-/* STATE */
-
-let currentNoteId = null;
-
-/* ELEMENTS */
-
-const editor = document.getElementById("editor");
-const noteList = document.getElementById("noteList");
-const titleInput = document.getElementById("titleInput");
-const searchInput = document.getElementById("searchInput");
-
-/* CREATE NOTE */
-
-function createNewNote(){
-
-    const note = {
-
-        id: Date.now(),
-
-        title: "Untitled Note",
-
-        content: "",
-
-        created: new Date().toISOString()
-
-    };
-
-    notes.unshift(note);
-
-    currentNoteId = note.id;
-
-    renderNotes();
-
-    loadNote(note.id);
-
-    saveNotes();
-
-}
-
-/* RENDER NOTES */
-
-function renderNotes(filter = ""){
-
-    noteList.innerHTML = "";
-
-    const filtered = notes.filter(note => {
-
-        return (
-
-            note.title
-                .toLowerCase()
-                .includes(filter.toLowerCase())
-
-            ||
-
-            note.content
-                .toLowerCase()
-                .includes(filter.toLowerCase())
-
-        );
-
-    });
-
-    filtered.forEach(note => {
-
-        const div = document.createElement("div");
-
-        div.className = "note-item";
-
-        if(note.id === currentNoteId){
-
-            div.classList.add("active");
-
-        }
-
-        div.innerHTML = `
-
-            <div class="note-item-title">
-
-                ${note.title}
-
-            </div>
-
-        `;
-
-        div.onclick = () => {
-
-            loadNote(note.id);
-
-        };
-
-        noteList.appendChild(div);
-
-    });
-
-}
-
-/* LOAD NOTE */
-
-function loadNote(id){
-
-    const note = notes.find(n => n.id === id);
-
-    if(!note) return;
-
-    currentNoteId = id;
-
-    titleInput.value = note.title;
-
-    editor.innerHTML = note.content;
-
-    renderNotes(searchInput.value);
-
-}
-
-/* SAVE NOTE */
-
-function saveCurrentNote(){
-
-    if(currentNoteId === null) return;
-
-    const note = notes.find(n => n.id === currentNoteId);
-
-    if(!note) return;
-
-    note.title = titleInput.value || "Untitled Note";
-
-    note.content = editor.innerHTML;
-
-    saveNotes();
-
-    renderNotes(searchInput.value);
-
-}
-
-/* SAVE TO STORAGE */
-
-function saveNotes(){
-
-    localStorage.setItem(
-
-        "kilnNotes",
-
-        JSON.stringify(notes)
-
-    );
-
-}
-
-/* SEARCH */
-
-searchInput.addEventListener("input", e => {
-
-    renderNotes(e.target.value);
-
-});
-
-/* AUTO SAVE */
-
-editor.addEventListener(
-
-    "input",
-
-    saveCurrentNote
-
-);
-
-titleInput.addEventListener(
-
-    "input",
-
-    saveCurrentNote
-
-);
-
-/* AUTO LINK URLS */
-
-editor.addEventListener("paste", function(e){
-
-    e.preventDefault();
-
-    const text = (
-
-        e.clipboardData ||
-
-        window.clipboardData
-
-    ).getData("text");
-
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-    const html = text.replace(
-
-        urlRegex,
-
-        url => {
-
-            return `
-                <a 
-                    href="${url}" 
-                    target="_blank"
-                >
-                    ${url}
-                </a>
-            `;
-
-        }
-
-    );
-
-    document.execCommand(
-
-        "insertHTML",
-
-        false,
-
-        html
-
-    );
-
-});
-
-/* INITIALIZE */
-
-if(notes.length === 0){
-
-    createNewNote();
-
-} else {
-
-    renderNotes();
-
-    loadNote(notes[0].id);
-
-}
-
-</script>
+</body>
+</html>
