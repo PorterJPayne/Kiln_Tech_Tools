@@ -1,110 +1,93 @@
-.paint-map-app {
-  font-family: Arial, sans-serif;
-}
-
-.platform-sidebar {
-  width: 260px;
-  min-width: 260px;
-}
-
-body.platform-body * {
-  box-sizing: border-box;
-}
-
-:root {
-  --bg: #f6f4f0;
-  --sidebar: #efede8;
-  --card: #ffffff;
-  --border: #dfdbd3;
-  --text: #1f2a1f;
-  --muted: #6e726d;
-  --hover: #e5e1d9;
-}
-
 body.platform-body {
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: #f6f4f0;
+  color: #1f2a1f;
   height: 100vh;
 }
 
-.platform-body .app {
+body.platform-body > .app {
   display: flex;
   min-height: 100vh;
 }
 
-.platform-body .sidebar {
+/* PLATFORM SIDEBAR ONLY */
+
+body.platform-body > .app > .platform-sidebar {
   width: 260px;
   min-width: 260px;
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
+  background: #efede8;
+  border-right: 1px solid #dfdbd3;
   display: flex;
   flex-direction: column;
 }
 
-.platform-body .logo {
+body.platform-body > .app > .platform-sidebar .logo {
   padding: 26px 22px 18px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #dfdbd3;
 }
 
-.platform-body .logo h1 {
+body.platform-body > .app > .platform-sidebar .logo h1 {
   font-size: 30px;
   font-weight: 700;
   font-family: "Libre Baskerville", serif;
   margin: 0;
 }
 
-.platform-body .nav-section {
+body.platform-body > .app > .platform-sidebar .nav-section {
   padding-top: 20px;
 }
 
-.platform-body .nav-item {
+body.platform-body > .app > .platform-sidebar .nav-item {
   display: block;
   padding: 14px 22px;
   text-decoration: none;
-  color: var(--text);
+  color: #1f2a1f;
   transition: .2s;
   font-size: 15px;
 }
 
-.platform-body .nav-item:hover {
-  background: var(--hover);
+body.platform-body > .app > .platform-sidebar .nav-item:hover {
+  background: #e5e1d9;
 }
 
-.platform-body .nav-item.active {
+body.platform-body > .app > .platform-sidebar .nav-item.active {
   background: #dfdbd3;
   font-weight: 600;
 }
 
-.platform-body .main {
+/* PLATFORM MAIN ONLY */
+
+body.platform-body > .app > .main {
   flex: 1;
   overflow-y: auto;
 }
 
-.platform-body .topbar {
+/* DASHBOARD + EMAIL ONLY */
+
+.platform-page .topbar {
   padding: 42px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #dfdbd3;
   background: #f9f8f5;
 }
 
-.platform-body .topbar h2 {
+.platform-page .topbar h2 {
   font-family: "Libre Baskerville", serif;
   font-size: 58px;
   margin-bottom: 12px;
 }
 
-.platform-body .topbar p {
-  color: var(--muted);
+.platform-page .topbar p {
+  color: #6e726d;
   font-size: 22px;
 }
 
-.platform-body .content {
+.platform-page .content {
   padding: 42px;
 }
 
-.platform-body .section-title {
+.platform-page .section-title {
   background: #eeebe5;
   padding: 18px 22px;
   border-radius: 10px;
@@ -113,28 +96,28 @@ body.platform-body {
   margin-bottom: 24px;
 }
 
-.platform-body .cards {
+.platform-page .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 22px;
 }
 
-.platform-body .card {
-  background: var(--card);
+.platform-page .card {
+  background: white;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid #dfdbd3;
   transition: .2s;
   text-decoration: none;
   color: inherit;
 }
 
-.platform-body .card:hover {
+.platform-page .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(0,0,0,.08);
 }
 
-.platform-body .card-image {
+.platform-page .card-image {
   height: 240px;
   background: #f0eeea;
   display: flex;
@@ -143,33 +126,25 @@ body.platform-body {
   font-size: 28px;
 }
 
-.platform-body .card-body {
+.platform-page .card-body {
   padding: 22px;
 }
 
-.platform-body .card-title {
+.platform-page .card-title {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 18px;
 }
 
-.platform-body .muted {
-  color: var(--muted);
+.platform-page .muted {
+  color: #6e726d;
   font-size: 14px;
 }
 
 @media (max-width: 1100px) {
 
-  .platform-body .sidebar {
+  body.platform-body > .app > .platform-sidebar {
     display: none;
-  }
-
-  .platform-body .topbar h2 {
-    font-size: 42px;
-  }
-
-  .platform-body .cards {
-    grid-template-columns: 1fr;
   }
 
 }
