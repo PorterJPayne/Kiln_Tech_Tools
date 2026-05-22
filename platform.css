@@ -68,7 +68,7 @@ body.platform-body > .app {
 /* DASHBOARD + EMAIL */
 
 .platform-page .topbar {
-  padding: 8px;
+  padding: 10px;
   border-bottom: 1px solid #dfdbd3;
   background: #f9f8f5;
 }
@@ -82,8 +82,7 @@ body.platform-body > .app {
 .platform-page .topbar p {
   color: #6e726d;
   font-size: 10px;
-  margin-top: 0px;
-  margin-bottom:0px;
+  margin: 6px;
 }
 
 .platform-page .content {
