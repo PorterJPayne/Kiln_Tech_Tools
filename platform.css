@@ -68,20 +68,22 @@ body.platform-body > .app {
 /* DASHBOARD + EMAIL */
 
 .platform-page .topbar {
-  padding: 8px;
+  padding: 0px;
   border-bottom: 1px solid #dfdbd3;
   background: #f9f8f5;
 }
 
 .platform-page .topbar h2 {
   font-family: "Libre Baskerville", serif;
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 0px;
 }
 
 .platform-page .topbar p {
   color: #6e726d;
-  font-size: 12px;
+  font-size: 10px;
+  margin-top: 0px;
+  margin-bottom:0px;
 }
 
 .platform-page .content {
