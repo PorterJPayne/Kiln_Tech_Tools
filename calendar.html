@@ -6,6 +6,11 @@
 
 <title>Kiln Calendar</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="platform.css">
 
 <style>
@@ -37,7 +42,7 @@ body{
 
 .calendar-frame{
   width:100%;
-  height:100%;
+  height:calc(100vh - 120px);
   border:none;
   display:block;
 }
@@ -78,10 +83,15 @@ body{
 
   </aside>
 
-  <main class="platform-page">
+ <main class="main platform-page">
 
-    <iframe
-      class="calendar-frame"
+  <div class="topbar">
+    <h2>Calendar</h2>
+    <p>Google Calendar schedule and events.</p>
+  </div>
+
+  <iframe
+    class="calendar-frame"
       src="https://calendar.google.com/calendar/embed?src=porter.p%40kiln.com&ctz=America%2FDenver"
     ></iframe>
 
