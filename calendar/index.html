@@ -235,9 +235,9 @@ async function loadCalendar(){
   try{
 
     const response = await fetch(
-      "https://corsproxy.io/?" +
-      encodeURIComponent(CALENDAR_URL)
-    );
+  "https://api.codetabs.com/v1/proxy/?quest=" +
+  encodeURIComponent(CALENDAR_URL)
+);
 
     const text = await response.text();
 
