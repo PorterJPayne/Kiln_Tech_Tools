@@ -1,6 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
+body.platform-body * {
   box-sizing: border-box;
 }
 
@@ -14,42 +12,46 @@
   --hover: #e5e1d9;
 }
 
-body {
+body.platform-body {
+  margin: 0;
+  padding: 0;
   font-family: "Inter", sans-serif;
   background: var(--bg);
   color: var(--text);
   height: 100vh;
 }
 
-.app {
+.platform-body .app {
   display: flex;
   min-height: 100vh;
 }
 
-.sidebar {
+.platform-body .sidebar {
   width: 260px;
+  min-width: 260px;
   background: var(--sidebar);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
 }
 
-.logo {
+.platform-body .logo {
   padding: 26px 22px 18px;
   border-bottom: 1px solid var(--border);
 }
 
-.logo h1 {
+.platform-body .logo h1 {
   font-size: 30px;
   font-weight: 700;
   font-family: "Libre Baskerville", serif;
+  margin: 0;
 }
 
-.nav-section {
+.platform-body .nav-section {
   padding-top: 20px;
 }
 
-.nav-item {
+.platform-body .nav-item {
   display: block;
   padding: 14px 22px;
   text-decoration: none;
@@ -58,42 +60,42 @@ body {
   font-size: 15px;
 }
 
-.nav-item:hover {
+.platform-body .nav-item:hover {
   background: var(--hover);
 }
 
-.nav-item.active {
+.platform-body .nav-item.active {
   background: #dfdbd3;
   font-weight: 600;
 }
 
-.main {
+.platform-body .main {
   flex: 1;
   overflow-y: auto;
 }
 
-.topbar {
+.platform-body .topbar {
   padding: 42px;
   border-bottom: 1px solid var(--border);
   background: #f9f8f5;
 }
 
-.topbar h2 {
+.platform-body .topbar h2 {
   font-family: "Libre Baskerville", serif;
   font-size: 58px;
   margin-bottom: 12px;
 }
 
-.topbar p {
+.platform-body .topbar p {
   color: var(--muted);
   font-size: 22px;
 }
 
-.content {
+.platform-body .content {
   padding: 42px;
 }
 
-.section-title {
+.platform-body .section-title {
   background: #eeebe5;
   padding: 18px 22px;
   border-radius: 10px;
@@ -102,13 +104,13 @@ body {
   margin-bottom: 24px;
 }
 
-.cards {
+.platform-body .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 22px;
 }
 
-.card {
+.platform-body .card {
   background: var(--card);
   border-radius: 14px;
   overflow: hidden;
@@ -118,12 +120,12 @@ body {
   color: inherit;
 }
 
-.card:hover {
+.platform-body .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(0,0,0,.08);
 }
 
-.card-image {
+.platform-body .card-image {
   height: 240px;
   background: #f0eeea;
   display: flex;
@@ -132,32 +134,32 @@ body {
   font-size: 28px;
 }
 
-.card-body {
+.platform-body .card-body {
   padding: 22px;
 }
 
-.card-title {
+.platform-body .card-title {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 18px;
 }
 
-.muted {
+.platform-body .muted {
   color: var(--muted);
   font-size: 14px;
 }
 
 @media (max-width: 1100px) {
 
-  .sidebar {
+  .platform-body .sidebar {
     display: none;
   }
 
-  .topbar h2 {
+  .platform-body .topbar h2 {
     font-size: 42px;
   }
 
-  .cards {
+  .platform-body .cards {
     grid-template-columns: 1fr;
   }
 
