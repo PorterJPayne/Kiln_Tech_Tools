@@ -1,32 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<div class="notes-app">
 
-<title>Kiln Notes</title>
+    <!-- SIDEBAR -->
+
+    <div class="notes-sidebar">
+
+        <div class="notes-header">
+
+            <h2>Kiln Notes</h2>
+
+            <button 
+                class="new-note-btn"
+                onclick="createNewNote()"
+            >
+                + New Note
+            </button>
+
+        </div>
+
+        <input 
+            type="text"
+            id="searchInput"
+            class="notes-search"
+            placeholder="Search notes..."
+        >
+
+        <div 
+            id="noteList"
+            class="note-list"
+        ></div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="notes-main">
+
+        <div class="note-topbar">
+
+            <input
+                type="text"
+                id="titleInput"
+                class="title-input"
+                placeholder="Untitled Note"
+            >
+
+        </div>
+
+        <div
+            id="editor"
+            class="note-editor"
+            contenteditable="true"
+            spellcheck="true"
+        ></div>
+
+    </div>
+
+</div>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Inter,Arial,sans-serif;
-    background:#0f172a;
-    color:white;
-    height:100vh;
-    overflow:hidden;
-}
-
-/* APP */
-
 .notes-app{
     display:flex;
-    height:100vh;
+    height:100%;
     width:100%;
     overflow:hidden;
     background:#111827;
@@ -180,86 +215,28 @@ body{
 
 /* SCROLLBAR */
 
-::-webkit-scrollbar{
+.note-list::-webkit-scrollbar,
+.note-editor::-webkit-scrollbar{
     width:10px;
 }
 
-::-webkit-scrollbar-track{
+.note-list::-webkit-scrollbar-track,
+.note-editor::-webkit-scrollbar-track{
     background:transparent;
 }
 
-::-webkit-scrollbar-thumb{
+.note-list::-webkit-scrollbar-thumb,
+.note-editor::-webkit-scrollbar-thumb{
     background:rgba(255,255,255,0.12);
     border-radius:20px;
 }
 
-::-webkit-scrollbar-thumb:hover{
+.note-list::-webkit-scrollbar-thumb:hover,
+.note-editor::-webkit-scrollbar-thumb:hover{
     background:rgba(255,255,255,0.2);
 }
 
 </style>
-</head>
-
-<body>
-
-<div class="notes-app">
-
-    <!-- SIDEBAR -->
-
-    <div class="notes-sidebar">
-
-        <div class="notes-header">
-
-            <h2>Kiln Notes</h2>
-
-            <button 
-                class="new-note-btn"
-                onclick="createNewNote()"
-            >
-                + New Note
-            </button>
-
-        </div>
-
-        <input 
-            type="text"
-            id="searchInput"
-            class="notes-search"
-            placeholder="Search notes..."
-        >
-
-        <div 
-            id="noteList"
-            class="note-list"
-        ></div>
-
-    </div>
-
-    <!-- MAIN -->
-
-    <div class="notes-main">
-
-        <div class="note-topbar">
-
-            <input
-                type="text"
-                id="titleInput"
-                class="title-input"
-                placeholder="Untitled Note"
-            >
-
-        </div>
-
-        <div
-            id="editor"
-            class="note-editor"
-            contenteditable="true"
-            spellcheck="true"
-        ></div>
-
-    </div>
-
-</div>
 
 <script>
 
@@ -404,7 +381,7 @@ function saveCurrentNote(){
 
 }
 
-/* SAVE TO LOCAL STORAGE */
+/* SAVE TO STORAGE */
 
 function saveNotes(){
 
@@ -506,6 +483,3 @@ if(notes.length === 0){
 }
 
 </script>
-
-</body>
-</html>
