@@ -261,13 +261,10 @@ async function loadCalendar(){
 
   try{
 
-    const proxy =
-      "https://api.allorigins.win/raw?url=";
-
     const response = await fetch(
-      proxy + encodeURIComponent(CALENDAR_URL)
-    );
-
+  "https://corsproxy.io/?" +
+  encodeURIComponent(CALENDAR_URL)
+);
     const text = await response.text();
 
     const events = parseICS(text);
