@@ -1,0 +1,164 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f6f4f0;
+  --sidebar: #efede8;
+  --card: #ffffff;
+  --border: #dfdbd3;
+  --text: #1f2a1f;
+  --muted: #6e726d;
+  --hover: #e5e1d9;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  padding: 26px 22px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo h1 {
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Libre Baskerville", serif;
+}
+
+.nav-section {
+  padding-top: 20px;
+}
+
+.nav-item {
+  display: block;
+  padding: 14px 22px;
+  text-decoration: none;
+  color: var(--text);
+  transition: .2s;
+  font-size: 15px;
+}
+
+.nav-item:hover {
+  background: var(--hover);
+}
+
+.nav-item.active {
+  background: #dfdbd3;
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.topbar {
+  padding: 42px;
+  border-bottom: 1px solid var(--border);
+  background: #f9f8f5;
+}
+
+.topbar h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 58px;
+  margin-bottom: 12px;
+}
+
+.topbar p {
+  color: var(--muted);
+  font-size: 22px;
+}
+
+.content {
+  padding: 42px;
+}
+
+.section-title {
+  background: #eeebe5;
+  padding: 18px 22px;
+  border-radius: 10px;
+  font-size: 34px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: .2s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.card-image {
+  height: 240px;
+  background: #f0eeea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.card-body {
+  padding: 22px;
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+
+  .sidebar {
+    display: none;
+  }
+
+  .topbar h2 {
+    font-size: 42px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+}
