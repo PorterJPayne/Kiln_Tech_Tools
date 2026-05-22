@@ -41,8 +41,6 @@ body{
   min-height:100vh;
 }
 
-/* SIDEBAR */
-
 .sidebar{
   width:260px;
   background:var(--sidebar);
@@ -84,8 +82,6 @@ body{
   background:#dfdbd3;
   font-weight:600;
 }
-
-/* MAIN */
 
 .main{
   flex:1;
@@ -131,12 +127,6 @@ body{
   border-radius:14px;
   padding:18px 20px;
   margin-bottom:14px;
-  transition:.2s;
-}
-
-.event-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 24px rgba(0,0,0,.05);
 }
 
 .event-time{
@@ -152,7 +142,6 @@ body{
   font-size:24px;
   font-family:"Libre Baskerville",serif;
   margin-bottom:8px;
-  line-height:1.2;
 }
 
 .event-description{
@@ -172,18 +161,6 @@ body{
   color:#7b463d;
   padding:18px;
   border-radius:12px;
-}
-
-@media(max-width:900px){
-
-  .sidebar{
-    display:none;
-  }
-
-  .topbar h2{
-    font-size:42px;
-  }
-
 }
 
 </style>
@@ -264,7 +241,13 @@ async function loadCalendar(){
 
     const text = await response.text();
 
+    console.log("RAW ICS DATA:");
+    console.log(text);
+
     const events = parseICS(text);
+
+    console.log("PARSED EVENTS:");
+    console.log(events);
 
     renderEvents(events);
 
@@ -341,9 +324,8 @@ function parseICS(data){
   });
 
   return events
-    .filter(e => e.date && e.date > new Date())
-    .sort((a,b) => a.date - b.date)
-    .slice(0,30);
+    .filter(e => e.date)
+    .sort((a,b) => a.date - b.date);
 
 }
 
