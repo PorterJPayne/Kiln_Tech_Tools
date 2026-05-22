@@ -10,7 +10,12 @@
 
 <style>
 
-iframe{
+.main{
+  padding:0 !important;
+  overflow:hidden;
+}
+
+.calendar-frame{
   width:100%;
   height:100vh;
   border:none;
@@ -53,9 +58,12 @@ iframe{
 
   </aside>
 
- <main class="main" style="padding:0; width:100%;">
+  <main class="main">
 
-    <iframe src="calendar/index.html"></iframe>
+    <iframe
+      class="calendar-frame"
+      src="https://calendar.google.com/calendar/embed?src=porter.p%40kiln.com&ctz=America%2FDenver"
+    ></iframe>
 
   </main>
 
