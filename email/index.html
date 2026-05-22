@@ -25,24 +25,10 @@
   --line:#ddd2c5;
 }
 
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
-  margin:0;
-  padding:0;
-  width:100%;
-  overflow-x:hidden;
-}
-
 body{
   background:var(--outer);
   color:var(--text);
   font-family:'Inter',sans-serif;
-  min-height:100vh;
-  padding:16px;
 }
 
 .serif{
@@ -72,7 +58,6 @@ textarea{
   border:1px solid #ddd2c5;
   border-radius:12px;
   padding:40px;
-  width:100%;
 }
 
 .small-label{
@@ -114,42 +99,14 @@ textarea{
   background:#e6cbc5;
 }
 
-.main-layout{
-  width:100%;
-  max-width:none;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:280px minmax(0,1fr);
-  gap:20px;
-  align-items:start;
-}
-
-.left-panel{
-  min-width:0;
-}
-
-.preview-panel{
-  min-width:0;
-  width:100%;
-}
-
-@media (max-width:900px){
-
-  .main-layout{
-    grid-template-columns:1fr;
-  }
-
-}
-
 </style>
 </head>
 
-<body>
+<body class="min-h-screen p-4 overflow-x-hidden">
 
-<div class="main-layout">
-
+<div class="w-full mx-auto grid grid-cols-[280px_minmax(0,1fr)] gap-5 items-start">
   <!-- LEFT PANEL -->
-  <div class="left-panel">
+  <div>
 
     <div class="mb-5">
 
@@ -165,6 +122,7 @@ textarea{
 
     <div class="bg-[#f7f3ee] border border-[#ddd2c5] rounded-xl p-5">
 
+      <!-- DATE -->
       <div class="mb-4">
 
         <div class="small-label mb-2">
@@ -179,6 +137,7 @@ textarea{
 
       </div>
 
+      <!-- INTRO -->
       <div class="mb-5">
 
         <div class="small-label mb-2">
@@ -195,6 +154,7 @@ textarea{
 
       <div class="border-t border-[#ddd2c5] my-5"></div>
 
+      <!-- ENTRY -->
       <div>
 
         <div class="small-label mb-3">
@@ -240,6 +200,77 @@ textarea{
             class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
+          <div class="flex gap-3 pt-1">
+
+            <button
+              id="addEntryBtn"
+              class="flex-1 bg-[#7d8e71] hover:bg-[#708063] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
+            >
+              + Add Entry
+            </button>
+
+            <button
+              id="clearBtn"
+              class="px-5 border border-[#ddd2c5] rounded-xl hover:bg-[#f1ece6] transition text-[13px]"
+            >
+              Clear
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ENTRY LIST -->
+      <div id="entryList" class="mt-5 space-y-2"></div>
+
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <!-- SUBMIT -->
+      <div class="mb-5">
+
+        <button
+          id="submitCompletedBtn"
+          class="w-full bg-[#7d8e71] hover:bg-[#6d7e61] text-white py-3 rounded-xl action-btn text-[13px] font-medium"
+        >
+          Submit Completed Tickets
+        </button>
+
+      </div>
+
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <!-- EXPORT -->
+      <div>
+
+        <div class="small-label mb-3">
+          Export
+        </div>
+
+        <div class="space-y-2.5">
+
+          <button
+            id="copyBtn"
+            class="w-full bg-[#a56f45] hover:bg-[#94613b] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
+          >
+            Copy HTML
+          </button>
+
+          <button
+            id="downloadBtn"
+            class="w-full border border-[#d8c7b7] hover:bg-[#f2ece5] py-2.5 rounded-xl action-btn text-[13px] font-medium text-[#8c603c]"
+          >
+            Download HTML
+          </button>
+
+          <button
+            id="clearDraftBtn"
+            class="w-full border border-[#e0d3c7] hover:bg-[#f3ebe3] py-2.5 rounded-xl text-[13px]"
+          >
+            Clear Draft
+          </button>
+
         </div>
 
       </div>
@@ -249,7 +280,7 @@ textarea{
   </div>
 
   <!-- PREVIEW -->
-  <div class="preview-panel">
+  <div>
 
     <div class="flex items-center justify-center gap-12 mb-4">
 
@@ -260,8 +291,7 @@ textarea{
 
     </div>
 
-    <div class="email-preview">
-
+<div class="email-preview w-full">
       <div id="previewContent"></div>
 
     </div>
@@ -269,6 +299,770 @@ textarea{
   </div>
 
 </div>
+
+<script>
+
+const WEEKLY_GOAL = 22;
+
+let entries = [];
+let editingIndex = null;
+
+const previewContent = document.getElementById("previewContent");
+
+const dateInput = document.getElementById("dateInput");
+const introInput = document.getElementById("introInput");
+
+const sectionInput = document.getElementById("sectionInput");
+const titleInput = document.getElementById("titleInput");
+const descriptionInput = document.getElementById("descriptionInput");
+const buttonTextInput = document.getElementById("buttonTextInput");
+const buttonLinkInput = document.getElementById("buttonLinkInput");
+
+function formattedDate(){
+
+  const options = {
+    weekday:'short',
+    month:'short',
+    day:'numeric'
+  };
+
+  return new Date().toLocaleDateString('en-US',options);
+
+}
+
+function getWeekKey(date = new Date()){
+
+  const temp = new Date(date);
+
+  temp.setHours(0,0,0,0);
+
+  temp.setDate(temp.getDate() + 3 - (temp.getDay() + 6) % 7);
+
+  const week1 = new Date(temp.getFullYear(),0,4);
+
+  return temp.getFullYear() + "-W" + (
+    1 + Math.round(
+      ((temp - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7
+    )
+  );
+
+}
+
+function saveDraft(){
+
+  localStorage.setItem("kilnDraft", JSON.stringify({
+    entries,
+    date: dateInput.value,
+    intro: introInput.value
+  }));
+
+}
+
+function loadDraft(){
+
+  const saved = localStorage.getItem("kilnDraft");
+
+  if(!saved) return;
+
+  const draft = JSON.parse(saved);
+
+  entries = draft.entries || [];
+
+  dateInput.value = draft.date || formattedDate();
+  introInput.value = draft.intro || "Hola a todos,";
+
+  renderEntryList();
+
+}
+
+function getHistory(){
+
+  return JSON.parse(
+    localStorage.getItem("kilnWeeklyHistory") || "[]"
+  );
+
+}
+
+function saveHistory(history){
+
+  localStorage.setItem(
+    "kilnWeeklyHistory",
+    JSON.stringify(history)
+  );
+
+}
+
+function getWeeklyStats(){
+
+  const history = getHistory();
+
+  const currentWeek = getWeekKey();
+
+  const weekTickets = history.filter(
+    item => item.weekKey === currentWeek
+  );
+
+  const uniqueTickets = [...new Set(
+    weekTickets.map(t => t.ticket)
+  )];
+
+  const count = uniqueTickets.length;
+
+  const percent = Math.round((count / WEEKLY_GOAL) * 100);
+
+  return {
+    count,
+    percent
+  };
+
+}
+
+function renderProgressWidget(){
+
+  const stats = getWeeklyStats();
+
+  const progressWidth = Math.min(stats.percent,100);
+
+  return `
+    <div style="
+      width:150px;
+      text-align:right;
+    ">
+
+      <div style="
+        font-size:10px;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+        color:#7d8e71;
+        font-weight:600;
+        margin-bottom:6px;
+      ">
+        Weekly Total
+      </div>
+
+      <div style="
+        font-size:24px;
+        line-height:1;
+        font-weight:600;
+        color:#2c2926;
+        margin-bottom:1px;
+      ">
+        ${stats.count}
+      </div>
+
+      <div style="
+        font-size:10px;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        color:#766d65;
+        margin-bottom:7px;
+      ">
+        Tickets
+      </div>
+
+      <div style="
+        width:100%;
+        height:10px;
+        background:#ddd2c5;
+        overflow:hidden;
+      ">
+
+        <div style="
+          width:${progressWidth}%;
+          height:100%;
+          background:#7d8e71;
+        "></div>
+
+      </div>
+
+      <div style="
+        font-size:11px;
+        color:#766d65;
+        margin-top:5px;
+      ">
+        ${stats.percent}% of goal
+      </div>
+
+    </div>
+  `;
+
+}
+
+function renderStats(){
+
+  const completed = entries.filter(e=>e.section==="Completed").length;
+  const progress = entries.filter(e=>e.section==="In Progress").length;
+  const notes = entries.filter(e=>e.section==="Notes").length;
+
+  return `
+    <div style="
+      display:flex;
+      gap:7px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    ">
+
+      <div style="
+        background:#edf1e7;
+        color:#617053;
+        padding:4px 9px;
+        border-radius:999px;
+        font-size:10px;
+        font-weight:600;
+      ">
+        ${completed} Completed
+      </div>
+
+      <div style="
+        background:#efe7dc;
+        color:#7c6754;
+        padding:4px 9px;
+        border-radius:999px;
+        font-size:10px;
+        font-weight:600;
+      ">
+        ${progress} In Progress
+      </div>
+
+      <div style="
+        background:#f3e8e4;
+        color:#8b6358;
+        padding:4px 9px;
+        border-radius:999px;
+        font-size:10px;
+        font-weight:600;
+      ">
+        ${notes} Notes
+      </div>
+
+    </div>
+  `;
+
+}
+
+function renderCard(entry,bg,border){
+
+  return `
+    <table
+      role="presentation"
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      style="
+        background:${bg};
+        border:1px solid ${border};
+        border-radius:9px;
+      "
+    >
+
+      <tr>
+
+        <td valign="top" style="padding:11px 13px;">
+
+          <div style="
+            font-size:14px;
+            line-height:1.25;
+            margin-bottom:3px;
+            font-family:Georgia,serif;
+          ">
+            ${entry.title}
+          </div>
+
+          <div style="
+            font-size:12px;
+            line-height:1.42;
+            color:#5f5751;
+          ">
+            ${entry.description}
+          </div>
+
+          ${
+            entry.buttonText
+            ? `
+              <div style="padding-top:6px;">
+
+                <span
+                  style="
+                    display:inline-block;
+                    background:#efe7dc;
+                    color:#7b6857;
+                    border-radius:999px;
+                    padding:2px 8px;
+                    font-size:10px;
+                    font-weight:600;
+                    letter-spacing:.04em;
+                  "
+                >
+                  ${entry.buttonText}
+                </span>
+
+              </div>
+            `
+            : ""
+          }
+
+        </td>
+
+      </tr>
+
+    </table>
+  `;
+
+}
+
+function renderTwoColumnSection(section, bg, border){
+
+  const filtered = entries.filter(e => e.section === section);
+
+  if(!filtered.length) return "";
+
+  let rows = "";
+
+  for(let i = 0; i < filtered.length; i += 2){
+
+    const left = filtered[i];
+    const right = filtered[i + 1];
+
+    rows += `
+      <tr>
+
+        <td width="50%" valign="top" style="padding:4px;">
+
+          ${renderCard(left,bg,border)}
+
+        </td>
+
+        <td width="50%" valign="top" style="padding:4px;">
+
+          ${right ? renderCard(right,bg,border) : ""}
+
+        </td>
+
+      </tr>
+    `;
+
+  }
+
+  return `
+    <div style="margin-top:14px;">
+
+      <div style="
+        font-size:12px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:#7d8e71;
+        font-weight:600;
+        margin-bottom:6px;
+      ">
+        ${section}
+      </div>
+
+      <table
+        role="presentation"
+        width="100%"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
+      >
+        ${rows}
+      </table>
+
+    </div>
+  `;
+
+}
+
+function renderNotesSection(){
+
+  const filtered = entries.filter(e => e.section === "Notes");
+
+  if(!filtered.length) return "";
+
+  return `
+    <div style="margin-top:14px;">
+
+      <div style="
+        font-size:12px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:#7d8e71;
+        font-weight:600;
+        margin-bottom:6px;
+      ">
+        Notes
+      </div>
+
+      ${filtered.map(entry => `
+
+        <div style="
+          background:#f3e8e4;
+          border:1px solid #e2d0ca;
+          border-radius:9px;
+          padding:11px 13px;
+          margin-top:7px;
+        ">
+
+          <div style="
+            font-size:14px;
+            line-height:1.25;
+            margin-bottom:3px;
+            font-family:Georgia,serif;
+          ">
+            ${entry.title}
+          </div>
+
+          <div style="
+            font-size:12px;
+            line-height:1.42;
+            color:#5f5751;
+          ">
+            ${entry.description}
+          </div>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+  `;
+
+}
+
+function renderPreview(){
+
+  previewContent.innerHTML = `
+
+    <table
+      role="presentation"
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      style="margin-bottom:14px;"
+    >
+
+      <tr>
+
+        <td valign="top">
+
+          <div style="
+            font-size:44px;
+            font-family:'Georgia',serif;
+            line-height:1;
+          ">
+            kiln | TECH.
+          </div>
+
+          <div style="
+            font-size:14px;
+            color:#7d8e71;
+            font-family:Georgia,serif;
+            margin-top:8px;
+          ">
+            ${dateInput.value}
+          </div>
+
+        </td>
+
+        <td width="160" align="right" valign="top">
+
+          ${renderProgressWidget()}
+
+        </td>
+
+      </tr>
+
+    </table>
+
+    <div style="
+      font-size:13px;
+      line-height:1.5;
+      margin-bottom:10px;
+    ">
+      ${introInput.value}
+    </div>
+
+    ${renderStats()}
+
+    ${renderTwoColumnSection(
+      "Completed",
+      "#eef3ea",
+      "#d7e1cf"
+    )}
+
+    ${renderTwoColumnSection(
+      "In Progress",
+      "#f4ede4",
+      "#e5d7c7"
+    )}
+
+    ${renderNotesSection()}
+
+    <div style="
+      margin-top:14px;
+      line-height:1.45;
+      font-size:13px;
+      color:#4b433d;
+    ">
+      Gracias,<br><br>
+      <span style="font-style:italic;">– Porter</span>
+    </div>
+
+  `;
+
+}
+
+function clearForm(){
+
+  sectionInput.value = "Completed";
+  titleInput.value = "";
+  descriptionInput.value = "";
+  buttonTextInput.value = "";
+  buttonLinkInput.value = "";
+
+}
+
+function renderEntryList(){
+
+  const container = document.getElementById("entryList");
+
+  container.innerHTML = "";
+
+  entries.forEach((entry,index)=>{
+
+    const div = document.createElement("div");
+
+    div.className = "bg-white border border-[#e7dfd6] rounded-xl p-2.5";
+
+    div.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+
+        <div>
+
+          <div class="font-medium text-[13px] mb-0.5">
+            ${entry.title}
+          </div>
+
+          <div class="text-[11px] text-[#7d746c]">
+            ${entry.section}
+          </div>
+
+        </div>
+
+        <div class="flex gap-2">
+
+          <button class="edit-btn" onclick="editEntry(${index})">
+            Edit
+          </button>
+
+          <button class="delete-btn" onclick="deleteEntry(${index})">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    container.appendChild(div);
+
+  });
+
+}
+
+window.editEntry = function(index){
+
+  const entry = entries[index];
+
+  sectionInput.value = entry.section;
+  titleInput.value = entry.title;
+  descriptionInput.value = entry.description;
+  buttonTextInput.value = entry.buttonText;
+  buttonLinkInput.value = entry.buttonLink;
+
+  editingIndex = index;
+
+  document.getElementById("addEntryBtn").innerText = "Save Changes";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+window.deleteEntry = function(index){
+
+  entries.splice(index,1);
+
+  renderEntryList();
+  renderPreview();
+  saveDraft();
+
+}
+
+document.getElementById("submitCompletedBtn").addEventListener("click",()=>{
+
+  const history = getHistory();
+
+  const weekKey = getWeekKey();
+
+  const existingTickets = new Set(
+    history
+      .filter(item => item.weekKey === weekKey)
+      .map(item => item.ticket)
+  );
+
+  const completedEntries = entries.filter(
+    e => e.section === "Completed"
+  );
+
+  let added = 0;
+
+  completedEntries.forEach(entry=>{
+
+    const ticket = entry.buttonText?.trim();
+
+    if(
+      ticket &&
+      ticket.startsWith("#") &&
+      !existingTickets.has(ticket)
+    ){
+
+      history.push({
+        ticket,
+        weekKey,
+        submittedAt:new Date().toISOString()
+      });
+
+      existingTickets.add(ticket);
+
+      added++;
+
+    }
+
+  });
+
+  saveHistory(history);
+
+  renderPreview();
+
+  alert(
+    added === 0
+    ? "No new completed tickets submitted."
+    : `${added} completed tickets submitted.`
+  );
+
+});
+
+dateInput.addEventListener("input",()=>{
+  renderPreview();
+  saveDraft();
+});
+
+introInput.addEventListener("input",()=>{
+  renderPreview();
+  saveDraft();
+});
+
+document.getElementById("addEntryBtn").addEventListener("click",()=>{
+
+  const entry = {
+    section:sectionInput.value,
+    title:titleInput.value,
+    description:descriptionInput.value,
+    buttonText:buttonTextInput.value,
+    buttonLink:buttonLinkInput.value
+  };
+
+  if(editingIndex !== null){
+
+    entries[editingIndex] = entry;
+    editingIndex = null;
+
+    document.getElementById("addEntryBtn").innerText = "+ Add Entry";
+
+  } else {
+
+    entries.push(entry);
+
+  }
+
+  clearForm();
+  renderEntryList();
+  renderPreview();
+  saveDraft();
+
+});
+
+document.getElementById("clearBtn").addEventListener("click",clearForm);
+
+document.getElementById("copyBtn").addEventListener("click",()=>{
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<body style="background:#e9ddd0;padding:24px;font-family:Arial,sans-serif;">
+<div style="max-width:980px;margin:auto;background:#fcfaf7;padding:40px;border-radius:12px;">
+${previewContent.innerHTML}
+</div>
+</body>
+</html>
+`;
+
+  navigator.clipboard.writeText(html);
+
+  alert("HTML copied to clipboard.");
+
+});
+
+document.getElementById("downloadBtn").addEventListener("click",()=>{
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<body style="background:#e9ddd0;padding:24px;font-family:Arial,sans-serif;">
+<div style="max-width:980px;margin:auto;background:#fcfaf7;padding:40px;border-radius:12px;">
+${previewContent.innerHTML}
+</div>
+</body>
+</html>
+`;
+
+  const blob = new Blob([html],{type:"text/html"});
+
+  const a = document.createElement("a");
+
+  a.href = URL.createObjectURL(blob);
+
+  a.download = "kiln-tech-update.html";
+
+  a.click();
+
+});
+
+document.getElementById("clearDraftBtn").addEventListener("click",()=>{
+
+  const confirmed = confirm("Clear current draft?");
+
+  if(!confirmed) return;
+
+  localStorage.removeItem("kilnDraft");
+
+  location.reload();
+
+});
+
+loadDraft();
+
+if(!dateInput.value){
+  dateInput.value = formattedDate();
+}
+
+renderPreview();
+
+</script>
 
 </body>
 </html>
