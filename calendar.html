@@ -10,14 +10,34 @@
 
 <style>
 
-.main{
+html,
+body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
+}
+
+.app{
+  display:flex;
+  height:100vh;
+}
+
+.platform-sidebar{
+  min-width:260px;
+  max-width:260px;
+  overflow-y:auto;
+}
+
+.platform-page{
+  flex:1;
   padding:0 !important;
   overflow:hidden;
 }
 
 .calendar-frame{
   width:100%;
-  height:100vh;
+  height:100%;
   border:none;
   display:block;
 }
@@ -30,7 +50,7 @@
 
 <div class="app">
 
-  <aside class="sidebar">
+  <aside class="platform-sidebar">
 
     <div class="logo">
       <h1>kiln | tools</h1>
@@ -58,7 +78,7 @@
 
   </aside>
 
-  <main class="main">
+  <main class="platform-page">
 
     <iframe
       class="calendar-frame"
