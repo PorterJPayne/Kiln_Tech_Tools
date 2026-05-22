@@ -12,9 +12,9 @@ body.platform-body > .app {
   min-height: 100vh;
 }
 
-/* PLATFORM SIDEBAR ONLY */
+/* PLATFORM SIDEBAR */
 
-body.platform-body > .app > .platform-sidebar {
+.platform-sidebar {
   width: 260px;
   min-width: 260px;
   background: #efede8;
@@ -23,23 +23,23 @@ body.platform-body > .app > .platform-sidebar {
   flex-direction: column;
 }
 
-body.platform-body > .app > .platform-sidebar .logo {
+.platform-sidebar .logo {
   padding: 26px 22px 18px;
   border-bottom: 1px solid #dfdbd3;
 }
 
-body.platform-body > .app > .platform-sidebar .logo h1 {
+.platform-sidebar .logo h1 {
   font-size: 30px;
   font-weight: 700;
   font-family: "Libre Baskerville", serif;
   margin: 0;
 }
 
-body.platform-body > .app > .platform-sidebar .nav-section {
+.platform-sidebar .nav-section {
   padding-top: 20px;
 }
 
-body.platform-body > .app > .platform-sidebar .nav-item {
+.platform-sidebar .nav-item {
   display: block;
   padding: 14px 22px;
   text-decoration: none;
@@ -48,23 +48,23 @@ body.platform-body > .app > .platform-sidebar .nav-item {
   font-size: 15px;
 }
 
-body.platform-body > .app > .platform-sidebar .nav-item:hover {
+.platform-sidebar .nav-item:hover {
   background: #e5e1d9;
 }
 
-body.platform-body > .app > .platform-sidebar .nav-item.active {
+.platform-sidebar .nav-item.active {
   background: #dfdbd3;
   font-weight: 600;
 }
 
-/* PLATFORM MAIN ONLY */
+/* PLATFORM MAIN */
 
-body.platform-body > .app > .main {
+.main {
   flex: 1;
   overflow-y: auto;
 }
 
-/* DASHBOARD + EMAIL ONLY */
+/* DASHBOARD + EMAIL */
 
 .platform-page .topbar {
   padding: 42px;
@@ -141,9 +141,17 @@ body.platform-body > .app > .main {
   font-size: 14px;
 }
 
+.paint-map-app {
+  font-family: Arial, sans-serif;
+}
+
+.paint-map-app * {
+  box-sizing: border-box;
+}
+
 @media (max-width: 1100px) {
 
-  body.platform-body > .app > .platform-sidebar {
+  .platform-sidebar {
     display: none;
   }
 
