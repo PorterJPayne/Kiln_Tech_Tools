@@ -133,14 +133,6 @@ textarea{
   width:100%;
 }
 
-@media (max-width:1200px){
-
-  .main-layout{
-    grid-template-columns:260px minmax(0,1fr);
-  }
-
-}
-
 @media (max-width:900px){
 
   .main-layout{
@@ -173,10 +165,83 @@ textarea{
 
     <div class="bg-[#f7f3ee] border border-[#ddd2c5] rounded-xl p-5">
 
-      <!-- EVERYTHING ELSE STAYS THE SAME -->
+      <div class="mb-4">
 
-      <div class="text-sm text-[#766d65]">
-        Your existing generator content continues below...
+        <div class="small-label mb-2">
+          Date
+        </div>
+
+        <input
+          id="dateInput"
+          type="text"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+        />
+
+      </div>
+
+      <div class="mb-5">
+
+        <div class="small-label mb-2">
+          Intro
+        </div>
+
+        <textarea
+          id="introInput"
+          rows="2"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+        >Hola a todos,</textarea>
+
+      </div>
+
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <div>
+
+        <div class="small-label mb-3">
+          Add Entry
+        </div>
+
+        <div class="space-y-3">
+
+          <select
+            id="sectionInput"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          >
+            <option>Completed</option>
+            <option>In Progress</option>
+            <option>Notes</option>
+          </select>
+
+          <input
+            id="titleInput"
+            type="text"
+            placeholder="Entry title"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+          <textarea
+            id="descriptionInput"
+            rows="3"
+            placeholder="Brief explanation..."
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          ></textarea>
+
+          <input
+            id="buttonTextInput"
+            type="text"
+            placeholder="Ticket Number (#710088)"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+          <input
+            id="buttonLinkInput"
+            type="text"
+            placeholder="Link URL"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+        </div>
+
       </div>
 
     </div>
