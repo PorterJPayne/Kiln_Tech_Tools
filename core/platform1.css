@@ -251,3 +251,75 @@ body {
   --radius: 18px;
 
 }
+
+:root {
+
+  /* BACKGROUNDS */
+
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-light: #1d212b;
+  --panel-hover: #252b38;
+
+  /* TEXT */
+
+  --text: #f3f5f7;
+  --muted: #9aa3b2;
+
+  /* ACCENTS */
+
+  --accent: #7c9cff;
+  --accent-hover: #93adff;
+
+  --green: #3ecf8e;
+  --yellow: #ffca62;
+  --red: #ff7272;
+
+  /* BORDERS */
+
+  --border: #2a3040;
+
+  /* RADII */
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  /* SHADOWS */
+
+  --shadow:
+    0 8px 24px rgba(0,0,0,.25);
+
+  /* INPUTS */
+
+  --input-bg: #202632;
+  --input-border: #31384a;
+
+  /* SIDEBAR */
+
+  --sidebar-width: 260px;
+
+  /* TRANSITIONS */
+
+  --transition: .2s ease;
+
+}
+
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.input {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text);
+  border-radius: var(--radius-md);
+}
+
+.button-primary {
+  background: var(--accent);
+  color: white;
+}
