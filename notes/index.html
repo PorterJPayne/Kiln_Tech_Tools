@@ -225,6 +225,74 @@ button{
     background:rgba(0,0,0,0.04);
 }
 
+/* LINK POPUP */
+
+.link-popup{
+
+    position:absolute;
+
+    top:60px;
+    right:20px;
+
+    display:none;
+
+    gap:8px;
+
+    padding:12px;
+
+    background:#f4ede4;
+
+    border:1px solid rgba(70,50,30,0.08);
+
+    border-radius:14px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.12);
+
+    z-index:200;
+
+}
+
+.link-popup.show{
+    display:flex;
+}
+
+.link-popup input{
+
+    width:240px;
+
+    padding:10px 12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    outline:none;
+
+    background:white;
+
+    font-size:14px;
+
+}
+
+.link-popup button{
+
+    border:none;
+
+    background:#8b735d;
+
+    color:white;
+
+    padding:10px 14px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
 /* EDITOR */
 
 .note-editor{
@@ -263,9 +331,23 @@ button{
 }
 
 .note-editor a{
-    color:#6a4d36;
+
+    color:#7a4f2b;
+
     text-decoration:underline;
+
+    text-decoration-thickness:2px;
+
+    font-weight:500;
+
     cursor:pointer;
+
+}
+
+.note-editor a:hover{
+
+    color:#9a6235;
+
 }
 
 /* CHECKLIST */
@@ -429,6 +511,13 @@ button{
 
             <button 
                 class="format-button"
+                onclick="openLinkPrompt()"
+            >
+                🔗
+            </button>
+
+            <button 
+                class="format-button"
                 onclick="insertChecklist()"
             >
                 ✓
@@ -454,6 +543,20 @@ button{
 
             </div>
 
+            <div class="link-popup" id="linkPopup">
+
+                <input
+                    type="text"
+                    id="linkInput"
+                    placeholder="Paste URL..."
+                >
+
+                <button onclick="applyLink()">
+                    Add Link
+                </button>
+
+            </div>
+
         </div>
 
         <div
@@ -469,653 +572,120 @@ button{
 
 <script>
 
-let notes = JSON.parse(
-    localStorage.getItem("kilnNotes")
-) || [];
+/* LINK FUNCTIONS */
 
-let currentNoteId = null;
-
-const editor = document.getElementById("editor");
-const noteList = document.getElementById("noteList");
-const titleInput = document.getElementById("titleInput");
-const searchInput = document.getElementById("searchInput");
-
-/* CREATE */
-
-function createNewNote(){
-
-    const note = {
-
-        id: Date.now(),
-        title: "Untitled Note",
-        content: "",
-        pinned: false,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-
-    };
-
-    notes.unshift(note);
-
-    currentNoteId = note.id;
-
-    renderNotes();
-
-    loadNote(note.id);
-
-    saveNotes();
-
-}
-
-/* SORT */
-
-function sortNotes(){
-
-    notes.sort((a,b) => {
-
-        if(a.pinned !== b.pinned){
-            return b.pinned - a.pinned;
-        }
-
-        return b.updatedAt - a.updatedAt;
-
-    });
-
-}
-
-/* RENDER */
-
-function renderNotes(filter = ""){
-
-    sortNotes();
-
-    noteList.innerHTML = "";
-
-    const filtered = notes.filter(note => {
-
-        return (
-            note.title.toLowerCase().includes(filter.toLowerCase())
-            ||
-            note.content.toLowerCase().includes(filter.toLowerCase())
-        );
-
-    });
-
-    filtered.forEach(note => {
-
-        const div = document.createElement("div");
-
-        div.className = "note-item";
-
-        if(note.id === currentNoteId){
-            div.classList.add("active");
-        }
-
-        div.innerHTML = `
-
-            <div class="note-item-title">
-                ${note.title}
-            </div>
-
-            <div class="note-meta">
-                ${formatDate(note.updatedAt)}
-            </div>
-
-            ${
-                note.pinned
-                ? '<div class="pin-indicator">📌</div>'
-                : ''
-            }
-
-        `;
-
-        div.onclick = () => loadNote(note.id);
-
-        noteList.appendChild(div);
-
-    });
-
-}
-
-/* LOAD */
-
-function loadNote(id){
-
-    const note = notes.find(n => n.id === id);
-
-    if(!note) return;
-
-    currentNoteId = id;
-
-    titleInput.value = note.title;
-
-    editor.innerHTML = note.content;
-
-    renderNotes(searchInput.value);
-
-}
-
-/* SAVE */
-
-function saveCurrentNote(){
-
-    if(currentNoteId === null) return;
-
-    const note = notes.find(
-        n => n.id === currentNoteId
-    );
-
-    if(!note) return;
-
-    note.title = titleInput.value || "Untitled Note";
-
-    note.content = editor.innerHTML;
-
-    note.updatedAt = Date.now();
-
-    saveNotes();
-
-    renderNotes(searchInput.value);
-
-}
-
-function saveNotes(){
-
-    localStorage.setItem(
-        "kilnNotes",
-        JSON.stringify(notes)
-    );
-
-}
-
-/* DELETE */
-
-function deleteNote(){
-
-    if(currentNoteId === null) return;
-
-    const confirmed = confirm(
-        "Delete this note?"
-    );
-
-    if(!confirmed) return;
-
-    notes = notes.filter(
-        n => n.id !== currentNoteId
-    );
-
-    saveNotes();
-
-    if(notes.length > 0){
-
-        loadNote(notes[0].id);
-
-    } else {
-
-        createNewNote();
-
-    }
-
-}
-
-/* PIN */
-
-function togglePin(){
-
-    const note = notes.find(
-        n => n.id === currentNoteId
-    );
-
-    if(!note) return;
-
-    note.pinned = !note.pinned;
-
-    note.updatedAt = Date.now();
-
-    saveNotes();
-
-    renderNotes(searchInput.value);
-
-}
-
-/* FORMAT */
-
-function formatBlock(tag){
-
-    document.execCommand(
-        "formatBlock",
-        false,
-        tag
-    );
-
-}
-
-function toggleFormatMenu(){
+function openLinkPrompt(){
 
     document
-        .getElementById("formatMenu")
+        .getElementById("linkPopup")
         .classList
         .toggle("show");
 
 }
 
-document.addEventListener("click", function(e){
+function applyLink(){
 
-    const menu = document.getElementById("formatMenu");
+    const input =
+        document.getElementById("linkInput");
+
+    let url =
+        input.value.trim();
+
+    if(!url) return;
 
     if(
-        !e.target.closest(".toolbar")
+        !url.startsWith("http://") &&
+        !url.startsWith("https://")
     ){
-        menu.classList.remove("show");
+        url = "https://" + url;
     }
 
-});
+    document.execCommand(
+        "createLink",
+        false,
+        url
+    );
 
-/* CHECKLIST */
+    const links =
+        editor.querySelectorAll("a");
 
-function createChecklistRow(textValue = ""){
+    links.forEach(link => {
 
-    const checklist =
-        document.createElement("div");
+        link.target = "_blank";
 
-    checklist.className =
-        "checklist-item";
+    });
 
-    const checkbox =
-        document.createElement("div");
+    input.value = "";
 
-    checkbox.className =
-        "checklist-checkbox";
-
-    const text =
-        document.createElement("div");
-
-    text.className =
-        "checklist-text";
-
-    text.contentEditable = true;
-
-    text.innerText = textValue;
-
-    checkbox.onclick = () => {
-
-        checkbox.classList.toggle("checked");
-
-        text.classList.toggle("checked");
-
-        saveCurrentNote();
-
-    };
-
-    checklist.appendChild(checkbox);
-
-    checklist.appendChild(text);
-
-    return {
-        checklist,
-        text
-    };
-
-}
-
-function insertChecklist(){
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount) return;
-
-    const selectedText =
-        selection.toString();
-
-    const {
-        checklist,
-        text
-    } = createChecklistRow(selectedText);
-
-    const range =
-        selection.getRangeAt(0);
-
-    range.deleteContents();
-
-    range.insertNode(checklist);
-
-    placeCaretAtEnd(text);
+    document
+        .getElementById("linkPopup")
+        .classList
+        .remove("show");
 
     saveCurrentNote();
 
 }
 
-/* KEYBOARD */
+document
+    .getElementById("linkInput")
+    .addEventListener("keydown", function(e){
 
-editor.addEventListener("keydown", function(e){
+        if(e.key === "Enter"){
 
-    const selection =
-        window.getSelection();
-
-    if(!selection.rangeCount) return;
-
-    let node =
-        selection.anchorNode;
-
-    while(
-        node &&
-        node !== editor &&
-        !node.classList?.contains("checklist-text")
-    ){
-        node = node.parentNode;
-    }
-
-    /* CHECKLIST ENTER */
-
-    if(
-        e.key === "Enter" &&
-        node &&
-        node.classList?.contains("checklist-text")
-    ){
-
-        e.preventDefault();
-
-        const currentChecklist =
-            node.parentNode;
-
-        if(node.innerText.trim() === ""){
-
-            const p =
-                document.createElement("p");
-
-            p.innerHTML = "<br>";
-
-            currentChecklist.replaceWith(p);
-
-            placeCaretAtEnd(p);
-
-            saveCurrentNote();
-
-            return;
+            applyLink();
 
         }
-
-        const {
-            checklist,
-            text
-        } = createChecklistRow("");
-
-        currentChecklist.insertAdjacentElement(
-            "afterend",
-            checklist
-        );
-
-        placeCaretAtEnd(text);
-
-        saveCurrentNote();
-
-        return;
-
-    }
-
-    /* CHECKLIST BACKSPACE */
-
-    if(
-        e.key === "Backspace" &&
-        node &&
-        node.classList?.contains("checklist-text")
-    ){
-
-        if(node.innerText.trim() === ""){
-
-            e.preventDefault();
-
-            const checklist =
-                node.parentNode;
-
-            const p =
-                document.createElement("p");
-
-            p.innerHTML = "<br>";
-
-            checklist.replaceWith(p);
-
-            placeCaretAtEnd(p);
-
-            saveCurrentNote();
-
-        }
-
-        return;
-
-    }
-
-    /* DASH SPACE LIST */
-
-    if(e.key === " "){
-
-        const range =
-            selection.getRangeAt(0);
-
-        const currentText =
-            range.startContainer.textContent;
-
-        if(currentText === "-"){
-
-            e.preventDefault();
-
-            range.startContainer.textContent = "";
-
-            const ul =
-                document.createElement("ul");
-
-            const li =
-                document.createElement("li");
-
-            li.innerHTML = "<br>";
-
-            ul.appendChild(li);
-
-            range.insertNode(ul);
-
-            placeCaretAtEnd(li);
-
-            saveCurrentNote();
-
-            return;
-
-        }
-
-    }
-
-    /* TAB INDENT */
-
-    if(e.key === "Tab"){
-
-        let li = selection.anchorNode;
-
-        while(
-            li &&
-            li !== editor &&
-            li.nodeName !== "LI"
-        ){
-            li = li.parentNode;
-        }
-
-        if(li && li.nodeName === "LI"){
-
-            e.preventDefault();
-
-            /* INDENT */
-
-            if(!e.shiftKey){
-
-                const prevLi =
-                    li.previousElementSibling;
-
-                if(prevLi){
-
-                    let nested =
-                        prevLi.querySelector(":scope > ul");
-
-                    if(!nested){
-
-                        nested =
-                            document.createElement("ul");
-
-                        prevLi.appendChild(nested);
-
-                    }
-
-                    nested.appendChild(li);
-
-                }
-
-            }
-
-            /* OUTDENT */
-
-            else {
-
-                const parentUl =
-                    li.parentElement;
-
-                const parentLi =
-                    parentUl.closest("li");
-
-                if(parentLi){
-
-                    parentLi.after(li);
-
-                    if(
-                        parentUl.children.length === 0
-                    ){
-                        parentUl.remove();
-                    }
-
-                }
-
-            }
-
-            saveCurrentNote();
-
-            return;
-
-        }
-
-    }
 
 });
 
-/* CARET */
-
-function placeCaretAtEnd(el){
-
-    el.focus();
-
-    const range = document.createRange();
-
-    range.selectNodeContents(el);
-
-    range.collapse(false);
-
-    const sel = window.getSelection();
-
-    sel.removeAllRanges();
-
-    sel.addRange(range);
-
-}
-
-/* LINKS */
-
-editor.addEventListener("click", function(e){
-
-    const link = e.target.closest("a");
-
-    if(link){
-
-        window.open(
-            link.href,
-            "_blank"
-        );
-
-    }
-
-});
-
-/* AUTO LINK PASTE */
+/* PASTE HANDLER */
 
 editor.addEventListener("paste", function(e){
 
     e.preventDefault();
 
-    const text = (
-        e.clipboardData ||
-        window.clipboardData
-    ).getData("text");
+    const html =
+        e.clipboardData.getData("text/html");
 
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const text =
+        e.clipboardData.getData("text/plain");
 
-    const html = text.replace(
-        urlRegex,
-        url => `
-            <a href="${url}" target="_blank">
-                ${url}
-            </a>
-        `
-    );
+    if(html){
 
-    document.execCommand(
-        "insertHTML",
-        false,
-        html
-    );
+        document.execCommand(
+            "insertHTML",
+            false,
+            html
+        );
+
+    }
+
+    else {
+
+        const urlRegex =
+            /(https?:\/\/[^\s]+)/g;
+
+        const linkedText =
+            text.replace(
+                urlRegex,
+                url => `
+                    <a href="${url}" target="_blank">
+                        ${url}
+                    </a>
+                `
+            );
+
+        document.execCommand(
+            "insertHTML",
+            false,
+            linkedText
+        );
+
+    }
+
+    saveCurrentNote();
 
 });
-
-/* EVENTS */
-
-searchInput.addEventListener("input", e => {
-
-    renderNotes(e.target.value);
-
-});
-
-editor.addEventListener(
-    "input",
-    saveCurrentNote
-);
-
-titleInput.addEventListener(
-    "input",
-    saveCurrentNote
-);
-
-/* DATE */
-
-function formatDate(timestamp){
-
-    const date = new Date(timestamp);
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            month:"short",
-            day:"numeric"
-        }
-    );
-
-}
-
-/* INIT */
-
-if(notes.length === 0){
-
-    createNewNote();
-
-} else {
-
-    renderNotes();
-
-    loadNote(notes[0].id);
-
-}
 
 </script>
 
