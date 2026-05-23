@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kiln Dashboard</title>
+
+  <link rel="stylesheet" href="./core/platform1.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app-layout">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      Kiln<span>Tech</span>
+    </div>
+
+    <div class="nav">
+
+      <button class="nav-button active">
+        Dashboard
+      </button>
+
+      <button class="nav-button">
+        Notes
+      </button>
+
+      <button class="nav-button">
+        Maps
+      </button>
+
+      <button class="nav-button">
+        Tickets
+      </button>
+
+      <button class="nav-button">
+        SOPs
+      </button>
+
+    </div>
+
+  </aside>
+
+  <main class="main-content">
+
+    <div class="topbar">
+
+      <input
+        class="searchbar"
+        placeholder="Search everything..."
+      >
+
+      <button class="button button-primary">
+        + Quick Note
+      </button>
+
+    </div>
+
+    <div class="widget-grid">
+
+      <div class="widget span-5">
+        <h2>Today Queue</h2>
+
+        <p>This will become your live task system.</p>
+      </div>
+
+      <div class="widget span-4">
+        <h2>Quick Notes</h2>
+
+        <p>This will become operational memory.</p>
+      </div>
+
+      <div class="widget span-3">
+        <h2>Stats</h2>
+
+        <p>Weekly ticket stats.</p>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script src="./core/storage.js"></script>
+<script src="./core/platform.js"></script>
+
+</body>
+</html>

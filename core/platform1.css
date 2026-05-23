@@ -1,0 +1,214 @@
+/* =========================
+   KILN TECH PLATFORM CORE
+========================= */
+
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-light: #1d212b;
+  --border: #2a3040;
+
+  --text: #f3f5f7;
+  --muted: #9aa3b2;
+
+  --accent: #7c9cff;
+  --green: #3ecf8e;
+  --yellow: #ffca62;
+  --red: #ff7272;
+
+  --radius: 18px;
+  --shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* =========================
+   APP LAYOUT
+========================= */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  width: 260px;
+  background: #12151c;
+  border-right: 1px solid var(--border);
+  padding: 24px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-button {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+
+  padding: 14px 16px;
+  border-radius: 14px;
+
+  text-align: left;
+  cursor: pointer;
+
+  font-size: 15px;
+  transition: .2s;
+}
+
+.nav-button:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.nav-button.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.searchbar {
+  flex: 1;
+
+  background: var(--panel);
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  padding: 14px 18px;
+
+  color: var(--text);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.button {
+  border: none;
+  border-radius: 14px;
+
+  padding: 12px 16px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.button-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.button-green {
+  background: var(--green);
+  color: #08150f;
+}
+
+/* =========================
+   WIDGETS
+========================= */
+
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+.widget {
+  background: var(--panel);
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius);
+
+  padding: 20px;
+
+  box-shadow: var(--shadow);
+}
+
+.widget h2 {
+  margin-top: 0;
+}
+
+/* =========================
+   GRID SPANS
+========================= */
+
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-5 { grid-column: span 5; }
+.span-6 { grid-column: span 6; }
+.span-7 { grid-column: span 7; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 1200px) {
+  .span-3,
+  .span-4,
+  .span-5,
+  .span-6,
+  .span-7,
+  .span-8 {
+    grid-column: span 12;
+  }
+}
