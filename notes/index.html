@@ -372,12 +372,13 @@ button{
 /* LISTS */
 
 .note-editor ul{
-    padding-left:28px;
-    margin:4px 0;
+    padding-left:24px;
+    margin:2px 0;
 }
 
 .note-editor li{
     margin:2px 0;
+    line-height:1.45;
 }
 
 /* SCROLLBAR */
@@ -397,8 +398,6 @@ button{
 <body>
 
 <div class="notes-app">
-
-    <!-- SIDEBAR -->
 
     <div class="notes-sidebar">
 
@@ -425,8 +424,6 @@ button{
         <div id="noteList" class="note-list"></div>
 
     </div>
-
-    <!-- MAIN -->
 
     <div class="notes-main">
 
@@ -458,8 +455,6 @@ button{
             </div>
 
         </div>
-
-        <!-- TOOLBAR -->
 
         <div class="toolbar">
 
@@ -526,8 +521,6 @@ button{
             </div>
 
         </div>
-
-        <!-- EDITOR -->
 
         <div
             id="editor"
@@ -895,7 +888,7 @@ editor.addEventListener("keydown", function(e){
         node = node.parentNode;
     }
 
-    /* ENTER INSIDE CHECKLIST */
+    /* CHECKLIST ENTER */
 
     if(
         e.key === "Enter" &&
@@ -907,8 +900,6 @@ editor.addEventListener("keydown", function(e){
 
         const currentChecklist =
             node.parentNode;
-
-        /* EMPTY CHECKLIST -> EXIT */
 
         if(node.innerText.trim() === ""){
 
@@ -941,9 +932,11 @@ editor.addEventListener("keydown", function(e){
 
         saveCurrentNote();
 
+        return;
+
     }
 
-    /* BACKSPACE EMPTY CHECKLIST */
+    /* CHECKLIST BACKSPACE */
 
     if(
         e.key === "Backspace" &&
@@ -971,22 +964,43 @@ editor.addEventListener("keydown", function(e){
 
         }
 
+        return;
+
     }
 
     /* DASH SPACE LIST */
 
     if(e.key === " "){
 
-        const text =
-            selection.anchorNode?.textContent;
+        const range =
+            selection.getRangeAt(0);
 
-        if(text === "-"){
+        const currentText =
+            range.startContainer.textContent;
+
+        if(currentText === "-"){
 
             e.preventDefault();
 
-            document.execCommand(
-                "insertUnorderedList"
-            );
+            range.startContainer.textContent = "";
+
+            const ul =
+                document.createElement("ul");
+
+            const li =
+                document.createElement("li");
+
+            li.innerHTML = "<br>";
+
+            ul.appendChild(li);
+
+            range.insertNode(ul);
+
+            placeCaretAtEnd(li);
+
+            saveCurrentNote();
+
+            return;
 
         }
 
@@ -1003,15 +1017,60 @@ editor.addEventListener("keydown", function(e){
 
             e.preventDefault();
 
-            if(e.shiftKey){
+            /* INDENT */
 
-                document.execCommand("outdent");
+            if(!e.shiftKey){
 
-            } else {
+                const prevLi =
+                    li.previousElementSibling;
 
-                document.execCommand("indent");
+                if(prevLi){
+
+                    let nested =
+                        prevLi.querySelector(":scope > ul");
+
+                    if(!nested){
+
+                        nested =
+                            document.createElement("ul");
+
+                        prevLi.appendChild(nested);
+
+                    }
+
+                    nested.appendChild(li);
+
+                }
 
             }
+
+            /* OUTDENT */
+
+            else {
+
+                const parentUl =
+                    li.parentElement;
+
+                const parentLi =
+                    parentUl.closest("li");
+
+                if(parentLi){
+
+                    parentLi.after(li);
+
+                    if(
+                        parentUl.children.length === 0
+                    ){
+                        parentUl.remove();
+                    }
+
+                }
+
+            }
+
+            saveCurrentNote();
+
+            return;
 
         }
 
