@@ -178,9 +178,11 @@ async function initGlobalSearch(){
 loadSidebar();
 loadTopbar();
 
-setTimeout(() => {
+window.addEventListener(
+    "load",
+    () => {
 
-    initGlobalSearch();
+        initGlobalSearch();
 
-}, 100);
-
+    }
+);
