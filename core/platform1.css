@@ -85,7 +85,7 @@ body{
    BODY
 ======================================== */
 
-body{
+.platform-body{
   margin:0;
 
   overflow:hidden;
@@ -96,7 +96,6 @@ body{
 
   font-family:Inter,sans-serif;
 }
-
 /* ========================================
    APP LAYOUT
 ======================================== */
