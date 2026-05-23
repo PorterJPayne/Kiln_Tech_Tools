@@ -12,7 +12,7 @@ async function loadSidebar(){
     if(!sidebar) return;
 
     const response =
-    await fetch(window.sidebarPath);
+    fetch("./core/sidebar.html")
 
     const html =
         await response.text();
