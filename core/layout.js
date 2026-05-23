@@ -177,14 +177,14 @@ console.log(query);
 // INIT
 // =========================
 
-loadSidebar();
-loadTopbar();
+async function initPlatform(){
 
-window.addEventListener(
-    "load",
-    () => {
+    await loadSidebar();
 
-        initGlobalSearch();
+    await loadTopbar();
 
-    }
-);
+    initGlobalSearch();
+
+}
+
+initPlatform();
