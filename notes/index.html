@@ -399,6 +399,7 @@ button{
 .checklist-text{
     flex:1;
     outline:none;
+    min-height:24px;
 }
 
 .checklist-text.checked{
@@ -731,7 +732,9 @@ function saveCurrentNote(){
 
     if(currentNoteId === null) return;
 
-    const note = notes.find(n => n.id === currentNoteId);
+    const note = notes.find(
+        n => n.id === currentNoteId
+    );
 
     if(!note) return;
 
@@ -743,7 +746,11 @@ function saveCurrentNote(){
 
     saveNotes();
 
+    const currentScroll = noteList.scrollTop;
+
     renderNotes(searchInput.value);
+
+    noteList.scrollTop = currentScroll;
 
 }
 
@@ -849,21 +856,48 @@ function insertChecklist(){
 
     const range = selection.getRangeAt(0);
 
-    const checklist = document.createElement("div");
+    let currentNode = range.startContainer;
 
-    checklist.className = "checklist-item";
+    while(
+        currentNode &&
+        currentNode !== editor &&
+        !currentNode.classList?.contains("checklist-item")
+    ){
+        currentNode = currentNode.parentNode;
+    }
 
-    const checkbox = document.createElement("div");
+    if(
+        currentNode &&
+        currentNode.classList?.contains("checklist-item")
+    ){
+        return;
+    }
 
-    checkbox.className = "checklist-checkbox";
+    const selectedText =
+        selection.toString();
 
-    const text = document.createElement("div");
+    const checklist =
+        document.createElement("div");
 
-    text.className = "checklist-text";
+    checklist.className =
+        "checklist-item";
+
+    const checkbox =
+        document.createElement("div");
+
+    checkbox.className =
+        "checklist-checkbox";
+
+    const text =
+        document.createElement("div");
+
+    text.className =
+        "checklist-text";
 
     text.contentEditable = true;
 
-    text.innerHTML = "Checklist item";
+    text.innerText =
+        selectedText || "";
 
     checkbox.onclick = () => {
 
@@ -888,6 +922,75 @@ function insertChecklist(){
     saveCurrentNote();
 
 }
+
+editor.addEventListener("keydown", function(e){
+
+    if(e.key !== "Enter") return;
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount) return;
+
+    let node = selection.anchorNode;
+
+    while(
+        node &&
+        node !== editor &&
+        !node.classList?.contains("checklist-text")
+    ){
+        node = node.parentNode;
+    }
+
+    if(!node) return;
+
+    e.preventDefault();
+
+    const currentChecklist =
+        node.parentNode;
+
+    const newChecklist =
+        document.createElement("div");
+
+    newChecklist.className =
+        "checklist-item";
+
+    const checkbox =
+        document.createElement("div");
+
+    checkbox.className =
+        "checklist-checkbox";
+
+    const text =
+        document.createElement("div");
+
+    text.className =
+        "checklist-text";
+
+    text.contentEditable = true;
+
+    checkbox.onclick = () => {
+
+        checkbox.classList.toggle("checked");
+
+        text.classList.toggle("checked");
+
+        saveCurrentNote();
+
+    };
+
+    newChecklist.appendChild(checkbox);
+
+    newChecklist.appendChild(text);
+
+    currentChecklist.after(newChecklist);
+
+    placeCaretAtEnd(text);
+
+    saveCurrentNote();
+
+});
+
+/* CARET */
 
 function placeCaretAtEnd(el){
 
