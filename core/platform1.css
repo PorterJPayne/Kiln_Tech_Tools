@@ -323,3 +323,10 @@ body {
   background: var(--accent);
   color: white;
 }
+
+.platform-body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+}
