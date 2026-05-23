@@ -177,14 +177,12 @@ console.log(query);
 // INIT
 // =========================
 
-async function initPlatform(){
+loadSidebar();
 
-    await loadSidebar();
+loadTopbar();
 
-    await loadTopbar();
+setTimeout(() => {
 
     initGlobalSearch();
 
-}
-
-initPlatform();
+}, 300);
