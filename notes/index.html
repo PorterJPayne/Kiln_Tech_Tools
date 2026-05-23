@@ -8,6 +8,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <style>
 
 *{
@@ -553,12 +555,19 @@ const noteList = document.getElementById("noteList");
 const titleInput = document.getElementById("titleInput");
 const searchInput = document.getElementById("searchInput");
 const linkPopup = document.getElementById("linkPopup");
-const linkInput = document.getElementById("linkInput");
+const SUPABASE_URL =
+    "https://otwlqqhiiinltxdydcev.supabase.co";
 
-let notes =
-    JSON.parse(
-        localStorage.getItem("kilnNotes")
-    ) || [];
+const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90d2xxcWhpaWlubHR4ZHlkY2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTYzMDcsImV4cCI6MjA5NTA3MjMwN30.HoUbXld83LQBiatA9P3zt8ffwgMzqZApwdj88gzjgRw";
+
+const supabase =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+let notes = [];
 
 let currentNoteId = null;
 let savedSelection = null;
@@ -704,12 +713,28 @@ function saveCurrentNote(){
 
 }
 
-function saveNotes(){
+async function saveNotes(){
 
-    localStorage.setItem(
-        "kilnNotes",
-        JSON.stringify(notes)
-    );
+    for(const note of notes){
+
+        const { error } =
+            await supabase
+                .from("notes")
+                .upsert({
+                    id: note.id,
+                    title: note.title,
+                    content: note.content,
+                    pinned: note.pinned,
+                    updated_at: note.updatedAt
+                });
+
+        if(error){
+
+            console.error(error);
+
+        }
+
+    }
 
 }
 
@@ -1275,20 +1300,49 @@ searchInput.addEventListener(
     e => renderNotes(e.target.value)
 );
 
-/* INIT */
+async function loadNotesFromDatabase(){
 
-if(notes.length === 0){
+    const { data, error } =
+        await supabase
+            .from("notes")
+            .select("*");
 
-    createNewNote();
+    if(error){
 
-} else {
+        console.error(error);
 
-    renderNotes();
+        return;
 
-    loadNote(notes[0].id);
+    }
+
+    notes = data.map(note => ({
+
+        id: note.id,
+        title: note.title,
+        content: note.content,
+        pinned: note.pinned,
+        updatedAt: note.updated_at
+
+    }));
+
+    if(notes.length === 0){
+
+        createNewNote();
+
+    } else {
+
+        renderNotes();
+
+        loadNote(notes[0].id);
+
+    }
 
 }
 
+
+/* INIT */
+
+loadNotesFromDatabase();
 </script>
 
 </body>
