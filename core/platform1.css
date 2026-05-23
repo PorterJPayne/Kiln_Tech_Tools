@@ -330,7 +330,7 @@ select:focus{
 }
 
 .widget{
-  height:fit-content;
+  height:auto;
 }
 
 .span-3{
