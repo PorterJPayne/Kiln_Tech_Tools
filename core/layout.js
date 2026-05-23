@@ -1,9 +1,9 @@
 // =========================
 // LOAD SIDEBAR
 // =========================
-
+console.log("LAYOUT LOADED");
 async function loadSidebar(){
-
+console.log("LOADING SIDEBAR");
     const sidebar =
         document.getElementById(
             "sidebar"
@@ -18,7 +18,7 @@ async function loadSidebar(){
         await response.text();
 
     sidebar.innerHTML = html;
-
+console.log("SIDEBAR INSERTED");
     setActiveNav();
 
 }
@@ -69,3 +69,4 @@ function navigateTo(path){
 // =========================
 
 loadSidebar();
+console.log("navigateTo:", navigateTo);
