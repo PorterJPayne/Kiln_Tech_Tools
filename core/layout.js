@@ -13,7 +13,7 @@ console.log("LOADING SIDEBAR");
 
     const response =
     await fetch("./core/sidebar.html");
-
+console.log(response);
     const html =
         await response.text();
 
