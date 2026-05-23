@@ -7,6 +7,7 @@
 <title>Kiln Dashboard</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="/core/platform1.css">
@@ -25,6 +26,37 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script src="/core/layout.js" defer></script>
 
+<style>
+
+/* ========================================
+   DASHBOARD ONLY
+======================================== */
+
+.dashboard-content{
+    overflow:auto;
+    padding:24px;
+}
+
+.widget-grid{
+    align-content:start;
+}
+
+.dashboard-label{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:var(--accent);
+    margin-bottom:10px;
+}
+
+.dashboard-hero-text{
+    color:var(--muted);
+    line-height:1.6;
+    max-width:700px;
+}
+
+</style>
+
 </head>
 
 <body
@@ -38,9 +70,9 @@ window.sidebarPath = "/core/sidebar.html";
     <!-- SIDEBAR -->
 
     <aside
-    class="sidebar"
-    id="sidebar"
-></aside>
+        class="sidebar"
+        id="sidebar"
+    ></aside>
 
     <!-- MAIN -->
 
@@ -50,214 +82,220 @@ window.sidebarPath = "/core/sidebar.html";
 
         <div id="topbar"></div>
 
-        <!-- GRID -->
+        <!-- CONTENT -->
 
-        
-        <div class="widget-grid">
+        <div class="content dashboard-content">
 
-    <!-- HERO -->
+            <div class="widget-grid">
 
-    <div class="widget span-12">
+                <!-- HERO -->
 
-        <div class="flex-between">
+                <div class="widget span-12">
 
-            <div>
+                    <div class="flex-between">
 
-                <h1>
-                    Operational Dashboard
-                </h1>
+                        <div>
 
-                <p class="muted">
-                    Daily workflow, quick access, and operational visibility.
-                </p>
+                            <div class="dashboard-label">
+                                DAILY OPERATIONS
+                            </div>
+
+                            <div class="dashboard-hero-text">
+                                Quick access, workflow tools,
+                                and operational visibility.
+                            </div>
+
+                        </div>
+
+                        <div class="flex gap-md">
+
+                            <button class="button button-primary">
+                                + Quick Note
+                            </button>
+
+                            <button class="button">
+                                Open Maps
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TODAY QUEUE -->
+
+                <div class="widget span-5">
+
+                    <h2>
+                        Today Queue
+                    </h2>
+
+                    <p class="muted">
+                        Daily operational priorities,
+                        maintenance, and event prep.
+                    </p>
+
+                </div>
+
+                <!-- NOTES -->
+
+                <div class="widget span-4">
+
+                    <div class="flex-between gap-md">
+
+                        <h2>
+                            Notes
+                        </h2>
+
+                        <select
+                            id="dashboardNoteSelect"
+                            class="input"
+                        ></select>
+
+                    </div>
+
+                    <div style="height:16px;"></div>
+
+                    <input
+                        id="dashboardNoteTitle"
+                        class="input"
+                        placeholder="Note title"
+                    >
+
+                    <div style="height:12px;"></div>
+
+                    <textarea
+                        id="dashboardNoteContent"
+                        class="input"
+                        placeholder="Quick operational note..."
+                        style="
+                            min-height:220px;
+                            resize:none;
+                            width:100%;
+                        "
+                    ></textarea>
+
+                </div>
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="widget span-3">
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                    <div class="flex-column gap-sm">
+
+                        <button class="button button-primary">
+                            New Note
+                        </button>
+
+                        <button class="button">
+                            Open Maps
+                        </button>
+
+                        <button class="button">
+                            Create Ticket
+                        </button>
+
+                        <button class="button">
+                            Event Prep
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- EVENTS -->
+
+                <div class="widget span-4">
+
+                    <h2>
+                        Upcoming Events
+                    </h2>
+
+                    <p class="muted">
+                        Calendar integration and event preparation.
+                    </p>
+
+                </div>
+
+                <!-- PROJECTS -->
+
+                <div class="widget span-4">
+
+                    <h2>
+                        Projects
+                    </h2>
+
+                    <p class="muted">
+                        Active operational projects and maintenance tracking.
+                    </p>
+
+                </div>
+
+                <!-- SEARCH -->
+
+                <div class="widget span-4">
+
+                    <h2>
+                        Search
+                    </h2>
+
+                    <p class="muted">
+                        Recently searched operational records and notes.
+                    </p>
+
+                </div>
+
+                <!-- MAPS -->
+
+                <div class="widget span-6">
+
+                    <h2>
+                        Maps & Infrastructure
+                    </h2>
+
+                    <p class="muted">
+                        Wiring plans, room overlays,
+                        and visual operations.
+                    </p>
+
+                </div>
+
+                <!-- SOPS -->
+
+                <div class="widget span-3">
+
+                    <h2>
+                        SOPs
+                    </h2>
+
+                    <p class="muted">
+                        Standard operating procedures and documentation.
+                    </p>
+
+                </div>
+
+                <!-- STATS -->
+
+                <div class="widget span-3">
+
+                    <h2>
+                        Stats
+                    </h2>
+
+                    <p class="muted">
+                        Weekly operational metrics and trends.
+                    </p>
+
+                </div>
 
             </div>
 
-            <div class="flex gap-md">
-
-                <button class="button button-primary">
-                    + Quick Note
-                </button>
-
-                <button class="button">
-                    Open Maps
-                </button>
-
-            </div>
-
         </div>
-
-    </div>
-
-    <!-- TODAY QUEUE -->
-
-    <div class="widget span-5">
-
-        <h2>
-            Today Queue
-        </h2>
-
-        <p class="muted">
-            Daily operational priorities, maintenance, and event prep.
-        </p>
-
-    </div>
-
-    <!-- NOTES -->
-
-    <div class="widget span-4">
-
-        <div class="flex-between gap-md">
-
-            <h2>
-                Notes
-            </h2>
-
-            <select
-                id="dashboardNoteSelect"
-                class="input"
-            ></select>
-
-        </div>
-
-        <div style="height:16px;"></div>
-
-        <input
-            id="dashboardNoteTitle"
-            class="input"
-            placeholder="Note title"
-        >
-
-        <div style="height:12px;"></div>
-
-        <textarea
-            id="dashboardNoteContent"
-            class="input"
-            placeholder="Quick operational note..."
-            style="
-                min-height:220px;
-                resize:none;
-                width:100%;
-            "
-        ></textarea>
-
-    </div>
-
-    <!-- QUICK ACTIONS -->
-
-    <div class="widget span-3">
-
-        <h2>
-            Quick Actions
-        </h2>
-
-        <div class="flex-column gap-sm">
-
-            <button class="button button-primary">
-                New Note
-            </button>
-
-            <button class="button">
-                Open Maps
-            </button>
-
-            <button class="button">
-                Create Ticket
-            </button>
-
-            <button class="button">
-                Event Prep
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- EVENTS -->
-
-    <div class="widget span-4">
-
-        <h2>
-            Upcoming Events
-        </h2>
-
-        <p class="muted">
-            Calendar integration and event preparation.
-        </p>
-
-    </div>
-
-    <!-- PROJECTS -->
-
-    <div class="widget span-4">
-
-        <h2>
-            Projects
-        </h2>
-
-        <p class="muted">
-            Active operational projects and maintenance tracking.
-        </p>
-
-    </div>
-
-    <!-- SEARCH -->
-
-    <div class="widget span-4">
-
-        <h2>
-            Search
-        </h2>
-
-        <p class="muted">
-            Recently searched operational records and notes.
-        </p>
-
-    </div>
-
-    <!-- MAPS -->
-
-    <div class="widget span-6">
-
-        <h2>
-            Maps & Infrastructure
-        </h2>
-
-        <p class="muted">
-            Wiring plans, room overlays, and visual operations.
-        </p>
-
-    </div>
-
-    <!-- SOPS -->
-
-    <div class="widget span-3">
-
-        <h2>
-            SOPs
-        </h2>
-
-        <p class="muted">
-            Standard operating procedures and documentation.
-        </p>
-
-    </div>
-
-    <!-- STATS -->
-
-    <div class="widget span-3">
-
-        <h2>
-            Stats
-        </h2>
-
-        <p class="muted">
-            Weekly operational metrics and trends.
-        </p>
-
-    </div>
-
-</div>
 
     </main>
 
