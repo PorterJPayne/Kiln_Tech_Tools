@@ -124,10 +124,11 @@ console.log("SEARCH INIT");
         "input",
         async () => {
 console.log("typing");
-console.log(query);
-            const query =
-                input.value.trim();
 
+const query =
+    input.value.trim();
+
+console.log(query);
             if(query.length < 2){
 
                 resultsBox.innerHTML = "";
