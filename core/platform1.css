@@ -101,17 +101,20 @@ body{
 ======================================== */
 
 .app{
-  height:100vh;
-
   display:flex;
+  height:100vh;
+  overflow:hidden;
 }
 
 .main{
   flex:1;
+
   display:flex;
   flex-direction:column;
+
+  min-height:0;
+
   overflow:hidden;
-  min-width:0;
 }
 
 .platform-page{
@@ -317,8 +320,6 @@ select:focus{
 ======================================== */
 
 .widget-grid{
-  flex:1;
-
   padding:24px;
 
   display:grid;
@@ -328,10 +329,7 @@ select:focus{
   gap:20px;
 
   align-content:start;
-
-  min-height:0;
 }
-
 .widget{
   height:auto;
 }
