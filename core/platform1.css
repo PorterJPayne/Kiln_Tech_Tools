@@ -546,3 +546,55 @@ select:focus{
   font-size:13px;
   color:var(--muted);
 }
+
+
+/* ========================================
+   SEARCH PAGE
+======================================== */
+
+.search-page{
+  padding:24px;
+}
+
+.search-page-results{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.search-page-result{
+  display:flex;
+  gap:16px;
+  padding:18px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  text-decoration:none;
+  color:var(--text);
+  transition:var(--transition);
+}
+
+.search-page-result:hover{
+  background:var(--panel-light);
+}
+
+.search-page-icon{
+  font-size:22px;
+}
+
+.search-page-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.search-page-description{
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.empty-search{
+  color:var(--muted);
+  padding:40px;
+  text-align:center;
+}

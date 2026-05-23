@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Search</title>
+
+<link
+  rel="stylesheet"
+  href="/core/platform1.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<script src="/core/api/notes-api.js"></script>
+
+<script src="/core/api/search-api.js"></script>
+
+<script src="/core/layout.js" defer></script>
+
+</head>
+
+<body
+  class="platform-body"
+  data-title="Search"
+  data-description="Global platform search results."
+>
+
+<div class="app">
+
+  <aside
+    class="sidebar"
+    id="sidebar"
+  ></aside>
+
+  <main class="main platform-page">
+
+    <div id="topbar"></div>
+
+    <div class="content">
+
+      <div class="search-page">
+
+        <div
+          id="searchResults"
+          class="search-page-results"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+async function initSearchPage(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const query =
+        params.get("q") || "";
+
+    const results =
+        await globalSearch(query);
+
+    const container =
+        document.getElementById(
+            "searchResults"
+        );
+
+    if(results.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-search">
+                No results found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML = results
+        .map(result => `
+
+            <a
+              class="search-page-result"
+              href="${result.url}"
+            >
+
+              <div class="search-page-icon">
+                ${result.icon}
+              </div>
+
+              <div>
+
+                <div class="search-page-title">
+                  ${result.title}
+                </div>
+
+                <div class="search-page-description">
+                  ${result.description}
+                </div>
+
+              </div>
+
+            </a>
+
+        `)
+        .join("");
+
+}
+
+initSearchPage();
+
+</script>
+
+</body>
+</html>

@@ -172,6 +172,27 @@ console.log(query);
         }
     );
 
+    input.addEventListener(
+    "keydown",
+    e => {
+
+        if(e.key === "Enter"){
+
+            const query =
+                input.value.trim();
+
+            if(!query) return;
+
+            window.location.href =
+                `/search.html?q=${encodeURIComponent(
+                    query
+                )}`;
+
+        }
+
+    }
+);
+
 }
 // =========================
 // INIT
