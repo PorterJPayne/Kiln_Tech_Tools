@@ -107,7 +107,7 @@ function navigateTo(path){
 // ========================================
 
 async function initGlobalSearch(){
-
+console.log("SEARCH INIT");
     const input =
         document.getElementById(
             "globalSearchInput"
@@ -123,7 +123,8 @@ async function initGlobalSearch(){
     input.addEventListener(
         "input",
         async () => {
-
+console.log("typing");
+console.log(query);
             const query =
                 input.value.trim();
 
