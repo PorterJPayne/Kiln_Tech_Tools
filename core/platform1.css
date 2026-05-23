@@ -236,3 +236,18 @@ body {
     flex:1;
     min-height:0;
 }
+
+:root{
+
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-light: #1d212b;
+
+  --text: #f3f5f7;
+  --muted: #9aa3b2;
+
+  --border: #2a3040;
+
+  --radius: 18px;
+
+}
