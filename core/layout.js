@@ -101,9 +101,86 @@ function navigateTo(path){
 
 }
 
+
+// ========================================
+// SEARCH
+// ========================================
+
+async function initGlobalSearch(){
+
+    const input =
+        document.getElementById(
+            "globalSearchInput"
+        );
+
+    const resultsBox =
+        document.getElementById(
+            "globalSearchResults"
+        );
+
+    if(!input || !resultsBox) return;
+
+    input.addEventListener(
+        "input",
+        async () => {
+
+            const query =
+                input.value.trim();
+
+            if(query.length < 2){
+
+                resultsBox.innerHTML = "";
+
+                return;
+
+            }
+
+            const results =
+                await globalSearch(query);
+
+            resultsBox.innerHTML = results
+                .map(result => `
+
+                    <a
+                        class="search-result"
+                        href="${result.url}"
+                    >
+
+                        <div>
+                            ${result.icon}
+                        </div>
+
+                        <div>
+
+                            <div class="search-result-title">
+                                ${result.title}
+                            </div>
+
+                            <div class="search-result-description">
+                                ${result.description}
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                `)
+                .join("");
+
+        }
+    );
+
+}
 // =========================
 // INIT
 // =========================
 
 loadSidebar();
 loadTopbar();
+
+setTimeout(() => {
+
+    initGlobalSearch();
+
+}, 100);
+
