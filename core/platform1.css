@@ -124,9 +124,10 @@ body{
   flex:1;
   min-height:0;
 
-  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
 
-  padding:0;
+  overflow:hidden;
 }
 
 /* ========================================
@@ -311,12 +312,21 @@ select:focus{
 ======================================== */
 
 .widget-grid{
+  flex:1;
+
   padding:24px;
+
   display:grid;
+
   grid-template-columns:repeat(12,1fr);
+
   gap:20px;
 
+  overflow-y:auto;
+
   align-content:start;
+
+  min-height:0;
 }
 
 .widget{
