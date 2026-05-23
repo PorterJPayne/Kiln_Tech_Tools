@@ -27,14 +27,15 @@ body{
     color:#2f2419;
 }
 
+button{
+    font-family:inherit;
+}
+
 .notes-app{
     display:flex;
-
     width:100%;
     height:100%;
-
     overflow:hidden;
-
     background:#ddd2c2;
 }
 
@@ -54,13 +55,18 @@ body{
 
 .notes-header{
     padding:22px;
-
     border-bottom:1px solid rgba(70,50,30,0.08);
+}
+
+.notes-header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
 }
 
 .notes-header h2{
     font-size:24px;
-    margin-bottom:14px;
 }
 
 .new-note-btn{
@@ -126,6 +132,8 @@ body{
     transition:.15s;
 
     border:1px solid transparent;
+
+    position:relative;
 }
 
 .note-item:hover{
@@ -133,7 +141,7 @@ body{
 }
 
 .note-item.active{
-    background:rgba(255,255,255,0.4);
+    background:rgba(255,255,255,0.45);
 
     border-color:rgba(70,50,30,0.08);
 }
@@ -141,6 +149,19 @@ body{
 .note-item-title{
     font-size:15px;
     font-weight:600;
+    margin-bottom:6px;
+}
+
+.note-meta{
+    font-size:12px;
+    opacity:.6;
+}
+
+.pin-indicator{
+    position:absolute;
+    top:12px;
+    right:12px;
+    font-size:12px;
 }
 
 /* MAIN */
@@ -163,10 +184,14 @@ body{
     padding:20px 24px;
 
     border-bottom:1px solid rgba(70,50,30,0.08);
+
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 .title-input{
-    width:100%;
+    flex:1;
 
     background:none;
 
@@ -181,6 +206,32 @@ body{
     font-weight:700;
 }
 
+.topbar-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    border:none;
+
+    background:rgba(255,255,255,0.5);
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.15s;
+}
+
+.icon-btn:hover{
+    background:white;
+}
+
 /* TOOLBAR */
 
 .toolbar{
@@ -191,6 +242,10 @@ body{
     border-bottom:1px solid rgba(70,50,30,0.08);
 
     background:#ded4c7;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
 .format-button{
@@ -209,6 +264,10 @@ body{
     font-weight:700;
 
     cursor:pointer;
+}
+
+.format-button:hover{
+    background:white;
 }
 
 .format-menu{
@@ -273,8 +332,6 @@ body{
     font-size:16px;
 
     outline:none;
-
-    white-space:pre-wrap;
 }
 
 .note-editor:empty:before{
@@ -282,11 +339,7 @@ body{
     color:rgba(47,36,25,0.4);
 }
 
-.note-editor a{
-    color:#6a4d36;
-}
-
-/* HEADINGS */
+/* TEXT */
 
 .note-editor h1{
     font-size:42px;
@@ -303,27 +356,26 @@ body{
     margin:14px 0;
 }
 
+.note-editor p{
+    margin:8px 0;
+}
+
+.note-editor a{
+    color:#6a4d36;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
 /* CHECKLIST */
 
 .checklist-item{
     display:flex;
-
     align-items:flex-start;
-
     gap:12px;
-
-    margin:10px 0;
+    margin:8px 0;
 }
 
-.checklist-item span{
-    flex:1;
-
-    outline:none;
-}
-
-.checklist-item input[type="checkbox"]{
-    appearance:none;
-
+.checklist-checkbox{
     width:22px;
     height:22px;
 
@@ -331,17 +383,27 @@ body{
 
     border:2px solid #8b735d;
 
-    background:white;
+    margin-top:5px;
 
-    margin-top:3px;
+    flex-shrink:0;
 
     cursor:pointer;
 
-    flex-shrink:0;
+    background:white;
 }
 
-.checklist-item input[type="checkbox"]:checked{
+.checklist-checkbox.checked{
     background:#8b735d;
+}
+
+.checklist-text{
+    flex:1;
+    outline:none;
+}
+
+.checklist-text.checked{
+    text-decoration:line-through;
+    opacity:.6;
 }
 
 /* SCROLLBAR */
@@ -366,11 +428,17 @@ body{
 
 <div class="notes-app">
 
+    <!-- SIDEBAR -->
+
     <div class="notes-sidebar">
 
         <div class="notes-header">
 
-            <h2>Kiln Notes</h2>
+            <div class="notes-header-top">
+
+                <h2>Kiln Notes</h2>
+
+            </div>
 
             <button 
                 class="new-note-btn"
@@ -392,6 +460,8 @@ body{
 
     </div>
 
+    <!-- MAIN -->
+
     <div class="notes-main">
 
         <div class="note-topbar">
@@ -403,7 +473,29 @@ body{
                 placeholder="Untitled Note"
             >
 
+            <div class="topbar-actions">
+
+                <button 
+                    class="icon-btn"
+                    onclick="togglePin()"
+                    title="Pin Note"
+                >
+                    📌
+                </button>
+
+                <button 
+                    class="icon-btn"
+                    onclick="deleteNote()"
+                    title="Delete Note"
+                >
+                    🗑️
+                </button>
+
+            </div>
+
         </div>
+
+        <!-- TOOLBAR -->
 
         <div class="toolbar">
 
@@ -412,6 +504,41 @@ body{
                 onclick="toggleFormatMenu()"
             >
                 Aa
+            </button>
+
+            <button 
+                class="format-button"
+                onclick="document.execCommand('bold')"
+            >
+                B
+            </button>
+
+            <button 
+                class="format-button"
+                onclick="document.execCommand('italic')"
+            >
+                I
+            </button>
+
+            <button 
+                class="format-button"
+                onclick="document.execCommand('underline')"
+            >
+                U
+            </button>
+
+            <button 
+                class="format-button"
+                onclick="document.execCommand('strikeThrough')"
+            >
+                S
+            </button>
+
+            <button 
+                class="format-button"
+                onclick="insertChecklist()"
+            >
+                ✓
             </button>
 
             <div class="format-menu" id="formatMenu">
@@ -432,13 +559,11 @@ body{
                     Title
                 </button>
 
-                <button onclick="insertChecklist()">
-                    Checklist
-                </button>
-
             </div>
 
         </div>
+
+        <!-- EDITOR -->
 
         <div
             id="editor"
@@ -453,16 +578,22 @@ body{
 
 <script>
 
+/* STORAGE */
+
 let notes = JSON.parse(
     localStorage.getItem("kilnNotes")
 ) || [];
 
 let currentNoteId = null;
 
+/* ELEMENTS */
+
 const editor = document.getElementById("editor");
 const noteList = document.getElementById("noteList");
 const titleInput = document.getElementById("titleInput");
 const searchInput = document.getElementById("searchInput");
+
+/* CREATE */
 
 function createNewNote(){
 
@@ -474,7 +605,11 @@ function createNewNote(){
 
         content: "",
 
-        created: new Date().toISOString()
+        pinned: false,
+
+        createdAt: Date.now(),
+
+        updatedAt: Date.now()
 
     };
 
@@ -490,7 +625,29 @@ function createNewNote(){
 
 }
 
+/* SORT */
+
+function sortNotes(){
+
+    notes.sort((a,b) => {
+
+        if(a.pinned !== b.pinned){
+
+            return b.pinned - a.pinned;
+
+        }
+
+        return b.updatedAt - a.updatedAt;
+
+    });
+
+}
+
+/* RENDER */
+
 function renderNotes(filter = ""){
+
+    sortNotes();
 
     noteList.innerHTML = "";
 
@@ -525,22 +682,32 @@ function renderNotes(filter = ""){
         }
 
         div.innerHTML = `
+
             <div class="note-item-title">
                 ${note.title}
             </div>
+
+            <div class="note-meta">
+                ${formatDate(note.updatedAt)}
+            </div>
+
+            ${
+                note.pinned
+                ? '<div class="pin-indicator">📌</div>'
+                : ''
+            }
+
         `;
 
-        div.onclick = () => {
-
-            loadNote(note.id);
-
-        };
+        div.onclick = () => loadNote(note.id);
 
         noteList.appendChild(div);
 
     });
 
 }
+
+/* LOAD */
 
 function loadNote(id){
 
@@ -558,6 +725,8 @@ function loadNote(id){
 
 }
 
+/* SAVE */
+
 function saveCurrentNote(){
 
     if(currentNoteId === null) return;
@@ -569,6 +738,8 @@ function saveCurrentNote(){
     note.title = titleInput.value || "Untitled Note";
 
     note.content = editor.innerHTML;
+
+    note.updatedAt = Date.now();
 
     saveNotes();
 
@@ -584,6 +755,58 @@ function saveNotes(){
     );
 
 }
+
+/* DELETE */
+
+function deleteNote(){
+
+    if(currentNoteId === null) return;
+
+    const confirmed = confirm(
+        "Delete this note?"
+    );
+
+    if(!confirmed) return;
+
+    notes = notes.filter(
+        n => n.id !== currentNoteId
+    );
+
+    saveNotes();
+
+    if(notes.length > 0){
+
+        loadNote(notes[0].id);
+
+    } else {
+
+        createNewNote();
+
+    }
+
+}
+
+/* PIN */
+
+function togglePin(){
+
+    const note = notes.find(
+        n => n.id === currentNoteId
+    );
+
+    if(!note) return;
+
+    note.pinned = !note.pinned;
+
+    note.updatedAt = Date.now();
+
+    saveNotes();
+
+    renderNotes(searchInput.value);
+
+}
+
+/* FORMAT */
 
 function formatBlock(tag){
 
@@ -616,45 +839,92 @@ document.addEventListener("click", function(e){
 
 });
 
+/* CHECKLIST */
+
 function insertChecklist(){
 
-    const checklistHTML = `
+    const selection = window.getSelection();
 
-        <div class="checklist-item">
+    if(!selection.rangeCount) return;
 
-            <input type="checkbox">
+    const range = selection.getRangeAt(0);
 
-            <span contenteditable="true">
-                New checklist item
-            </span>
+    const checklist = document.createElement("div");
 
-        </div>
+    checklist.className = "checklist-item";
 
-    `;
+    const checkbox = document.createElement("div");
 
-    document.execCommand(
-        "insertHTML",
-        false,
-        checklistHTML
-    );
+    checkbox.className = "checklist-checkbox";
+
+    const text = document.createElement("div");
+
+    text.className = "checklist-text";
+
+    text.contentEditable = true;
+
+    text.innerHTML = "Checklist item";
+
+    checkbox.onclick = () => {
+
+        checkbox.classList.toggle("checked");
+
+        text.classList.toggle("checked");
+
+        saveCurrentNote();
+
+    };
+
+    checklist.appendChild(checkbox);
+
+    checklist.appendChild(text);
+
+    range.deleteContents();
+
+    range.insertNode(checklist);
+
+    placeCaretAtEnd(text);
+
+    saveCurrentNote();
 
 }
 
-searchInput.addEventListener("input", e => {
+function placeCaretAtEnd(el){
 
-    renderNotes(e.target.value);
+    el.focus();
+
+    const range = document.createRange();
+
+    range.selectNodeContents(el);
+
+    range.collapse(false);
+
+    const sel = window.getSelection();
+
+    sel.removeAllRanges();
+
+    sel.addRange(range);
+
+}
+
+/* LINKS */
+
+editor.addEventListener("click", function(e){
+
+    const link = e.target.closest("a");
+
+    if(link){
+
+        window.open(
+            link.href,
+            "_blank"
+        );
+
+    }
 
 });
 
-editor.addEventListener(
-    "input",
-    saveCurrentNote
-);
-
-titleInput.addEventListener(
-    "input",
-    saveCurrentNote
-);
+/* AUTO LINK PASTE */
 
 editor.addEventListener("paste", function(e){
 
@@ -683,6 +953,42 @@ editor.addEventListener("paste", function(e){
     );
 
 });
+
+/* EVENTS */
+
+searchInput.addEventListener("input", e => {
+
+    renderNotes(e.target.value);
+
+});
+
+editor.addEventListener(
+    "input",
+    saveCurrentNote
+);
+
+titleInput.addEventListener(
+    "input",
+    saveCurrentNote
+);
+
+/* DATE */
+
+function formatDate(timestamp){
+
+    const date = new Date(timestamp);
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            month:"short",
+            day:"numeric"
+        }
+    );
+
+}
+
+/* INIT */
 
 if(notes.length === 0){
 
