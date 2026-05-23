@@ -1,21 +1,10 @@
-<!--
-IMPORTANT:
-Replace your ENTIRE current notes/index.html with this file.
-This version fully integrates:
-- working hyperlink pasting
-- manual hyperlink creation
-- preserved text selection
-- target="_blank"
-- working checklist system
-- working nested lists
-- stable keyboard handling
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Kiln Notes</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -252,6 +241,56 @@ input{
 
 .format-button:hover{
     background:white;
+}
+
+/* FORMAT MENU */
+
+.format-menu{
+    position:absolute;
+
+    top:54px;
+    left:16px;
+
+    display:none;
+
+    flex-direction:column;
+
+    background:#f4ede4;
+
+    border:1px solid rgba(70,50,30,0.08);
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.12);
+
+    z-index:100;
+}
+
+.format-menu.show{
+    display:flex;
+}
+
+.format-menu button{
+    border:none;
+
+    background:none;
+
+    padding:12px 16px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    color:#3f3126;
+
+    font-size:14px;
+}
+
+.format-menu button:hover{
+    background:rgba(0,0,0,0.04);
 }
 
 /* LINK POPUP */
@@ -515,6 +554,13 @@ input{
 
             <button
                 class="format-button"
+                onclick="toggleFormatMenu()"
+            >
+                Aa
+            </button>
+
+            <button
+                class="format-button"
                 onclick="document.execCommand('bold')"
             >
                 B
@@ -555,6 +601,31 @@ input{
                 ✓
             </button>
 
+            <!-- FORMAT MENU -->
+
+            <div
+                class="format-menu"
+                id="formatMenu"
+            >
+
+                <button onclick="formatBlock('p')">
+                    Text
+                </button>
+
+                <button onclick="formatBlock('h3')">
+                    Subheading
+                </button>
+
+                <button onclick="formatBlock('h2')">
+                    Heading
+                </button>
+
+                <button onclick="formatBlock('h1')">
+                    Title
+                </button>
+
+            </div>
+
             <!-- LINK POPUP -->
 
             <div
@@ -590,8 +661,6 @@ input{
 
 <script>
 
-/* ELEMENTS */
-
 const editor =
     document.getElementById("editor");
 
@@ -609,8 +678,6 @@ const linkPopup =
 
 const linkInput =
     document.getElementById("linkInput");
-
-/* STATE */
 
 let notes =
     JSON.parse(
@@ -772,6 +839,29 @@ function saveNotes(){
         "kilnNotes",
         JSON.stringify(notes)
     );
+
+}
+
+/* FORMAT */
+
+function toggleFormatMenu(){
+
+    document
+        .getElementById("formatMenu")
+        .classList
+        .toggle("show");
+
+}
+
+function formatBlock(tag){
+
+    document.execCommand(
+        "formatBlock",
+        false,
+        tag
+    );
+
+    saveCurrentNote();
 
 }
 
@@ -984,6 +1074,16 @@ function applyLink(){
 
 }
 
+linkInput.addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+
+        applyLink();
+
+    }
+
+});
+
 /* PASTE */
 
 editor.addEventListener("paste", function(e){
@@ -1032,7 +1132,7 @@ editor.addEventListener("paste", function(e){
 
 });
 
-/* CLICK LINKS */
+/* OPEN LINKS */
 
 editor.addEventListener("click", function(e){
 
@@ -1048,6 +1148,22 @@ editor.addEventListener("click", function(e){
             "_blank"
         );
 
+    }
+
+});
+
+/* CLOSE MENUS */
+
+document.addEventListener("click", function(e){
+
+    const formatMenu =
+        document.getElementById("formatMenu");
+
+    if(
+        formatMenu &&
+        !e.target.closest(".toolbar")
+    ){
+        formatMenu.classList.remove("show");
     }
 
 });
