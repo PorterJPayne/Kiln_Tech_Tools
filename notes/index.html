@@ -429,8 +429,6 @@ button{
 
 <div class="notes-app">
 
-    <!-- SIDEBAR -->
-
     <div class="notes-sidebar">
 
         <div class="notes-header">
@@ -460,8 +458,6 @@ button{
         <div id="noteList" class="note-list"></div>
 
     </div>
-
-    <!-- MAIN -->
 
     <div class="notes-main">
 
@@ -495,8 +491,6 @@ button{
             </div>
 
         </div>
-
-        <!-- TOOLBAR -->
 
         <div class="toolbar">
 
@@ -564,8 +558,6 @@ button{
 
         </div>
 
-        <!-- EDITOR -->
-
         <div
             id="editor"
             class="note-editor"
@@ -579,15 +571,11 @@ button{
 
 <script>
 
-/* STORAGE */
-
 let notes = JSON.parse(
     localStorage.getItem("kilnNotes")
 ) || [];
 
 let currentNoteId = null;
-
-/* ELEMENTS */
 
 const editor = document.getElementById("editor");
 const noteList = document.getElementById("noteList");
@@ -746,11 +734,7 @@ function saveCurrentNote(){
 
     saveNotes();
 
-    const currentScroll = noteList.scrollTop;
-
     renderNotes(searchInput.value);
-
-    noteList.scrollTop = currentScroll;
 
 }
 
@@ -848,33 +832,7 @@ document.addEventListener("click", function(e){
 
 /* CHECKLIST */
 
-function insertChecklist(){
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount) return;
-
-    const range = selection.getRangeAt(0);
-
-    let currentNode = range.startContainer;
-
-    while(
-        currentNode &&
-        currentNode !== editor &&
-        !currentNode.classList?.contains("checklist-item")
-    ){
-        currentNode = currentNode.parentNode;
-    }
-
-    if(
-        currentNode &&
-        currentNode.classList?.contains("checklist-item")
-    ){
-        return;
-    }
-
-    const selectedText =
-        selection.toString();
+function createChecklistRow(textValue = ""){
 
     const checklist =
         document.createElement("div");
@@ -896,8 +854,7 @@ function insertChecklist(){
 
     text.contentEditable = true;
 
-    text.innerText =
-        selectedText || "";
+    text.innerText = textValue;
 
     checkbox.onclick = () => {
 
@@ -913,6 +870,30 @@ function insertChecklist(){
 
     checklist.appendChild(text);
 
+    return {
+        checklist,
+        text
+    };
+
+}
+
+function insertChecklist(){
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount) return;
+
+    const selectedText =
+        selection.toString();
+
+    const {
+        checklist,
+        text
+    } = createChecklistRow(selectedText);
+
+    const range =
+        selection.getRangeAt(0);
+
     range.deleteContents();
 
     range.insertNode(checklist);
@@ -923,15 +904,19 @@ function insertChecklist(){
 
 }
 
+/* ENTER KEY */
+
 editor.addEventListener("keydown", function(e){
 
     if(e.key !== "Enter") return;
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     if(!selection.rangeCount) return;
 
-    let node = selection.anchorNode;
+    let node =
+        selection.anchorNode;
 
     while(
         node &&
@@ -941,48 +926,27 @@ editor.addEventListener("keydown", function(e){
         node = node.parentNode;
     }
 
-    if(!node) return;
+    if(
+        !node ||
+        !node.classList?.contains("checklist-text")
+    ){
+        return;
+    }
 
     e.preventDefault();
 
     const currentChecklist =
         node.parentNode;
 
-    const newChecklist =
-        document.createElement("div");
+    const {
+        checklist,
+        text
+    } = createChecklistRow("");
 
-    newChecklist.className =
-        "checklist-item";
-
-    const checkbox =
-        document.createElement("div");
-
-    checkbox.className =
-        "checklist-checkbox";
-
-    const text =
-        document.createElement("div");
-
-    text.className =
-        "checklist-text";
-
-    text.contentEditable = true;
-
-    checkbox.onclick = () => {
-
-        checkbox.classList.toggle("checked");
-
-        text.classList.toggle("checked");
-
-        saveCurrentNote();
-
-    };
-
-    newChecklist.appendChild(checkbox);
-
-    newChecklist.appendChild(text);
-
-    currentChecklist.after(newChecklist);
+    currentChecklist.insertAdjacentElement(
+        "afterend",
+        checklist
+    );
 
     placeCaretAtEnd(text);
 
