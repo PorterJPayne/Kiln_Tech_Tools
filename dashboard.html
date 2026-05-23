@@ -1,95 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Kiln Dashboard</title>
+<title>Kiln Dashboard</title>
 
-  <link rel="stylesheet" href="./core/platform1.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../core/platform1.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="../core/notes-api.js"></script>
+
 </head>
+
 <body>
 
 <div class="app-layout">
 
-  <aside class="sidebar">
+    <!-- SIDEBAR -->
 
-    <div class="logo">
-      Kiln<span>Tech</span>
-    </div>
+    <aside class="sidebar">
 
-    <div class="nav">
+        <div class="logo">
+            Kiln<span>Tech</span>
+        </div>
 
-      <button class="nav-button active">
-        Dashboard
-      </button>
+        <div class="nav">
 
-      <button class="nav-button">
-        Notes
-      </button>
+            <button class="nav-button active">
+                Dashboard
+            </button>
 
-      <button class="nav-button">
-        Maps
-      </button>
+            <button class="nav-button">
+                Notes
+            </button>
 
-      <button class="nav-button">
-        Tickets
-      </button>
+            <button class="nav-button">
+                Maps
+            </button>
 
-      <button class="nav-button">
-        SOPs
-      </button>
+            <button class="nav-button">
+                Tickets
+            </button>
 
-    </div>
+            <button class="nav-button">
+                SOPs
+            </button>
 
-  </aside>
+        </div>
 
-  <main class="main-content">
+    </aside>
 
-    <div class="topbar">
+    <!-- MAIN -->
 
-      <input
-        class="searchbar"
-        placeholder="Search everything..."
-      >
+    <main class="main-content">
 
-      <button class="button button-primary">
-        + Quick Note
-      </button>
+        <!-- TOPBAR -->
 
-    </div>
+        <div class="topbar">
 
-    <div class="widget-grid">
+            <input
+                class="searchbar"
+                placeholder="Search everything..."
+            >
 
-      <div class="widget span-5">
-        <h2>Today Queue</h2>
+            <button class="button button-primary">
+                + Quick Note
+            </button>
 
-        <p>This will become your live task system.</p>
-      </div>
+        </div>
 
-      <div class="widget span-4">
-        <h2>Quick Notes</h2>
+        <!-- GRID -->
 
-        <p>This will become operational memory.</p>
-      </div>
+        <div class="widget-grid">
 
-      <div class="widget span-3">
-        <h2>Stats</h2>
+            <!-- TODAY QUEUE -->
 
-        <p>Weekly ticket stats.</p>
-      </div>
+            <div class="widget span-5">
 
-    </div>
+                <h2>Today Queue</h2>
 
-  </main>
+                <p>
+                    This will eventually connect to
+                    tickets, projects, and operational workflows.
+                </p>
+
+            </div>
+
+            <!-- NOTES WIDGET -->
+
+            <div class="widget span-4">
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:16px;
+                        gap:10px;
+                    "
+                >
+
+                    <h2 style="margin:0;">
+                        Notes
+                    </h2>
+
+                    <select
+                        id="dashboardNoteSelect"
+                        style="
+                            background:var(--panel-light);
+                            border:1px solid var(--border);
+                            color:var(--text);
+                            padding:10px;
+                            border-radius:10px;
+                        "
+                    ></select>
+
+                </div>
+
+                <input
+                    id="dashboardNoteTitle"
+                    placeholder="Note title"
+                    style="
+                        width:100%;
+                        margin-bottom:12px;
+                        padding:12px;
+                        border:none;
+                        border-radius:12px;
+                        background:var(--panel-light);
+                        color:var(--text);
+                    "
+                >
+
+                <textarea
+                    id="dashboardNoteContent"
+                    placeholder="Quick operational note..."
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        resize:none;
+                        border:none;
+                        border-radius:12px;
+                        background:var(--panel-light);
+                        color:var(--text);
+                        padding:14px;
+                        font-family:inherit;
+                    "
+                ></textarea>
+
+            </div>
+
+            <!-- STATS -->
+
+            <div class="widget span-3">
+
+                <h2>Stats</h2>
+
+                <p>
+                    Weekly ticket stats will go here.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
 
 </div>
 
-<script src="./core/storage.js"></script>
-<script src="./core/platform.js"></script>
+<script>
+
+// =========================
+// NOTES WIDGET
+// =========================
+
+let dashboardNotes = [];
+
+let currentDashboardNote = null;
+
+const noteSelect =
+    document.getElementById(
+        "dashboardNoteSelect"
+    );
+
+const noteTitle =
+    document.getElementById(
+        "dashboardNoteTitle"
+    );
+
+const noteContent =
+    document.getElementById(
+        "dashboardNoteContent"
+    );
+
+// =========================
+// INIT
+// =========================
+
+async function initDashboardNotes(){
+
+    dashboardNotes =
+        await fetchNotes();
+
+    renderDashboardNoteOptions();
+
+    if(dashboardNotes.length){
+
+        loadDashboardNote(
+            dashboardNotes[0].id
+        );
+
+    }
+
+}
+
+// =========================
+// DROPDOWN
+// =========================
+
+function renderDashboardNoteOptions(){
+
+    noteSelect.innerHTML = "";
+
+    dashboardNotes.forEach(note => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = note.id;
+
+        option.textContent = note.title;
+
+        noteSelect.appendChild(option);
+
+    });
+
+}
+
+// =========================
+// LOAD NOTE
+// =========================
+
+function loadDashboardNote(id){
+
+    currentDashboardNote =
+        dashboardNotes.find(
+            n => n.id == id
+        );
+
+    if(!currentDashboardNote) return;
+
+    noteSelect.value =
+        currentDashboardNote.id;
+
+    noteTitle.value =
+        currentDashboardNote.title;
+
+    noteContent.value =
+        stripHtml(
+            currentDashboardNote.content
+        );
+
+}
+
+// =========================
+// SAVE NOTE
+// =========================
+
+async function saveDashboardNote(){
+
+    if(!currentDashboardNote) return;
+
+    currentDashboardNote.title =
+        noteTitle.value;
+
+    currentDashboardNote.content =
+        noteContent.value;
+
+    currentDashboardNote.updatedAt =
+        Date.now();
+
+    await saveNote({
+        id: currentDashboardNote.id,
+        title: currentDashboardNote.title,
+        content: currentDashboardNote.content,
+        pinned: currentDashboardNote.pinned,
+        updatedAt: currentDashboardNote.updatedAt
+    });
+
+}
+
+// =========================
+// STRIP HTML
+// =========================
+
+function stripHtml(html){
+
+    const div =
+        document.createElement("div");
+
+    div.innerHTML = html;
+
+    return div.textContent || "";
+
+}
+
+// =========================
+// EVENTS
+// =========================
+
+noteSelect.addEventListener(
+    "change",
+    () => {
+
+        loadDashboardNote(
+            noteSelect.value
+        );
+
+    }
+);
+
+noteTitle.addEventListener(
+    "input",
+    saveDashboardNote
+);
+
+noteContent.addEventListener(
+    "input",
+    saveDashboardNote
+);
+
+// =========================
+// START
+// =========================
+
+initDashboardNotes();
+
+</script>
 
 </body>
 </html>
