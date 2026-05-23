@@ -572,6 +572,7 @@ let notes = [];
 
 let currentNoteId = null;
 let savedSelection = null;
+let saveTimeout = null;
 
 /* NOTES */
 
@@ -708,9 +709,15 @@ function saveCurrentNote(){
     note.updatedAt =
         Date.now();
 
-    saveNotes();
-
     renderNotes(searchInput.value);
+
+    clearTimeout(saveTimeout);
+
+    saveTimeout = setTimeout(() => {
+
+        saveNotes().catch(console.error);
+
+    }, 1000);
 
 }
 
