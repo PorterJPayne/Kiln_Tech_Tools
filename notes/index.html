@@ -1285,6 +1285,13 @@ searchInput.addEventListener(
 
 
 /* INIT */
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const noteId =
+    params.get("id");
 
 async function initNotes(){
 
@@ -1308,7 +1315,17 @@ async function initNotes(){
 
         renderNotes();
 
-        loadNote(notes[0].id);
+        if(noteId){
+
+    loadNote(Number(noteId));
+
+}
+
+else{
+
+    loadNote(notes[0].id);
+
+}
 
     }
 

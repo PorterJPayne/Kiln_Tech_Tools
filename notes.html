@@ -71,9 +71,9 @@
       <div class="notes-container">
 
         <iframe
-          class="notes-frame"
-          src="notes/index.html"
-        ></iframe>
+  class="notes-frame"
+  id="notesFrame"
+></iframe>
 
       </div>
 
@@ -82,6 +82,19 @@
   </main>
 
 </div>
+
+<script>
+
+const frame =
+    document.getElementById(
+        "notesFrame"
+    );
+
+frame.src =
+    "notes/index.html" +
+    window.location.search;
+
+</script>
 
 </body>
 </html>
