@@ -20,7 +20,11 @@ window.sidebarPath = "/core/sidebar.html";
 
 </head>
 
-<body>
+<body
+  class="platform-body"
+  data-title="Dashboard"
+  data-description="Operational notes and workflow tracking."
+>
 
 <div class="app-layout">
 
@@ -37,18 +41,7 @@ window.sidebarPath = "/core/sidebar.html";
 
         <!-- TOPBAR -->
 
-        <div class="topbar">
-
-            <input
-                class="searchbar"
-                placeholder="Search everything..."
-            >
-
-            <button class="button button-primary">
-                + Quick Note
-            </button>
-
-        </div>
+        <div id="topbar"></div>
 
         <!-- GRID -->
 

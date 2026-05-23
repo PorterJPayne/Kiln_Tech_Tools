@@ -16,7 +16,11 @@ window.sidebarPath = "/core/sidebar.html";
  <script src="/core/layout.js" defer></script>
 </head>
 
-<body class="platform-body">
+<body
+  class="platform-body"
+  data-title="Paint"
+  data-description="Operational notes and workflow tracking."
+>
 
 <div class="app">
 
@@ -26,6 +30,8 @@ window.sidebarPath = "/core/sidebar.html";
 ></aside>
 
 <main class="main platform-page">
+
+  <div id="topbar"></div>
 
     <iframe
       src="paint/index.html"

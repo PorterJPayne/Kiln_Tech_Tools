@@ -1,9 +1,9 @@
 // =========================
 // LOAD SIDEBAR
 // =========================
-console.log("LAYOUT LOADED");
+
 async function loadSidebar(){
-console.log("LOADING SIDEBAR");
+
     const sidebar =
         document.getElementById(
             "sidebar"
@@ -11,15 +11,52 @@ console.log("LOADING SIDEBAR");
 
     if(!sidebar) return;
 
-   const response =
-  await fetch("/core/sidebar.html");
-console.log(response);
+    const response =
+        await fetch("/core/sidebar.html");
+
     const html =
         await response.text();
 
     sidebar.innerHTML = html;
-console.log("SIDEBAR INSERTED");
+
     setActiveNav();
+
+}
+
+// =========================
+// LOAD TOPBAR
+// =========================
+
+async function loadTopbar(){
+
+    const topbar =
+        document.getElementById(
+            "topbar"
+        );
+
+    if(!topbar) return;
+
+    const response =
+        await fetch("/core/topbar.html");
+
+    const html =
+        await response.text();
+
+    topbar.innerHTML = html;
+
+    const title =
+        document.body.dataset.title || "";
+
+    const description =
+        document.body.dataset.description || "";
+
+    document.getElementById(
+        "topbarTitle"
+    ).textContent = title;
+
+    document.getElementById(
+        "topbarDescription"
+    ).textContent = description;
 
 }
 
@@ -69,4 +106,4 @@ function navigateTo(path){
 // =========================
 
 loadSidebar();
-console.log("navigateTo:", navigateTo);
+loadTopbar();

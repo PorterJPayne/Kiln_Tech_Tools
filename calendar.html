@@ -57,7 +57,11 @@ body{
 
 </head>
 
-<body class="platform-body">
+<body
+  class="platform-body"
+  data-title="Calendar"
+  data-description="Operational notes and workflow tracking."
+>
 
 <div class="app">
 
@@ -68,10 +72,7 @@ body{
 
  <main class="main platform-page">
 
-  <div class="topbar">
-    <h2>Calendar</h2>
-    <p>Google Calendar schedule and events.</p>
-  </div>
+  <div id="topbar"></div>
 
   <iframe
     class="calendar-frame"
