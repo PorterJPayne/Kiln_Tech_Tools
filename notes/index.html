@@ -548,6 +548,8 @@ input{
 
 </div>
 
+<script src="./core/notes-api.js"></script>
+
 <script>
 
 const editor = document.getElementById("editor");
@@ -556,17 +558,7 @@ const titleInput = document.getElementById("titleInput");
 const searchInput = document.getElementById("searchInput");
 const linkPopup = document.getElementById("linkPopup");
 const linkInput = document.getElementById("linkInput");
-const SUPABASE_URL =
-    "https://otwlqqhiiinltxdydcev.supabase.co";
 
-const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90d2xxcWhpaWlubHR4ZHlkY2V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0OTYzMDcsImV4cCI6MjA5NTA3MjMwN30.HoUbXld83LQBiatA9P3zt8ffwgMzqZApwdj88gzjgRw";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
 
 let notes = [];
 
@@ -715,36 +707,13 @@ function saveCurrentNote(){
 
     saveTimeout = setTimeout(() => {
 
-        saveNotes().catch(console.error);
+        saveNote(note);
 
     }, 1000);
 
 }
 
-async function saveNotes(){
 
-    for(const note of notes){
-
-        const { error } =
-           await supabaseClient
-                .from("notes")
-                .upsert({
-                    id: note.id,
-                    title: note.title,
-                    content: note.content,
-                    pinned: note.pinned,
-                    updated_at: note.updatedAt
-                });
-
-        if(error){
-
-            console.error(error);
-
-        }
-
-    }
-
-}
 
 /* FORMAT */
 
@@ -805,7 +774,7 @@ function deleteNote(){
 
     }
 
-    saveNotes();
+    deleteNoteFromDB(currentNoteId);
 
 }
 
@@ -1308,22 +1277,16 @@ searchInput.addEventListener(
     e => renderNotes(e.target.value)
 );
 
-async function loadNotesFromDatabase(){
 
-    const { data, error } =
-        await supabaseClient
-            .from("notes")
-            .select("*");
 
-    if(error){
 
-        console.error(error);
+/* INIT */
 
-        return;
+async function initNotes(){
 
-    }
+    notes = await fetchNotes();
 
-    notes = data.map(note => ({
+    notes = notes.map(note => ({
 
         id: note.id,
         title: note.title,
@@ -1347,10 +1310,8 @@ async function loadNotesFromDatabase(){
 
 }
 
+initNotes();
 
-/* INIT */
-
-loadNotesFromDatabase();
 </script>
 
 </body>
