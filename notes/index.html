@@ -21,11 +21,8 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
-
     font-family:Inter,Arial,sans-serif;
-
     background:#ddd2c2;
-
     color:#2f2419;
 }
 
@@ -46,18 +43,14 @@ input{
 .notes-sidebar{
     width:320px;
     min-width:320px;
-
     background:#d2c5b4;
-
     border-right:1px solid rgba(70,50,30,0.08);
-
     display:flex;
     flex-direction:column;
 }
 
 .notes-header{
     padding:20px;
-
     border-bottom:1px solid rgba(70,50,30,0.08);
 }
 
@@ -68,56 +61,37 @@ input{
 
 .new-note-btn{
     width:100%;
-
     border:none;
-
     background:#8b735d;
-
     color:white;
-
     padding:11px;
-
     border-radius:12px;
-
     cursor:pointer;
-
     font-size:14px;
     font-weight:600;
 }
 
 .notes-search{
     margin:14px;
-
     padding:11px 13px;
-
     border:none;
-
     border-radius:12px;
-
     outline:none;
-
     background:rgba(255,255,255,0.45);
 }
 
 .note-list{
     flex:1;
-
     overflow-y:auto;
-
     padding:0 10px 10px;
 }
 
 .note-item{
     padding:12px;
-
     border-radius:12px;
-
     margin-bottom:6px;
-
     cursor:pointer;
-
     border:1px solid transparent;
-
     position:relative;
 }
 
@@ -127,7 +101,6 @@ input{
 
 .note-item.active{
     background:rgba(255,255,255,0.45);
-
     border-color:rgba(70,50,30,0.08);
 }
 
@@ -153,12 +126,9 @@ input{
 
 .notes-main{
     flex:1;
-
     display:flex;
     flex-direction:column;
-
     overflow:hidden;
-
     background:#e7ddd0;
 }
 
@@ -166,9 +136,7 @@ input{
 
 .note-topbar{
     padding:18px 22px;
-
     border-bottom:1px solid rgba(70,50,30,0.08);
-
     display:flex;
     align-items:center;
     gap:10px;
@@ -176,16 +144,11 @@ input{
 
 .title-input{
     flex:1;
-
     background:none;
-
     border:none;
-
     outline:none;
-
     font-size:30px;
     font-weight:700;
-
     color:#2f2419;
 }
 
@@ -196,14 +159,10 @@ input{
 
 .icon-btn{
     border:none;
-
     width:40px;
     height:40px;
-
     border-radius:10px;
-
     cursor:pointer;
-
     background:rgba(255,255,255,0.5);
 }
 
@@ -211,13 +170,9 @@ input{
 
 .toolbar{
     position:relative;
-
     padding:10px 16px;
-
     border-bottom:1px solid rgba(70,50,30,0.08);
-
     background:#ded4c7;
-
     display:flex;
     align-items:center;
     gap:8px;
@@ -225,16 +180,11 @@ input{
 
 .format-button{
     border:none;
-
     width:38px;
     height:38px;
-
     border-radius:10px;
-
     background:rgba(255,255,255,0.55);
-
     cursor:pointer;
-
     font-size:15px;
     font-weight:700;
 }
@@ -247,25 +197,15 @@ input{
 
 .format-menu{
     position:absolute;
-
     top:54px;
     left:16px;
-
     display:none;
-
     flex-direction:column;
-
     background:#f4ede4;
-
     border:1px solid rgba(70,50,30,0.08);
-
     border-radius:14px;
-
     overflow:hidden;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.12);
-
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
     z-index:100;
 }
 
@@ -275,17 +215,11 @@ input{
 
 .format-menu button{
     border:none;
-
     background:none;
-
     padding:12px 16px;
-
     text-align:left;
-
     cursor:pointer;
-
     color:#3f3126;
-
     font-size:14px;
 }
 
@@ -297,26 +231,16 @@ input{
 
 .link-popup{
     position:absolute;
-
     top:56px;
     right:16px;
-
     display:none;
-
     align-items:center;
     gap:8px;
-
     padding:12px;
-
     border-radius:14px;
-
     background:#f4ede4;
-
     border:1px solid rgba(70,50,30,0.08);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.12);
-
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
     z-index:500;
 }
 
@@ -326,29 +250,19 @@ input{
 
 .link-popup input{
     width:240px;
-
     padding:10px 12px;
-
     border:none;
-
     border-radius:10px;
-
     outline:none;
 }
 
 .link-popup button{
     border:none;
-
     background:#8b735d;
-
     color:white;
-
     padding:10px 14px;
-
     border-radius:10px;
-
     cursor:pointer;
-
     font-weight:600;
 }
 
@@ -356,15 +270,10 @@ input{
 
 .note-editor{
     flex:1;
-
     overflow-y:auto;
-
     padding:24px 28px;
-
     line-height:1.45;
-
     font-size:15px;
-
     outline:none;
 }
 
@@ -398,13 +307,9 @@ input{
 
 .note-editor a{
     color:#7a4f2b;
-
     text-decoration:underline;
-
     text-decoration-thickness:2px;
-
     font-weight:500;
-
     cursor:pointer;
 }
 
@@ -417,26 +322,18 @@ input{
 .checklist-item{
     display:flex;
     align-items:flex-start;
-
     gap:10px;
-
     margin:4px 0;
 }
 
 .checklist-checkbox{
     width:18px;
     height:18px;
-
     border-radius:50%;
-
     border:2px solid #8b735d;
-
     margin-top:2px;
-
     flex-shrink:0;
-
     cursor:pointer;
-
     background:white;
 }
 
@@ -446,9 +343,7 @@ input{
 
 .checklist-text{
     flex:1;
-
     min-height:20px;
-
     outline:none;
 }
 
@@ -486,8 +381,6 @@ input{
 
 <div class="notes-app">
 
-    <!-- SIDEBAR -->
-
     <div class="notes-sidebar">
 
         <div class="notes-header">
@@ -515,8 +408,6 @@ input{
         ></div>
 
     </div>
-
-    <!-- MAIN -->
 
     <div class="notes-main">
 
@@ -547,8 +438,6 @@ input{
             </div>
 
         </div>
-
-        <!-- TOOLBAR -->
 
         <div class="toolbar">
 
@@ -646,8 +535,6 @@ input{
 
         </div>
 
-        <!-- EDITOR -->
-
         <div
             id="editor"
             class="note-editor"
@@ -661,23 +548,12 @@ input{
 
 <script>
 
-const editor =
-    document.getElementById("editor");
-
-const noteList =
-    document.getElementById("noteList");
-
-const titleInput =
-    document.getElementById("titleInput");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const linkPopup =
-    document.getElementById("linkPopup");
-
-const linkInput =
-    document.getElementById("linkInput");
+const editor = document.getElementById("editor");
+const noteList = document.getElementById("noteList");
+const titleInput = document.getElementById("titleInput");
+const searchInput = document.getElementById("searchInput");
+const linkPopup = document.getElementById("linkPopup");
+const linkInput = document.getElementById("linkInput");
 
 let notes =
     JSON.parse(
@@ -685,7 +561,6 @@ let notes =
     ) || [];
 
 let currentNoteId = null;
-
 let savedSelection = null;
 
 /* NOTES */
@@ -695,13 +570,9 @@ function createNewNote(){
     const note = {
 
         id: Date.now(),
-
         title:"Untitled Note",
-
         content:"",
-
         pinned:false,
-
         updatedAt:Date.now()
 
     };
@@ -1147,6 +1018,225 @@ editor.addEventListener("click", function(e){
             link.href,
             "_blank"
         );
+
+    }
+
+});
+
+/* KEYBOARD BEHAVIOR */
+
+editor.addEventListener("keydown", function(e){
+
+    const selection =
+        window.getSelection();
+
+    if(!selection.rangeCount) return;
+
+    let checklistNode =
+        selection.anchorNode;
+
+    while(
+        checklistNode &&
+        checklistNode !== editor &&
+        !checklistNode.classList?.contains("checklist-text")
+    ){
+        checklistNode =
+            checklistNode.parentNode;
+    }
+
+    /* CHECKLIST ENTER */
+
+    if(
+        e.key === "Enter" &&
+        checklistNode &&
+        checklistNode.classList?.contains("checklist-text")
+    ){
+
+        e.preventDefault();
+
+        const currentChecklist =
+            checklistNode.parentNode;
+
+        if(
+            checklistNode.innerText.trim() === ""
+        ){
+
+            const p =
+                document.createElement("p");
+
+            p.innerHTML = "<br>";
+
+            currentChecklist.replaceWith(p);
+
+            placeCaretAtEnd(p);
+
+            saveCurrentNote();
+
+            return;
+
+        }
+
+        const {
+            checklist,
+            text
+        } = createChecklistRow("");
+
+        currentChecklist.insertAdjacentElement(
+            "afterend",
+            checklist
+        );
+
+        placeCaretAtEnd(text);
+
+        saveCurrentNote();
+
+        return;
+
+    }
+
+    /* CHECKLIST BACKSPACE */
+
+    if(
+        e.key === "Backspace" &&
+        checklistNode &&
+        checklistNode.classList?.contains("checklist-text")
+    ){
+
+        if(
+            checklistNode.innerText.trim() === ""
+        ){
+
+            e.preventDefault();
+
+            const checklist =
+                checklistNode.parentNode;
+
+            const p =
+                document.createElement("p");
+
+            p.innerHTML = "<br>";
+
+            checklist.replaceWith(p);
+
+            placeCaretAtEnd(p);
+
+            saveCurrentNote();
+
+            return;
+
+        }
+
+    }
+
+    /* DASH SPACE BULLETS */
+
+    if(e.key === " "){
+
+        const range =
+            selection.getRangeAt(0);
+
+        const currentText =
+            range.startContainer.textContent;
+
+        if(currentText === "-"){
+
+            e.preventDefault();
+
+            range.startContainer.textContent = "";
+
+            const ul =
+                document.createElement("ul");
+
+            const li =
+                document.createElement("li");
+
+            li.innerHTML = "<br>";
+
+            ul.appendChild(li);
+
+            range.insertNode(ul);
+
+            placeCaretAtEnd(li);
+
+            saveCurrentNote();
+
+            return;
+
+        }
+
+    }
+
+    /* TAB INDENT */
+
+    if(e.key === "Tab"){
+
+        let li =
+            selection.anchorNode;
+
+        while(
+            li &&
+            li !== editor &&
+            li.nodeName !== "LI"
+        ){
+            li = li.parentNode;
+        }
+
+        if(li && li.nodeName === "LI"){
+
+            e.preventDefault();
+
+            if(!e.shiftKey){
+
+                const prevLi =
+                    li.previousElementSibling;
+
+                if(prevLi){
+
+                    let nested =
+                        prevLi.querySelector(":scope > ul");
+
+                    if(!nested){
+
+                        nested =
+                            document.createElement("ul");
+
+                        prevLi.appendChild(nested);
+
+                    }
+
+                    nested.appendChild(li);
+
+                }
+
+            }
+
+            else {
+
+                const parentUl =
+                    li.parentElement;
+
+                const parentLi =
+                    parentUl.closest("li");
+
+                if(parentLi){
+
+                    parentLi.after(li);
+
+                    if(
+                        parentUl.children.length === 0
+                    ){
+                        parentUl.remove();
+                    }
+
+                }
+
+            }
+
+            saveCurrentNote();
+
+            return;
+
+        }
 
     }
 
