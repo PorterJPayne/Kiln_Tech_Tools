@@ -89,7 +89,7 @@ body{
   background:var(--bg);
   color:var(--text);
   font-family:Inter,sans-serif;
-  overflow:auto;
+  overflow:hidden;
 }
 
 /* ========================================
@@ -127,7 +127,7 @@ body{
   display:flex;
   flex-direction:column;
 
-  overflow:hidden;
+  overflow:auto;
 }
 
 /* ========================================
