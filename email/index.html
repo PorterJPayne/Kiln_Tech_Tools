@@ -179,7 +179,7 @@ body{
 
 .email-preview{
 
-  background:#fcfaf7;
+  background:var(--surface);
 
   border:1px solid var(--border);
 
@@ -209,6 +209,17 @@ body{
     top:0;
 
   }
+
+}
+
+
+input,
+textarea,
+select{
+
+  background:var(--surface);
+
+  color:var(--text);
 
 }
 
@@ -245,7 +256,7 @@ body{
         <input
           id="dateInput"
           type="text"
-          class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+          class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
         />
 
       </div>
@@ -260,7 +271,7 @@ body{
         <textarea
           id="introInput"
           rows="2"
-          class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+          class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
         >Hola a todos,</textarea>
 
       </div>
@@ -278,7 +289,7 @@ body{
 
           <select
             id="sectionInput"
-            class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+            class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
           >
             <option>Completed</option>
             <option>In Progress</option>
@@ -289,28 +300,28 @@ body{
             id="titleInput"
             type="text"
             placeholder="Entry title"
-            class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+            class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <textarea
             id="descriptionInput"
             rows="3"
             placeholder="Brief explanation..."
-            class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+            class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
           ></textarea>
 
           <input
             id="buttonTextInput"
             type="text"
             placeholder="Ticket Number (#710088)"
-            class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+            class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <input
             id="buttonLinkInput"
             type="text"
             placeholder="Link URL"
-            class="w-full bg-white border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
+            class="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <div class="flex gap-3 pt-1">
@@ -946,7 +957,7 @@ function renderEntryList(){
 
     const div = document.createElement("div");
 
-    div.className = "bg-white border border-[#e7dfd6] rounded-xl p-2.5";
+    div.className = "bg-[var(--surface)] border border-[#e7dfd6] rounded-xl p-2.5";
 
     div.innerHTML = `
       <div class="flex items-start justify-between gap-3">
@@ -1140,7 +1151,7 @@ document.getElementById("copyBtn").addEventListener("click",()=>{
 <!DOCTYPE html>
 <html>
 <body style="background:#e9ddd0;padding:24px;font-family:Arial,sans-serif;">
-<div style="max-width:980px;margin:auto;background:#fcfaf7;padding:40px;border-radius:12px;">
+<div style="max-width:980px;margin:auto;background:var(--surface);padding:40px;border-radius:12px;">
 ${previewContent.innerHTML}
 </div>
 </body>
@@ -1159,7 +1170,7 @@ document.getElementById("downloadBtn").addEventListener("click",()=>{
 <!DOCTYPE html>
 <html>
 <body style="background:#e9ddd0;padding:24px;font-family:Arial,sans-serif;">
-<div style="max-width:980px;margin:auto;background:#fcfaf7;padding:40px;border-radius:12px;">
+<div style="max-width:980px;margin:auto;background:var(--surface);padding:40px;border-radius:12px;">
 ${previewContent.innerHTML}
 </div>
 </body>
