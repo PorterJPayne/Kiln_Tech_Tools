@@ -58,6 +58,25 @@ async function loadTopbar(){
         "topbarDescription"
     ).textContent = description;
 
+    const btn =
+    document.querySelector(
+        '.mobile-menu-btn'
+    );
+
+const sidebar =
+    document.querySelector(
+        '.sidebar'
+    );
+
+if(btn && sidebar){
+
+    btn.addEventListener('click', () => {
+
+        sidebar.classList.toggle('open');
+
+    });
+
+}
 }
 
 // =========================
