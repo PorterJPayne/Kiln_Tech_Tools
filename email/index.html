@@ -441,6 +441,8 @@ async function loadEntries(){
 
     renderEntryList();
 
+renderPreview();
+
 }
 
 function getHistory(){
@@ -1145,11 +1147,14 @@ document.getElementById("clearDraftBtn").addEventListener("click",()=>{
 
 });
 
-loadEntries();
-
 if(!dateInput.value){
-  dateInput.value = formattedDate();
+
+    dateInput.value =
+        formattedDate();
+
 }
+
+loadEntries();
 
 </script>
 
