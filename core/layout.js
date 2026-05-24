@@ -270,10 +270,7 @@ setTimeout(() => {
 // GLOBAL TASK MODAL
 // =========================
 
-const taskModal =
-    document.getElementById(
-        "taskModal"
-    );
+
 
 // =========================
 // OPEN
@@ -288,9 +285,18 @@ document.addEventListener(
             "globalTaskBtn"
         ){
 
-            taskModal
-                .classList
-                .remove("hidden");
+            const modal =
+    document.getElementById(
+        "taskModal"
+    );
+
+if(modal){
+
+    modal.classList.remove(
+        "hidden"
+    );
+
+}
 
         }
 
@@ -310,9 +316,18 @@ document.addEventListener(
             "closeTaskModal"
         ){
 
-            taskModal
-                .classList
-                .add("hidden");
+           const modal =
+    document.getElementById(
+        "taskModal"
+    );
+
+if(modal){
+
+    modal.classList.add(
+        "hidden"
+    );
+
+}
 
         }
 
@@ -358,9 +373,18 @@ document.addEventListener(
 
             await createTask(task);
 
-            taskModal
-                .classList
-                .add("hidden");
+          const modal =
+    document.getElementById(
+        "taskModal"
+    );
+
+if(modal){
+
+    modal.classList.add(
+        "hidden"
+    );
+
+}
 
             // OPTIONAL:
             // refresh queue if dashboard
