@@ -1080,7 +1080,26 @@ document.getElementById("addEntryBtn").addEventListener("click",()=>{
 
     entries.push(entry);
 
-  }
+    createEmailEntry({
+
+        section:
+            entry.section,
+
+        title:
+            entry.title,
+
+        explanation:
+            entry.description,
+
+        ticket:
+            entry.buttonText,
+
+        link:
+            entry.buttonLink
+
+    });
+
+}
 
   clearForm();
   renderEntryList();
