@@ -767,24 +767,31 @@ function togglePin(){
 
 /* DELETE */
 
-function deleteNote(){
+async function deleteNote(){
+
+    const idToDelete =
+        currentNoteId;
 
     notes =
         notes.filter(
-            n => n.id !== currentNoteId
+            n => n.id !== idToDelete
         );
+
+    await deleteNoteFromDB(
+        idToDelete
+    );
 
     if(notes.length){
 
         loadNote(notes[0].id);
 
-    } else {
+    }
+
+    else {
 
         createNewNote();
 
     }
-
-    deleteNoteFromDB(currentNoteId);
 
 }
 
