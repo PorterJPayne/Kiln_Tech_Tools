@@ -492,14 +492,14 @@ select:focus{
 }
 
 .mobile-menu-btn{
-    display:none;
+    display:none !important;
 }
 
 @media(max-width:900px){
 
     .mobile-menu-btn{
-        display:flex;
-
+    display:flex !important;
+    
         align-items:center;
         justify-content:center;
 
