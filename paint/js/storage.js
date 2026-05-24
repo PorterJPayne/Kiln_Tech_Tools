@@ -74,7 +74,7 @@ async function loadCloudData(){
 
     const response =
       await fetch(
-        "/paint/api/load"
+        "/api/load"
       );
 
     if(!response.ok){
@@ -126,7 +126,7 @@ async function forceSave(){
 
     const response =
       await fetch(
-        "/paint/api/save",
+        "/api/save",
         {
 
           method:"POST",
