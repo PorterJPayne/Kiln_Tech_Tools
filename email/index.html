@@ -19,6 +19,10 @@
 
 <script src="/core/api/tickets-api.js"></script>
 
+<script src="/core/api/tasks-api.js"></script>
+
+<script src="/core/api/email-api.js"></script>
+
 <style>
 
 :root{
@@ -364,20 +368,78 @@ function saveDraft(){
 
 }
 
-function loadDraft(){
+// =========================
+// LOAD ENTRIES
+// =========================
 
-  const saved = localStorage.getItem("kilnDraft");
+async function loadEntries(){
 
-  if(!saved) return;
+    // =========================
+    // SUPABASE ENTRIES
+    // =========================
 
-  const draft = JSON.parse(saved);
+    const supabaseEntries =
+        await fetchEmailEntries();
 
-  entries = draft.entries || [];
+    if(
+        supabaseEntries &&
+        supabaseEntries.length
+    ){
 
-  dateInput.value = draft.date || formattedDate();
-  introInput.value = draft.intro || "Hola a todos,";
+        entries =
+            supabaseEntries.map(entry => ({
 
-  renderEntryList();
+                section:
+                    entry.section,
+
+                title:
+                    entry.title,
+
+                description:
+                    entry.explanation,
+
+                buttonText:
+                    entry.ticket,
+
+                buttonLink:
+                    entry.link
+
+            }));
+
+    }
+
+    // =========================
+    // FALLBACK LOCAL DRAFT
+    // =========================
+
+    else {
+
+        const saved =
+            localStorage.getItem(
+                "kilnDraft"
+            );
+
+        if(saved){
+
+            const draft =
+                JSON.parse(saved);
+
+            entries =
+                draft.entries || [];
+
+            dateInput.value =
+                draft.date ||
+                formattedDate();
+
+            introInput.value =
+                draft.intro ||
+                "Hola a todos,";
+
+        }
+
+    }
+
+    renderEntryList();
 
 }
 
@@ -1083,13 +1145,11 @@ document.getElementById("clearDraftBtn").addEventListener("click",()=>{
 
 });
 
-loadDraft();
+loadEntries();
 
 if(!dateInput.value){
   dateInput.value = formattedDate();
 }
-
-renderPreview();
 
 </script>
 
