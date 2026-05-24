@@ -13,6 +13,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+<script src="/core/api/tickets-api.js"></script>
+<script src="/core/api/supabase.js"></script>
+
 <style>
 
 :root{
@@ -902,7 +905,82 @@ window.deleteEntry = function(index){
 
 }
 
-document.getElementById("submitCompletedBtn").addEventListener("click",()=>{
+document.getElementById(
+    "submitCompletedBtn"
+).addEventListener(
+    "click",
+    async () => {
+
+        const weekKey =
+            getWeekKey();
+
+        const history =
+            await fetchTicketHistory();
+
+        const existingTickets =
+            new Set(
+
+                history
+                    .filter(
+                        item =>
+                            item.week_key === weekKey
+                    )
+                    .map(
+                        item => item.ticket
+                    )
+
+            );
+
+        const completedEntries =
+            entries.filter(
+                e =>
+                    e.section === "Completed"
+            );
+
+        let added = 0;
+
+        for(const entry of completedEntries){
+
+            const ticket =
+                entry.buttonText?.trim();
+
+            if(
+
+                ticket &&
+                ticket.startsWith("#") &&
+                !existingTickets.has(ticket)
+
+            ){
+
+                await saveCompletedTicket({
+
+                    ticket,
+                    weekKey
+
+                });
+
+                existingTickets.add(ticket);
+
+                added++;
+
+            }
+
+        }
+
+        renderPreview();
+
+        alert(
+
+            added === 0
+
+            ? "No new completed tickets submitted."
+
+            : `${added} completed tickets submitted.`
+
+        );
+
+    }
+);
 
   const history = getHistory();
 
