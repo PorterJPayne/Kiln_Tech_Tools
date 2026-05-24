@@ -389,15 +389,25 @@ if(modal){
             // OPTIONAL:
             // refresh queue if dashboard
 
-            if(
-                typeof loadTasks ===
-                "function"
-            ){
+            // =========================
+// OPTIONAL DASHBOARD REFRESH
+// =========================
 
-                loadTasks();
+if(
+    window.location.pathname
+        .includes("dashboard")
+){
 
-            }
+    if(
+        typeof loadTasks ===
+        "function"
+    ){
 
+        loadTasks();
+
+    }
+
+}
         }
 
     }

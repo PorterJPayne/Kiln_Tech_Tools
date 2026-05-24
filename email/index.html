@@ -387,24 +387,27 @@ async function loadEntries(){
     ){
 
         entries =
-            supabaseEntries.map(entry => ({
+    supabaseEntries.map(entry => ({
 
-                section:
-                    entry.section,
+        id:
+            entry.id,
 
-                title:
-                    entry.title,
+        section:
+            entry.section,
 
-                description:
-                    entry.explanation,
+        title:
+            entry.title,
 
-                buttonText:
-                    entry.ticket,
+        description:
+            entry.explanation,
 
-                buttonLink:
-                    entry.link
+        buttonText:
+            entry.ticket,
 
-            }));
+        buttonLink:
+            entry.link
+
+    }));
 
     }
 
@@ -962,13 +965,34 @@ window.editEntry = function(index){
 
 }
 
-window.deleteEntry = function(index){
+window.deleteEntry = async function(index){
 
-  entries.splice(index,1);
+    const entry =
+        entries[index];
 
-  renderEntryList();
-  renderPreview();
-  saveDraft();
+    // =========================
+    // DELETE FROM SUPABASE
+    // =========================
+
+    if(entry.id){
+
+        await deleteEmailEntry(
+            entry.id
+        );
+
+    }
+
+    // =========================
+    // REMOVE LOCALLY
+    // =========================
+
+    entries.splice(index,1);
+
+    renderEntryList();
+
+    renderPreview();
+
+    saveDraft();
 
 }
 

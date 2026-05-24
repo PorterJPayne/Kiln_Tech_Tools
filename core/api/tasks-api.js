@@ -71,3 +71,27 @@ async function updateTask(id, updates){
     }
 
 }
+
+
+// =========================
+// DELETE EMAIL ENTRY
+// =========================
+
+async function deleteEmailEntry(id){
+
+    const { error } =
+        await supabaseClient
+            .from("email_entries")
+            .delete()
+            .eq("id", id);
+
+    if(error){
+
+        console.error(
+            "Delete email entry error:",
+            error
+        );
+
+    }
+
+}
