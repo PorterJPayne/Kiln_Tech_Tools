@@ -68,13 +68,34 @@ const sidebar =
         '.sidebar'
     );
 
+const overlay =
+    document.querySelector(
+        '.sidebar-overlay'
+    );
+
 if(btn && sidebar){
 
     btn.addEventListener('click', () => {
 
         sidebar.classList.toggle('open');
 
+        if(overlay){
+            overlay.classList.toggle('open');
+        }
+
     });
+
+    if(overlay){
+
+        overlay.addEventListener('click', () => {
+
+            sidebar.classList.remove('open');
+
+            overlay.classList.remove('open');
+
+        });
+
+    }
 
 }
 }

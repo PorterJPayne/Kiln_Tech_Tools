@@ -499,7 +499,7 @@ select:focus{
 
     .mobile-menu-btn{
     display:flex !important;
-    
+
         align-items:center;
         justify-content:center;
 
@@ -515,6 +515,34 @@ select:focus{
         font-size:22px;
 
         cursor:pointer;
+    }
+
+}
+
+.sidebar-overlay{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .sidebar-overlay{
+
+        position:fixed;
+        inset:0;
+
+        background:rgba(0,0,0,0.45);
+
+        z-index:999;
+
+        opacity:0;
+        pointer-events:none;
+
+        transition:opacity .25s ease;
+    }
+
+    .sidebar-overlay.open{
+        opacity:1;
+        pointer-events:auto;
     }
 
 }
