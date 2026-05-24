@@ -1026,6 +1026,73 @@ div[style*="height:10px"]{
 
 </div>
 
+
+<!-- =========================
+     COMPLETE TASK MODAL
+========================= -->
+
+<div
+    class="modal-overlay hidden"
+    id="completeTaskModal"
+>
+
+    <div class="task-modal">
+
+        <div class="modal-title">
+            Complete Task
+        </div>
+
+        <div class="modal-grid">
+
+            <select
+                id="completionCategory"
+                class="input"
+            >
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+                <option value="Progress">
+                    Progress
+                </option>
+
+                <option value="Note">
+                    Note
+                </option>
+
+            </select>
+
+            <textarea
+                id="completionReport"
+                class="input modal-textarea"
+                placeholder="Completion report..."
+            ></textarea>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="button"
+                id="closeCompleteModal"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="button button-primary"
+                id="completeTaskBtn"
+            >
+                Submit
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script>
 
 // =========================
