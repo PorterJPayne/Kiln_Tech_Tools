@@ -134,213 +134,407 @@ window.sidebarPath = "/core/sidebar.html";
 
             <div class="widget-grid">
 
-                <!-- HERO -->
+    <!-- HERO -->
 
-                <div class="widget span-12">
+    <div class="widget span-12">
 
-                    <div class="flex-between">
+        <div class="flex-between">
 
-                        <div>
+            <div>
 
-                            <div class="dashboard-label">
-                                DAILY OPERATIONS
-                            </div>
-
-                            <div class="dashboard-hero-text">
-                                Quick access, workflow tools,
-                                and operational visibility.
-                            </div>
-
-                        </div>
-
-                        <div class="flex gap-md">
-
-                            <button class="button button-primary">
-                                + Quick Note
-                            </button>
-
-                            <button class="button">
-                                Open Maps
-                            </button>
-
-                        </div>
-
-                    </div>
-
+                <div class="dashboard-label">
+                    DAILY OPERATIONS
                 </div>
 
-                <!-- TODAY QUEUE -->
-
-                <div class="widget span-5">
-
-                    <h2>
-                        Today Queue
-                    </h2>
-
-                    <p class="muted">
-                        Daily operational priorities,
-                        maintenance, and event prep.
-                    </p>
-
+                <div class="dashboard-hero-text">
+                    Operational visibility, quick actions,
+                    maps, notes, tickets, and workflow tracking.
                 </div>
 
-                <!-- NOTES -->
+            </div>
 
-                <div class="widget span-4">
+            <div class="flex gap-md">
 
-                    <div class="flex-between gap-md">
+                <button
+                    class="button button-primary"
+                    onclick="window.location.href='/notes/index.html'"
+                >
+                    Open Notes
+                </button>
 
-                        <h2>
-                            Notes
-                        </h2>
+                <button
+                    class="button"
+                    onclick="window.location.href='/paint/index.html'"
+                >
+                    Open Maps
+                </button>
 
-                        <select
-                            id="dashboardNoteSelect"
-                            class="input"
-                        ></select>
+                <button
+                    class="button"
+                    onclick="window.location.href='/analytics.html'"
+                >
+                    Analytics
+                </button>
 
-                    </div>
+            </div>
 
-                    <div style="height:16px;"></div>
+        </div>
 
-                    <input
-                        id="dashboardNoteTitle"
-                        class="input"
-                        placeholder="Note title"
-                    >
+    </div>
 
-                    <div style="height:12px;"></div>
+    <!-- NOTES -->
 
-                    <div
-    id="dashboardNoteContent"
-    class="input"
-    contenteditable="true"
-    style="
-        min-height:220px;
-        width:100%;
-        overflow:auto;
-        white-space:pre-wrap;
-    "
-></div>
+    <div class="widget span-5">
 
+        <div class="flex-between gap-md">
+
+            <h2>
+                Operational Notes
+            </h2>
+
+            <select
+                id="dashboardNoteSelect"
+                class="input"
+            ></select>
+
+        </div>
+
+        <div style="height:16px;"></div>
+
+        <input
+            id="dashboardNoteTitle"
+            class="input"
+            placeholder="Note title"
+        >
+
+        <div style="height:12px;"></div>
+
+        <div
+            id="dashboardNoteContent"
+            class="input"
+            contenteditable="true"
+            style="
+                min-height:320px;
+                width:100%;
+                overflow:auto;
+                white-space:pre-wrap;
+            "
+        ></div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="widget span-3">
+
+        <h2>
+            Quick Actions
+        </h2>
+
+        <div class="flex-column gap-sm">
+
+            <button
+                class="button button-primary"
+                onclick="window.location.href='/notes/index.html'"
+            >
+                New Note
+            </button>
+
+            <button
+                class="button"
+                onclick="window.location.href='/paint/index.html'"
+            >
+                Open Maps
+            </button>
+
+            <button
+                class="button"
+                onclick="window.location.href='/forms/request.html'"
+            >
+                Request Form
+            </button>
+
+            <button
+                class="button"
+                onclick="window.location.href='/analytics.html'"
+            >
+                Open Analytics
+            </button>
+
+            <button
+                class="button"
+                onclick="window.location.href='/email-generator/index.html'"
+            >
+                Daily Update
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="widget span-4">
+
+        <h2>
+            Operational Snapshot
+        </h2>
+
+        <div class="flex-column gap-md">
+
+            <div>
+
+                <div class="muted">
+                    Tickets Completed This Week
                 </div>
 
-                <!-- QUICK ACTIONS -->
-
-                <div class="widget span-3">
-
-                    <h2>
-                        Quick Actions
-                    </h2>
-
-                    <div class="flex-column gap-sm">
-
-                        <button class="button button-primary">
-                            New Note
-                        </button>
-
-                        <button class="button">
-                            Open Maps
-                        </button>
-
-                        <button class="button">
-                            Create Ticket
-                        </button>
-
-                        <button class="button">
-                            Event Prep
-                        </button>
-
-                    </div>
-
+                <div
+                    style="
+                        font-size:42px;
+                        font-weight:700;
+                        margin-top:8px;
+                    "
+                >
+                    37
                 </div>
 
-                <!-- EVENTS -->
+            </div>
 
-                <div class="widget span-4">
+            <div>
 
-                    <h2>
-                        Upcoming Events
-                    </h2>
-
-                    <p class="muted">
-                        Calendar integration and event preparation.
-                    </p>
-
+                <div class="muted">
+                    Active Projects
                 </div>
 
-                <!-- PROJECTS -->
-
-                <div class="widget span-4">
-
-                    <h2>
-                        Projects
-                    </h2>
-
-                    <p class="muted">
-                        Active operational projects and maintenance tracking.
-                    </p>
-
+                <div
+                    style="
+                        font-size:32px;
+                        font-weight:700;
+                        margin-top:8px;
+                    "
+                >
+                    8
                 </div>
 
-                <!-- SEARCH -->
+            </div>
 
-                <div class="widget span-4">
+        </div>
 
-                    <h2>
-                        Search
-                    </h2>
+    </div>
 
-                    <p class="muted">
-                        Recently searched operational records and notes.
-                    </p>
+    <!-- TODAY QUEUE -->
 
-                </div>
+    <div class="widget span-4">
 
-                <!-- MAPS -->
+        <h2>
+            Today Queue
+        </h2>
 
-                <div class="widget span-6">
+        <div class="flex-column gap-sm">
 
-                    <h2>
-                        Maps & Infrastructure
-                    </h2>
+            <div class="widget-card">
+                Daily walkthroughs
+            </div>
 
-                    <p class="muted">
-                        Wiring plans, room overlays,
-                        and visual operations.
-                    </p>
+            <div class="widget-card">
+                Phone booth panel fixes
+            </div>
 
-                </div>
+            <div class="widget-card">
+                Alta whiteboard paint
+            </div>
 
-                <!-- SOPS -->
+            <div class="widget-card">
+                Lehi 2 board breakdown
+            </div>
 
-                <div class="widget span-3">
+            <div class="widget-card">
+                Fan troubleshooting
+            </div>
 
-                    <h2>
-                        SOPs
-                    </h2>
+        </div>
 
-                    <p class="muted">
-                        Standard operating procedures and documentation.
-                    </p>
+    </div>
 
-                </div>
+    <!-- MAPS -->
 
-                <!-- STATS -->
+    <div class="widget span-4">
 
-                <div class="widget span-3">
+        <div class="flex-between">
 
-                    <h2>
-                        Stats
-                    </h2>
+            <h2>
+                Maps & Infrastructure
+            </h2>
 
-                    <p class="muted">
-                        Weekly operational metrics and trends.
-                    </p>
+            <button
+                class="button"
+                onclick="window.location.href='/paint/index.html'"
+            >
+                Open
+            </button>
+
+        </div>
+
+        <div style="height:18px;"></div>
+
+        <div class="flex-column gap-sm">
+
+            <button class="button">
+                Snowbird
+            </button>
+
+            <button class="button">
+                Alta
+            </button>
+
+            <button class="button">
+                Brighton
+            </button>
+
+            <button class="button">
+                Lehi 2 Storage
+            </button>
+
+            <button class="button">
+                Wiring Overlay
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- PROJECTS -->
+
+    <div class="widget span-6">
+
+        <h2>
+            Active Projects
+        </h2>
+
+        <div style="height:18px;"></div>
+
+        <div class="flex-column gap-md">
+
+            <div class="widget-card">
+
+                <div class="flex-between">
+
+                    <strong>
+                        Cable Holders & Hole Repair
+                    </strong>
+
+                    <span class="muted">
+                        3 rooms
+                    </span>
 
                 </div>
 
             </div>
+
+            <div class="widget-card">
+
+                <div class="flex-between">
+
+                    <strong>
+                        Phone Booth Panel Repairs
+                    </strong>
+
+                    <span class="muted">
+                        8 booths
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="widget-card">
+
+                <div class="flex-between">
+
+                    <strong>
+                        Paint Touchups
+                    </strong>
+
+                    <span class="muted">
+                        Multi-location
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="widget span-3">
+
+        <h2>
+            Search
+        </h2>
+
+        <div style="height:14px;"></div>
+
+        <input
+            class="input"
+            placeholder="Search operations..."
+        >
+
+        <div style="height:16px;"></div>
+
+        <div class="flex-column gap-sm">
+
+            <div class="widget-card">
+                Snowbird fan issue
+            </div>
+
+            <div class="widget-card">
+                Alta whiteboard
+            </div>
+
+            <div class="widget-card">
+                Lehi 2 storage
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SOPS -->
+
+    <div class="widget span-3">
+
+        <h2>
+            SOPs
+        </h2>
+
+        <div style="height:18px;"></div>
+
+        <div class="flex-column gap-sm">
+
+            <button class="button">
+                Daily Walkthrough
+            </button>
+
+            <button class="button">
+                Paint Process
+            </button>
+
+            <button class="button">
+                Phone Booth Repair
+            </button>
+
+            <button class="button">
+                Event Prep
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
         </div>
 
