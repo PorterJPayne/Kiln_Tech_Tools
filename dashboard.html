@@ -307,6 +307,16 @@ div[style*="height:12px"]{
 
 }
 
+.dashboard-top-strip{
+
+    padding:10px 14px;
+
+    border-bottom:1px solid var(--border);
+
+    background:rgba(255,255,255,0.02);
+
+}
+
 </style>
 
 </head>
@@ -336,6 +346,23 @@ div[style*="height:12px"]{
 
         <!-- CONTENT -->
 
+<div class="dashboard-top-strip">
+
+    <div>
+
+        <div class="dashboard-label">
+            DAILY OPERATIONS
+        </div>
+
+        <div class="dashboard-hero-text">
+            Maps, workflows, notes, maintenance,
+            analytics, and operational visibility.
+        </div>
+
+    </div>
+
+</div>
+
         <div
     class="content dashboard-content"
     style="padding-top:6px;"
@@ -345,141 +372,142 @@ div[style*="height:12px"]{
 
     <!-- HERO -->
 
-    <div class="widget span-12 hero-widget">
+    <!-- TOP OPERATIONS ROW -->
 
-        <div class="flex-between">
+<div class="widget span-6">
 
-            <div>
-
-                <div class="dashboard-label">
-                    DAILY OPERATIONS
-                </div>
-
-                <div class="dashboard-hero-text">
-                    Operational visibility, quick actions,
-                    maps, notes, tickets, and workflow tracking.
-                </div>
-
-            </div>
-
-            <div class="flex gap-md">
-
-                <button
-                    class="button button-primary"
-                    onclick="window.location.href='/notes/index.html'"
-                >
-                    Open Notes
-                </button>
-
-                <button
-                    class="button"
-                    onclick="window.location.href='/paint/index.html'"
-                >
-                    Open Maps
-                </button>
-
-                <button
-                    class="button"
-                    onclick="window.location.href='/analytics.html'"
-                >
-                    Analytics
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- NOTES -->
-
-    <div class="widget span-5">
-
-        <div class="flex-between gap-md">
-
-            <h2>
-                Operational Notes
-            </h2>
-
-            <select
-                id="dashboardNoteSelect"
-                class="input"
-            ></select>
-
-        </div>
-
-        <div style="height:16px;"></div>
-
-        <input
-            id="dashboardNoteTitle"
-            class="input"
-            placeholder="Note title"
-        >
-
-        <div style="height:12px;"></div>
-
-        <div
-            id="dashboardNoteContent"
-            class="input"
-            contenteditable="true"
-            style="
-                min-height:320px;
-                width:100%;
-                overflow:auto;
-                white-space:pre-wrap;
-            "
-        ></div>
-
-    </div>
-
-    <!-- QUICK ACTIONS -->
-
-    <div class="widget span-3">
+    <div class="flex-between">
 
         <h2>
-            Quick Actions
+            Operational Notes
         </h2>
 
-        <div class="flex-column gap-sm">
+        <select
+            id="dashboardNoteSelect"
+            class="input"
+            style="max-width:220px;"
+        ></select>
 
-            <button
-                class="button button-primary"
-                onclick="window.location.href='/notes/index.html'"
-            >
-                New Note
-            </button>
+    </div>
 
-            <button
-                class="button"
-                onclick="window.location.href='/paint/index.html'"
-            >
-                Open Maps
-            </button>
+    <div style="height:10px;"></div>
 
-            <button
-                class="button"
-                onclick="window.location.href='/forms/request.html'"
-            >
-                Request Form
-            </button>
+    <input
+        id="dashboardNoteTitle"
+        class="input"
+        placeholder="Note title"
+    >
 
-            <button
-                class="button"
-                onclick="window.location.href='/analytics.html'"
-            >
-                Open Analytics
-            </button>
+    <div style="height:8px;"></div>
 
-            <button
-                class="button"
-                onclick="window.location.href='/email-generator/index.html'"
-            >
-                Daily Update
-            </button>
+    <div
+        id="dashboardNoteContent"
+        class="input"
+        contenteditable="true"
+        style="
+            min-height:340px;
+            max-height:340px;
+            overflow:auto;
+            white-space:pre-wrap;
+        "
+    ></div>
+
+</div>
+
+<div class="widget span-3">
+
+    <h2>
+        Quick Actions
+    </h2>
+
+    <div class="flex-column gap-sm">
+
+        <button
+            class="button button-primary"
+            onclick="window.location.href='/notes/index.html'"
+        >
+            Notes
+        </button>
+
+        <button
+            class="button"
+            onclick="window.location.href='/paint/index.html'"
+        >
+            Paint Map
+        </button>
+
+        <button
+            class="button"
+            onclick="window.location.href='/analytics.html'"
+        >
+            Analytics
+        </button>
+
+        <button
+            class="button"
+            onclick="window.location.href='/forms/request.html'"
+        >
+            Forms
+        </button>
+
+        <button
+            class="button"
+            onclick="window.location.href='/email-generator/index.html'"
+        >
+            Daily Update
+        </button>
+
+    </div>
+
+</div>
+
+<div class="widget span-3">
+
+    <h2>
+        Operational Snapshot
+    </h2>
+
+    <div class="flex-column gap-md">
+
+        <div>
+
+            <div class="muted">
+                Tickets This Week
+            </div>
+
+            <div class="stat-number">
+                37
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="muted">
+                Active Projects
+            </div>
+
+            <div class="stat-number">
+                8
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="muted">
+                Open Rooms
+            </div>
+
+            <div class="stat-number">
+                12
+            </div>
 
         </div>
 
     </div>
+
+</div>
 
     <!-- STATS -->
 
