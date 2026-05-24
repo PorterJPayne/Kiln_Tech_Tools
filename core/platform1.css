@@ -668,6 +668,9 @@ select:focus{
   color:var(--text);
   border-bottom:none;
 }
+.search-results:empty{
+    display:none;
+}
 
 .search-result:hover{
   background:var(--panel-light);
