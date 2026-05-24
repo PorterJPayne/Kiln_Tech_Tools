@@ -46,6 +46,8 @@ window.sidebarPath = "/core/sidebar.html";
     max-width:700px;
 }
 
+
+
 </style>
 
 </head>
@@ -156,16 +158,17 @@ window.sidebarPath = "/core/sidebar.html";
 
                     <div style="height:12px;"></div>
 
-                    <textarea
-                        id="dashboardNoteContent"
-                        class="input"
-                        placeholder="Quick operational note..."
-                        style="
-                            min-height:220px;
-                            resize:none;
-                            width:100%;
-                        "
-                    ></textarea>
+                    <div
+    id="dashboardNoteContent"
+    class="input"
+    contenteditable="true"
+    style="
+        min-height:220px;
+        width:100%;
+        overflow:auto;
+        white-space:pre-wrap;
+    "
+></div>
 
                 </div>
 
@@ -380,10 +383,8 @@ function loadDashboardNote(id){
     noteTitle.value =
         currentDashboardNote.title;
 
-    noteContent.value =
-        stripHtml(
-            currentDashboardNote.content
-        );
+    noteContent.innerHTML =
+    currentDashboardNote.content || "";
 
 }
 
@@ -399,7 +400,7 @@ async function saveDashboardNote(){
         noteTitle.value;
 
     currentDashboardNote.content =
-        noteContent.value;
+    noteContent.innerHTML;
 
     currentDashboardNote.updatedAt =
         Date.now();
@@ -417,17 +418,6 @@ async function saveDashboardNote(){
 // =========================
 // STRIP HTML
 // =========================
-
-function stripHtml(html){
-
-    const div =
-        document.createElement("div");
-
-    div.innerHTML = html;
-
-    return div.textContent || "";
-
-}
 
 // =========================
 // EVENTS
