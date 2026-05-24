@@ -20,27 +20,21 @@
 <script src="/core/api/tickets-api.js"></script>
 
 <style>
-<style>
 
 :root{
-  --bg:#020817;
-  --surface:#0f172a;
-  --surface-2:#111827;
-  --border:#243041;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-  --accent:#7d8e71;
-  --accent-hover:#708063;
-  --blue:#4f7cff;
-  --blue-hover:#3d68db;
+  --outer:#e9ddd0;
+  --card:#fcfaf7;
+  --sage:#7d8e71;
+  --brown:#a56f45;
+  --text:#2c2926;
+  --muted:#766d65;
+  --line:#ddd2c5;
 }
 
 body{
-  background:transparent;
+  background:var(--outer);
   color:var(--text);
   font-family:'Inter',sans-serif;
-  margin:0;
-  padding:0;
 }
 
 .serif{
@@ -51,52 +45,24 @@ input,
 textarea,
 select{
   transition:.18s ease;
-  background:var(--surface);
-  color:var(--text);
-  border:1px solid var(--border);
-}
-
-input::placeholder,
-textarea::placeholder{
-  color:var(--muted);
 }
 
 input:focus,
 textarea:focus,
 select:focus{
   outline:none;
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(125,142,113,.12);
+  border-color:var(--sage);
+  box-shadow:0 0 0 3px rgba(125,142,113,.08);
 }
 
 textarea{
   resize:vertical;
 }
 
-.email-generator-layout{
-  display:grid;
-  grid-template-columns:320px minmax(0,1fr);
-  gap:24px;
-  padding:24px;
-  align-items:start;
-}
-
-.email-sidebar{
-  position:sticky;
-  top:24px;
-}
-
-.email-controls{
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-}
-
 .email-preview{
-  background:#fcfaf7;
-  border:1px solid var(--border);
-  border-radius:18px;
+  background:var(--card);
+  border:1px solid #ddd2c5;
+  border-radius:12px;
   padding:40px;
 }
 
@@ -104,7 +70,7 @@ textarea{
   font-size:10px;
   letter-spacing:.14em;
   text-transform:uppercase;
-  color:var(--muted);
+  color:#726962;
   font-weight:600;
 }
 
@@ -114,126 +80,55 @@ textarea{
 
 .action-btn:hover{
   transform:translateY(-1px);
-  opacity:.95;
+  opacity:.92;
 }
 
 .edit-btn{
   font-size:11px;
   padding:5px 9px;
   border-radius:6px;
-  background:#1e293b;
-  color:var(--text);
+  background:#ece7e0;
 }
 
 .edit-btn:hover{
-  background:#334155;
+  background:#dfd7cd;
 }
 
 .delete-btn{
   font-size:11px;
   padding:5px 9px;
   border-radius:6px;
-  background:#3f1d1d;
-  color:#fca5a5;
+  background:#f1dfdb;
 }
 
 .delete-btn:hover{
-  background:#5b2525;
+  background:#e6cbc5;
 }
 
-.panel-input{
-  width:100%;
-  border-radius:14px;
-  padding:12px 14px;
-  font-size:13px;
-}
-
-.primary-btn{
-  background:var(--accent);
-  color:white;
-}
-
-.primary-btn:hover{
-  background:var(--accent-hover);
-}
-
-.secondary-btn{
-  background:var(--blue);
-  color:white;
-}
-
-.secondary-btn:hover{
-  background:var(--blue-hover);
-}
-
-.subtle-btn{
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-}
-
-.subtle-btn:hover{
-  background:#182235;
-}
-
-.entry-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:12px;
-}
-
-.entry-muted{
-  color:var(--muted);
-}
-
-@media(max-width:1200px){
-
-  .email-generator-layout{
-    grid-template-columns:1fr;
-  }
-
-  .email-sidebar{
-    position:relative;
-    top:0;
-  }
-
-}
-
-</style>
 </style>
 </head>
 
-<body>
+<body class="min-h-screen p-4 overflow-x-hidden">
 
-<div class="email-generator-layout">
-
+<div class="w-full mx-auto grid grid-cols-[280px_minmax(0,1fr)] gap-5 items-start">
   <!-- LEFT PANEL -->
-
-  <div class="email-sidebar">
+  <div>
 
     <div class="mb-5">
 
-      <h1
-        class="serif text-5xl leading-none mb-2"
-        style="color:var(--text);"
-      >
-        kiln<span class="mx-2" style="color:var(--blue);">|</span>TECH.
+      <h1 class="serif text-5xl leading-none mb-2">
+        kiln<span class="mx-2">|</span>TECH.
       </h1>
 
-      <div
-        class="tracking-[0.22em] uppercase text-[10px]"
-        style="color:var(--muted);"
-      >
+      <div class="tracking-[0.22em] uppercase text-[10px] text-[#766d65]">
         Daily Update Generator
       </div>
 
     </div>
 
-    <div class="email-controls">
+    <div class="bg-[#f7f3ee] border border-[#ddd2c5] rounded-xl p-5">
 
       <!-- DATE -->
-
       <div class="mb-4">
 
         <div class="small-label mb-2">
@@ -243,13 +138,12 @@ textarea{
         <input
           id="dateInput"
           type="text"
-          class="panel-input"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
         />
 
       </div>
 
       <!-- INTRO -->
-
       <div class="mb-5">
 
         <div class="small-label mb-2">
@@ -259,18 +153,14 @@ textarea{
         <textarea
           id="introInput"
           rows="2"
-          class="panel-input"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
         >Hola a todos,</textarea>
 
       </div>
 
-      <div
-        class="my-5"
-        style="border-top:1px solid var(--border);"
-      ></div>
+      <div class="border-t border-[#ddd2c5] my-5"></div>
 
       <!-- ENTRY -->
-
       <div>
 
         <div class="small-label mb-3">
@@ -281,7 +171,7 @@ textarea{
 
           <select
             id="sectionInput"
-            class="panel-input"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           >
             <option>Completed</option>
             <option>In Progress</option>
@@ -292,42 +182,42 @@ textarea{
             id="titleInput"
             type="text"
             placeholder="Entry title"
-            class="panel-input"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <textarea
             id="descriptionInput"
             rows="3"
             placeholder="Brief explanation..."
-            class="panel-input"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           ></textarea>
 
           <input
             id="buttonTextInput"
             type="text"
             placeholder="Ticket Number (#710088)"
-            class="panel-input"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <input
             id="buttonLinkInput"
             type="text"
             placeholder="Link URL"
-            class="panel-input"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
           />
 
           <div class="flex gap-3 pt-1">
 
             <button
               id="addEntryBtn"
-              class="flex-1 py-2.5 rounded-xl action-btn text-[13px] font-medium primary-btn"
+              class="flex-1 bg-[#7d8e71] hover:bg-[#708063] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
             >
               + Add Entry
             </button>
 
             <button
               id="clearBtn"
-              class="px-5 rounded-xl transition text-[13px] subtle-btn"
+              class="px-5 border border-[#ddd2c5] rounded-xl hover:bg-[#f1ece6] transition text-[13px]"
             >
               Clear
             </button>
@@ -339,37 +229,25 @@ textarea{
       </div>
 
       <!-- ENTRY LIST -->
+      <div id="entryList" class="mt-5 space-y-2"></div>
 
-      <div
-        id="entryList"
-        class="mt-5 space-y-2"
-      ></div>
-
-      <div
-        class="my-5"
-        style="border-top:1px solid var(--border);"
-      ></div>
+      <div class="border-t border-[#ddd2c5] my-5"></div>
 
       <!-- SUBMIT -->
-
       <div class="mb-5">
 
         <button
           id="submitCompletedBtn"
-          class="w-full py-3 rounded-xl action-btn text-[13px] font-medium primary-btn"
+          class="w-full bg-[#7d8e71] hover:bg-[#6d7e61] text-white py-3 rounded-xl action-btn text-[13px] font-medium"
         >
           Submit Completed Tickets
         </button>
 
       </div>
 
-      <div
-        class="my-5"
-        style="border-top:1px solid var(--border);"
-      ></div>
+      <div class="border-t border-[#ddd2c5] my-5"></div>
 
       <!-- EXPORT -->
-
       <div>
 
         <div class="small-label mb-3">
@@ -380,21 +258,21 @@ textarea{
 
           <button
             id="copyBtn"
-            class="w-full py-2.5 rounded-xl action-btn text-[13px] font-medium secondary-btn"
+            class="w-full bg-[#a56f45] hover:bg-[#94613b] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
           >
             Copy HTML
           </button>
 
           <button
             id="downloadBtn"
-            class="w-full py-2.5 rounded-xl action-btn text-[13px] font-medium subtle-btn"
+            class="w-full border border-[#d8c7b7] hover:bg-[#f2ece5] py-2.5 rounded-xl action-btn text-[13px] font-medium text-[#8c603c]"
           >
             Download HTML
           </button>
 
           <button
             id="clearDraftBtn"
-            class="w-full py-2.5 rounded-xl text-[13px] subtle-btn"
+            class="w-full border border-[#e0d3c7] hover:bg-[#f3ebe3] py-2.5 rounded-xl text-[13px]"
           >
             Clear Draft
           </button>
@@ -408,30 +286,18 @@ textarea{
   </div>
 
   <!-- PREVIEW -->
-
   <div>
 
     <div class="flex items-center justify-center gap-12 mb-4">
 
-      <div
-        class="flex items-center gap-3 pb-2 px-4"
-        style="
-          border-bottom:2px solid var(--accent);
-          color:var(--text);
-        "
-      >
+      <div class="flex items-center gap-3 border-b-2 border-[#7d8e71] pb-2 px-4">
         <span>◉</span>
-
-        <span class="font-medium tracking-wide text-xs">
-          PREVIEW
-        </span>
-
+        <span class="font-medium tracking-wide text-xs">PREVIEW</span>
       </div>
 
     </div>
 
-    <div class="email-preview w-full">
-
+<div class="email-preview w-full">
       <div id="previewContent"></div>
 
     </div>
@@ -584,7 +450,7 @@ function renderProgressWidget(){
         font-size:24px;
         line-height:1;
         font-weight:600;
-        color:var(--text);
+        color:#2c2926;
         margin-bottom:1px;
       ">
         ${stats.count}
