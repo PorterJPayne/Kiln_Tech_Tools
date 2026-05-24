@@ -29,21 +29,26 @@ window.sidebarPath = "/core/sidebar.html";
 <style>
 
 /* ========================================
-   DENSE OPERATIONAL DASHBOARD
+   KILN OPERATIONAL DASHBOARD
 ======================================== */
 
 .content.dashboard-content{
 
-    padding:10px 12px 14px;
+    padding:8px 10px 12px;
 
 }
+
+/* ========================================
+   GRID
+======================================== */
 
 .widget-grid{
 
     display:grid;
+
     grid-template-columns:repeat(12,1fr);
 
-    gap:10px;
+    gap:8px;
 
     align-items:start;
 
@@ -55,9 +60,9 @@ window.sidebarPath = "/core/sidebar.html";
 
 .widget{
 
-    padding:14px;
+    padding:12px;
 
-    border-radius:14px;
+    border-radius:10px;
 
     display:flex;
 
@@ -67,7 +72,11 @@ window.sidebarPath = "/core/sidebar.html";
 
     height:100%;
 
-    min-height:100%;
+    background:rgba(255,255,255,0.025);
+
+    border:1px solid rgba(255,255,255,0.06);
+
+    box-shadow:none;
 
 }
 
@@ -77,19 +86,19 @@ window.sidebarPath = "/core/sidebar.html";
 
 .top-row-widget{
 
-    height:420px;
+    height:400px;
 
 }
 
 .middle-row-widget{
 
-    height:300px;
+    height:260px;
 
 }
 
 .bottom-row-widget{
 
-    height:240px;
+    height:220px;
 
 }
 
@@ -97,60 +106,81 @@ window.sidebarPath = "/core/sidebar.html";
    TYPOGRAPHY
 ======================================== */
 
+body{
+
+    font-size:12px;
+
+}
+
 .widget h2{
 
-    font-size:15px;
+    font-size:13px;
 
-    margin-bottom:10px;
+    font-weight:600;
+
+    margin:0 0 10px;
 
     line-height:1.1;
+
+    letter-spacing:-0.2px;
 
 }
 
 .dashboard-label{
 
-    font-size:10px;
+    font-size:9px;
+
+    font-weight:700;
 
     letter-spacing:1.8px;
 
-    margin-bottom:4px;
+    color:var(--accent);
+
+    margin-bottom:2px;
 
 }
 
 .dashboard-hero-text{
 
-    font-size:13px;
+    font-size:12px;
 
-    line-height:1.4;
-
-    max-width:520px;
+    line-height:1.3;
 
     color:var(--muted);
+
+    max-width:650px;
 
 }
 
 .muted{
 
+    font-size:11px;
+
+    line-height:1.3;
+
+    color:rgba(255,255,255,0.55);
+
+}
+
+strong{
+
     font-size:12px;
 
-    line-height:1.35;
+    font-weight:600;
 
 }
 
 /* ========================================
-   HERO
+   TOP STRIP
 ======================================== */
 
-.hero-widget{
+.dashboard-top-strip{
 
-    padding:10px 14px;
+    padding:8px 12px;
 
-}
+    border-bottom:1px solid rgba(255,255,255,0.06);
 
-.hero-widget .button{
-
-    height:34px;
-    padding:0 12px;
+    background:rgba(255,255,255,0.015);
 
 }
 
@@ -160,25 +190,15 @@ window.sidebarPath = "/core/sidebar.html";
 
 .button{
 
-    min-height:34px;
+    min-height:30px;
 
-    padding:8px 12px;
+    padding:6px 10px;
 
-    font-size:12px;
+    border-radius:8px;
 
-    border-radius:10px;
+    font-size:11px;
 
-}
-
-.flex-column.gap-sm{
-
-    gap:8px;
-
-}
-
-.flex-column.gap-md{
-
-    gap:10px;
+    font-weight:600;
 
 }
 
@@ -188,11 +208,13 @@ window.sidebarPath = "/core/sidebar.html";
 
 .input{
 
-    padding:10px 12px;
+    min-height:32px;
 
-    font-size:13px;
+    padding:8px 10px;
 
-    border-radius:10px;
+    border-radius:8px;
+
+    font-size:12px;
 
 }
 
@@ -202,19 +224,27 @@ window.sidebarPath = "/core/sidebar.html";
 
 #dashboardNoteTitle{
 
-    margin-bottom:8px;
+    margin-bottom:6px;
 
 }
 
 #dashboardNoteContent{
 
-    min-height:240px !important;
+    min-height:0 !important;
 
-    font-size:13px;
+    flex:1;
 
-    line-height:1.45;
+    overflow:auto;
 
-    padding:12px;
+    font-size:12px;
+
+    line-height:1.35;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    white-space:pre-wrap;
 
 }
 
@@ -227,33 +257,43 @@ window.sidebarPath = "/core/sidebar.html";
 
 #dashboardNoteContent p{
 
-    margin-bottom:6px;
+    margin-bottom:4px;
 
 }
 
 #dashboardNoteContent li{
 
-    margin-bottom:2px;
+    margin-bottom:1px;
+
+}
+
+#dashboardNoteContent ul,
+#dashboardNoteContent ol{
+
+    padding-left:18px;
 
 }
 
 #dashboardNoteContent h1{
 
-    font-size:20px;
-    margin-bottom:8px;
+    font-size:16px;
+
+    margin-bottom:6px;
 
 }
 
 #dashboardNoteContent h2{
 
-    font-size:17px;
-    margin-bottom:6px;
+    font-size:14px;
+
+    margin-bottom:4px;
 
 }
 
 #dashboardNoteContent h3{
 
-    font-size:15px;
+    font-size:13px;
+
     margin-bottom:4px;
 
 }
@@ -264,13 +304,17 @@ window.sidebarPath = "/core/sidebar.html";
 
 .widget-card{
 
-    padding:10px 12px;
+    padding:8px 10px;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    font-size:12px;
+    font-size:11px;
 
-    line-height:1.35;
+    line-height:1.3;
+
+    background:rgba(255,255,255,0.03);
+
+    border:1px solid rgba(255,255,255,0.04);
 
 }
 
@@ -280,37 +324,81 @@ window.sidebarPath = "/core/sidebar.html";
 
 .stat-number{
 
-    font-size:28px !important;
+    font-size:24px;
 
-    margin-top:4px !important;
+    font-weight:700;
+
+    line-height:1;
+
+    margin-top:2px;
 
 }
 
 /* ========================================
-   TIGHTER SPACING
+   LIST SPACING
+======================================== */
+
+.flex-column.gap-sm{
+
+    gap:6px;
+
+}
+
+.flex-column.gap-md{
+
+    gap:8px;
+
+}
+
+/* ========================================
+   REMOVE EXCESS SPACERS
 ======================================== */
 
 div[style*="height:18px"]{
 
-    height:10px !important;
+    height:6px !important;
 
 }
 
 div[style*="height:16px"]{
 
-    height:8px !important;
+    height:6px !important;
 
 }
 
 div[style*="height:14px"]{
 
-    height:8px !important;
+    height:4px !important;
 
 }
 
 div[style*="height:12px"]{
 
-    height:6px !important;
+    height:4px !important;
+
+}
+
+div[style*="height:10px"]{
+
+    height:4px !important;
+
+}
+
+/* ========================================
+   SCROLLBARS
+======================================== */
+
+::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:rgba(255,255,255,0.14);
+
+    border-radius:20px;
 
 }
 
@@ -335,16 +423,6 @@ div[style*="height:12px"]{
         grid-template-columns:1fr;
 
     }
-
-}
-
-.dashboard-top-strip{
-
-    padding:10px 14px;
-
-    border-bottom:1px solid var(--border);
-
-    background:rgba(255,255,255,0.02);
 
 }
 
