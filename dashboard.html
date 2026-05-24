@@ -29,21 +29,162 @@ window.sidebarPath = "/core/sidebar.html";
 <style>
 
 /* ========================================
-   DASHBOARD ONLY
+   DENSE OPERATIONAL DASHBOARD
 ======================================== */
 
-.dashboard-label{
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:2px;
-    color:var(--accent);
+.content.dashboard-content{
+
+    padding:10px 12px 14px;
+
+}
+
+.widget-grid{
+
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+
+    gap:10px;
+
+    align-items:start;
+
+}
+
+/* ========================================
+   WIDGETS
+======================================== */
+
+.widget{
+
+    padding:14px;
+
+    border-radius:14px;
+
+    min-height:unset;
+}
+
+/* ========================================
+   TYPOGRAPHY
+======================================== */
+
+.widget h2{
+
+    font-size:15px;
+
     margin-bottom:10px;
+
+    line-height:1.1;
+
+}
+
+.dashboard-label{
+
+    font-size:10px;
+
+    letter-spacing:1.8px;
+
+    margin-bottom:4px;
+
 }
 
 .dashboard-hero-text{
+
+    font-size:13px;
+
+    line-height:1.4;
+
+    max-width:520px;
+
     color:var(--muted);
-    line-height:1.6;
-    max-width:700px;
+
+}
+
+.muted{
+
+    font-size:12px;
+
+    line-height:1.35;
+
+}
+
+/* ========================================
+   HERO
+======================================== */
+
+.hero-widget{
+
+    padding:10px 14px;
+
+}
+
+.hero-widget .button{
+
+    height:34px;
+    padding:0 12px;
+
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.button{
+
+    min-height:34px;
+
+    padding:8px 12px;
+
+    font-size:12px;
+
+    border-radius:10px;
+
+}
+
+.flex-column.gap-sm{
+
+    gap:8px;
+
+}
+
+.flex-column.gap-md{
+
+    gap:10px;
+
+}
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.input{
+
+    padding:10px 12px;
+
+    font-size:13px;
+
+    border-radius:10px;
+
+}
+
+/* ========================================
+   NOTES
+======================================== */
+
+#dashboardNoteTitle{
+
+    margin-bottom:8px;
+
+}
+
+#dashboardNoteContent{
+
+    min-height:240px !important;
+
+    font-size:13px;
+
+    line-height:1.45;
+
+    padding:12px;
+
 }
 
 #dashboardNoteContent *{
@@ -53,51 +194,116 @@ window.sidebarPath = "/core/sidebar.html";
 
 }
 
-#dashboardNoteContent div{
-
-    margin-bottom:4px;
-
-}
-
-#dashboardNoteContent br{
-
-    display:block;
-    content:"";
-    margin-top:4px;
-
-}
-
-#dashboardNoteContent{
-
-    line-height:1.6;
-
-}
-
-#dashboardNoteContent ul,
-#dashboardNoteContent ol{
-
-    padding-left:24px;
-
-}
-
-#dashboardNoteContent li{
+#dashboardNoteContent p{
 
     margin-bottom:6px;
 
 }
 
-#dashboardNoteContent h1,
-#dashboardNoteContent h2,
-#dashboardNoteContent h3{
+#dashboardNoteContent li{
 
-    margin-top:16px;
-    margin-bottom:10px;
+    margin-bottom:2px;
 
 }
 
-#dashboardNoteContent p{
+#dashboardNoteContent h1{
 
-    margin-bottom:10px;
+    font-size:20px;
+    margin-bottom:8px;
+
+}
+
+#dashboardNoteContent h2{
+
+    font-size:17px;
+    margin-bottom:6px;
+
+}
+
+#dashboardNoteContent h3{
+
+    font-size:15px;
+    margin-bottom:4px;
+
+}
+
+/* ========================================
+   CARDS
+======================================== */
+
+.widget-card{
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    line-height:1.35;
+
+}
+
+/* ========================================
+   STATS
+======================================== */
+
+.stat-number{
+
+    font-size:28px !important;
+
+    margin-top:4px !important;
+
+}
+
+/* ========================================
+   TIGHTER SPACING
+======================================== */
+
+div[style*="height:18px"]{
+
+    height:10px !important;
+
+}
+
+div[style*="height:16px"]{
+
+    height:8px !important;
+
+}
+
+div[style*="height:14px"]{
+
+    height:8px !important;
+
+}
+
+div[style*="height:12px"]{
+
+    height:6px !important;
+
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width:1200px){
+
+    .widget-grid{
+
+        grid-template-columns:repeat(6,1fr);
+
+    }
+
+}
+
+@media (max-width:800px){
+
+    .widget-grid{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
@@ -130,13 +336,16 @@ window.sidebarPath = "/core/sidebar.html";
 
         <!-- CONTENT -->
 
-        <div class="content dashboard-content">
+        <div
+    class="content dashboard-content"
+    style="padding-top:6px;"
+>
 
             <div class="widget-grid">
 
     <!-- HERO -->
 
-    <div class="widget span-12">
+    <div class="widget span-12 hero-widget">
 
         <div class="flex-between">
 
