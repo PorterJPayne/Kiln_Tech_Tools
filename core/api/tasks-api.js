@@ -1,0 +1,73 @@
+// =========================
+// FETCH TASKS
+// =========================
+
+async function fetchTasks(){
+
+    const { data, error } =
+        await supabaseClient
+            .from("tasks")
+            .select("*")
+            .order("created_at", {
+                ascending:false
+            });
+
+    if(error){
+
+        console.error(
+            "Fetch tasks error:",
+            error
+        );
+
+        return [];
+
+    }
+
+    return data;
+
+}
+
+// =========================
+// CREATE TASK
+// =========================
+
+async function createTask(task){
+
+    const { error } =
+        await supabaseClient
+            .from("tasks")
+            .insert(task);
+
+    if(error){
+
+        console.error(
+            "Create task error:",
+            error
+        );
+
+    }
+
+}
+
+// =========================
+// UPDATE TASK
+// =========================
+
+async function updateTask(id, updates){
+
+    const { error } =
+        await supabaseClient
+            .from("tasks")
+            .update(updates)
+            .eq("id", id);
+
+    if(error){
+
+        console.error(
+            "Update task error:",
+            error
+        );
+
+    }
+
+}

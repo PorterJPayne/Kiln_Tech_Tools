@@ -22,6 +22,8 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script src="/core/api/notes-api.js"></script>
 
+<script src="/core/api/tasks-api.js"></script>
+
 <script src="/core/api/search-api.js"></script>
 
 <script src="/core/layout.js" defer></script>
@@ -426,6 +428,148 @@ div[style*="height:10px"]{
 
 }
 
+/* ========================================
+   TASK QUEUE
+======================================== */
+
+.task-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    overflow:auto;
+
+    flex:1;
+
+    padding-right:2px;
+
+}
+
+.task-item{
+
+    padding:8px 10px;
+
+    border-radius:8px;
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    background:rgba(255,255,255,0.02);
+
+    transition:0.15s ease;
+
+}
+
+.task-item:hover{
+
+    background:rgba(255,255,255,0.04);
+
+}
+
+.task-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+}
+
+.task-title{
+
+    font-size:12px;
+
+    font-weight:600;
+
+    line-height:1.2;
+
+}
+
+.task-description{
+
+    font-size:11px;
+
+    line-height:1.35;
+
+    color:rgba(255,255,255,0.6);
+
+    margin-top:4px;
+
+}
+
+.task-meta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:6px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,0.45);
+
+}
+
+.task-age{
+
+    font-size:10px;
+
+    padding:2px 6px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,0.05);
+
+}
+
+.task-age.old{
+
+    background:rgba(255,180,0,0.12);
+
+    color:#ffcf70;
+
+}
+
+.task-age.stale{
+
+    background:rgba(255,80,80,0.12);
+
+    color:#ff8f8f;
+
+}
+
+.task-ticket{
+
+    color:var(--accent);
+
+    text-decoration:none;
+
+}
+
+.task-complete-btn{
+
+    width:24px;
+
+    height:24px;
+
+    border-radius:6px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+}
+
 </style>
 
 </head>
@@ -670,37 +814,31 @@ div[style*="height:10px"]{
 
     <!-- TODAY QUEUE -->
 
-   <div class="widget span-4 middle-row-widget">
+<div class="widget span-4 middle-row-widget">
+
+    <div class="flex-between">
 
         <h2>
             Today Queue
         </h2>
 
-        <div class="flex-column gap-sm">
-
-            <div class="widget-card">
-                Daily walkthroughs
-            </div>
-
-            <div class="widget-card">
-                Phone booth panel fixes
-            </div>
-
-            <div class="widget-card">
-                Alta whiteboard paint
-            </div>
-
-            <div class="widget-card">
-                Lehi 2 board breakdown
-            </div>
-
-            <div class="widget-card">
-                Fan troubleshooting
-            </div>
-
+        <div
+            class="muted"
+            id="taskCount"
+        >
+            0 Tasks
         </div>
 
     </div>
+
+    <div style="height:6px;"></div>
+
+    <div
+        id="taskList"
+        class="task-list"
+    ></div>
+
+</div>
 
     <!-- MAPS -->
 
@@ -1042,6 +1180,293 @@ noteContent.addEventListener(
 // =========================
 
 initDashboardNotes();
+
+
+// =========================
+// TASK SYSTEM
+// =========================
+
+let tasks = [];
+
+let activeTask = null;
+
+// =========================
+// LOAD TASKS
+// =========================
+
+async function loadTasks(){
+
+    tasks =
+        await fetchTasks();
+
+    renderTasks();
+
+}
+
+// =========================
+// RENDER TASKS
+// =========================
+
+function renderTasks(){
+
+    const taskList =
+        document.getElementById(
+            "taskList"
+        );
+
+    const taskCount =
+        document.getElementById(
+            "taskCount"
+        );
+
+    if(!taskList) return;
+
+    const activeTasks =
+        tasks.filter(
+            task => !task.completed
+        );
+
+    taskCount.textContent =
+        `${activeTasks.length} Tasks`;
+
+    taskList.innerHTML = "";
+
+    activeTasks.forEach(task => {
+
+        const createdDate =
+            new Date(task.created_at);
+
+        const today =
+            new Date();
+
+        const age =
+            Math.floor(
+                (
+                    today - createdDate
+                ) / (1000 * 60 * 60 * 24)
+            );
+
+        let ageLabel =
+            "Today";
+
+        let ageClass =
+            "";
+
+        if(age === 1){
+
+            ageLabel =
+                "1 day old";
+
+            ageClass =
+                "old";
+
+        }
+
+        if(age >= 2){
+
+            ageLabel =
+                `${age} days old`;
+
+            ageClass =
+                "stale";
+
+        }
+
+        const taskEl =
+            document.createElement("div");
+
+        taskEl.className =
+            "task-item";
+
+        taskEl.innerHTML = `
+
+            <div class="task-top">
+
+                <div>
+
+                    <div class="task-title">
+                        ${task.title}
+                    </div>
+
+                    <div class="task-description">
+                        ${task.description || ""}
+                    </div>
+
+                    <div class="task-meta">
+
+                        ${
+                            task.ticket
+                            ? `
+                            <a
+                                class="task-ticket"
+                                href="${task.link || '#'}"
+                                target="_blank"
+                            >
+                                ${task.ticket}
+                            </a>
+                            `
+                            : ""
+                        }
+
+                        <div
+                            class="task-age ${ageClass}"
+                        >
+                            ${ageLabel}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="task-complete-btn"
+                    onclick="openCompleteTask(${task.id})"
+                >
+                    ✓
+                </button>
+
+            </div>
+
+        `;
+
+        taskList.appendChild(
+            taskEl
+        );
+
+    });
+
+}
+
+// =========================
+// COMPLETE TASK MODAL
+// =========================
+
+function openCompleteTask(id){
+
+    activeTask =
+        tasks.find(
+            t => t.id === id
+        );
+
+    const modal =
+        document.getElementById(
+            "completeTaskModal"
+        );
+
+    if(modal){
+
+        modal.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+// =========================
+// COMPLETE TASK
+// =========================
+
+const completeTaskBtn =
+    document.getElementById(
+        "completeTaskBtn"
+    );
+
+if(completeTaskBtn){
+
+    completeTaskBtn.onclick =
+        async () => {
+
+            if(!activeTask) return;
+
+            const category =
+                document.getElementById(
+                    "completionCategory"
+                ).value;
+
+            const report =
+                document.getElementById(
+                    "completionReport"
+                ).value;
+
+            // =========================
+            // EMAIL ENTRY HOOK
+            // =========================
+
+            console.log({
+                task: activeTask,
+                category,
+                report
+            });
+
+            // =========================
+            // COMPLETE TASK
+            // =========================
+
+            await updateTask(
+                activeTask.id,
+                {
+                    completed: true,
+                    completed_at:
+                        new Date()
+                }
+            );
+
+            const modal =
+                document.getElementById(
+                    "completeTaskModal"
+                );
+
+            if(modal){
+
+                modal.classList.add(
+                    "hidden"
+                );
+
+            }
+
+            loadTasks();
+
+        };
+
+}
+
+// =========================
+// CLOSE COMPLETE MODAL
+// =========================
+
+const closeCompleteModal =
+    document.getElementById(
+        "closeCompleteModal"
+    );
+
+if(closeCompleteModal){
+
+    closeCompleteModal.onclick =
+        () => {
+
+            const modal =
+                document.getElementById(
+                    "completeTaskModal"
+                );
+
+            if(modal){
+
+                modal.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        };
+
+}
+
+// =========================
+// START
+// =========================
+
+loadTasks();
 
 </script>
 

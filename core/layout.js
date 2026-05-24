@@ -264,3 +264,117 @@ setTimeout(() => {
     initGlobalSearch();
 
 }, 300);
+
+
+// =========================
+// GLOBAL TASK MODAL
+// =========================
+
+const taskModal =
+    document.getElementById(
+        "taskModal"
+    );
+
+// =========================
+// OPEN
+// =========================
+
+document.addEventListener(
+    "click",
+    e => {
+
+        if(
+            e.target.id ===
+            "globalTaskBtn"
+        ){
+
+            taskModal
+                .classList
+                .remove("hidden");
+
+        }
+
+    }
+);
+
+// =========================
+// CLOSE
+// =========================
+
+document.addEventListener(
+    "click",
+    e => {
+
+        if(
+            e.target.id ===
+            "closeTaskModal"
+        ){
+
+            taskModal
+                .classList
+                .add("hidden");
+
+        }
+
+    }
+);
+
+// =========================
+// SAVE TASK
+// =========================
+
+document.addEventListener(
+    "click",
+    async e => {
+
+        if(
+            e.target.id ===
+            "saveTaskBtn"
+        ){
+
+            const task = {
+
+                title:
+                    document.getElementById(
+                        "taskTitle"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "taskDescription"
+                    ).value,
+
+                ticket:
+                    document.getElementById(
+                        "taskTicket"
+                    ).value,
+
+                link:
+                    document.getElementById(
+                        "taskLink"
+                    ).value
+
+            };
+
+            await createTask(task);
+
+            taskModal
+                .classList
+                .add("hidden");
+
+            // OPTIONAL:
+            // refresh queue if dashboard
+
+            if(
+                typeof loadTasks ===
+                "function"
+            ){
+
+                loadTasks();
+
+            }
+
+        }
+
+    }
+);

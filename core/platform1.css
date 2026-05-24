@@ -737,3 +737,93 @@ select:focus{
   padding:40px;
   text-align:center;
 }
+
+
+
+
+/* ========================================
+   TASK MODAL
+======================================== */
+
+.modal-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.45);
+
+    backdrop-filter:blur(6px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:9999;
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+.task-modal{
+
+    width:420px;
+
+    background:#111315;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:12px;
+
+    padding:16px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.5);
+
+}
+
+.modal-title{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+.modal-grid{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.modal-textarea{
+
+    min-height:120px;
+
+    resize:vertical;
+
+}
+
+.modal-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:14px;
+
+}

@@ -11,22 +11,94 @@
 
     </div>
 
-    <div class="topbar-right">
+   <div class="topbar-right">
 
-        <div class="search-wrapper">
-
-    <input
-        id="globalSearchInput"
-        class="searchbar"
-        placeholder="Search everything..."
+    <button
+        class="button button-primary"
+        id="globalTaskBtn"
     >
+        + New Task
+    </button>
 
-    <div
-        id="globalSearchResults"
-        class="search-results"
-    ></div>
+    <div class="search-wrapper">
+
+        <input
+            id="globalSearchInput"
+            class="searchbar"
+            placeholder="Search everything..."
+        >
+
+        <div
+            id="globalSearchResults"
+            class="search-results"
+        ></div>
+
+    </div>
 
 </div>
+
+</div>
+
+<!-- =========================
+     GLOBAL TASK MODAL
+========================= -->
+
+<div
+    class="modal-overlay hidden"
+    id="taskModal"
+>
+
+    <div class="task-modal">
+
+        <div class="modal-title">
+            New Task
+        </div>
+
+        <div class="modal-grid">
+
+            <input
+                id="taskTicket"
+                class="input"
+                placeholder="Ticket # (optional)"
+            >
+
+            <input
+                id="taskLink"
+                class="input"
+                placeholder="Link URL (optional)"
+            >
+
+            <input
+                id="taskTitle"
+                class="input"
+                placeholder="Entry Title"
+            >
+
+            <textarea
+                id="taskDescription"
+                class="input modal-textarea"
+                placeholder="Brief explanation"
+            ></textarea>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="button"
+                id="closeTaskModal"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="button button-primary"
+                id="saveTaskBtn"
+            >
+                Create Task
+            </button>
+
+        </div>
 
     </div>
 
