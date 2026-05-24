@@ -59,7 +59,38 @@ window.sidebarPath = "/core/sidebar.html";
 
     border-radius:14px;
 
-    min-height:unset;
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-start;
+
+    height:100%;
+
+    min-height:100%;
+
+}
+
+/* ========================================
+   ROW HEIGHTS
+======================================== */
+
+.top-row-widget{
+
+    height:420px;
+
+}
+
+.middle-row-widget{
+
+    height:300px;
+
+}
+
+.bottom-row-widget{
+
+    height:240px;
+
 }
 
 /* ========================================
@@ -374,7 +405,7 @@ div[style*="height:12px"]{
 
     <!-- TOP OPERATIONS ROW -->
 
-<div class="widget span-6">
+<div class="widget span-6 top-row-widget">
 
     <div class="flex-between">
 
@@ -414,7 +445,7 @@ div[style*="height:12px"]{
 
 </div>
 
-<div class="widget span-3">
+<div class="widget span-3 top-row-widget">
 
     <h2>
         Quick Actions
@@ -461,7 +492,7 @@ div[style*="height:12px"]{
 
 </div>
 
-<div class="widget span-3">
+<div class="widget span-3 top-row-widget">
 
     <h2>
         Operational Snapshot
@@ -511,7 +542,7 @@ div[style*="height:12px"]{
 
     <!-- STATS -->
 
-    <div class="widget span-4">
+    <div class="widget span-3 top-row-widget">
 
         <h2>
             Operational Snapshot
@@ -561,7 +592,7 @@ div[style*="height:12px"]{
 
     <!-- TODAY QUEUE -->
 
-    <div class="widget span-4">
+   <div class="widget span-4 middle-row-widget">
 
         <h2>
             Today Queue
@@ -595,7 +626,7 @@ div[style*="height:12px"]{
 
     <!-- MAPS -->
 
-    <div class="widget span-4">
+   <div class="widget span-4 middle-row-widget">
 
         <div class="flex-between">
 
@@ -642,7 +673,7 @@ div[style*="height:12px"]{
 
     <!-- PROJECTS -->
 
-    <div class="widget span-6">
+   <div class="widget span-6 bottom-row-widget">
 
         <h2>
             Active Projects
@@ -706,7 +737,7 @@ div[style*="height:12px"]{
 
     <!-- SEARCH -->
 
-    <div class="widget span-3">
+   <div class="widget span-3 bottom-row-widget">
 
         <h2>
             Search
@@ -741,7 +772,7 @@ div[style*="height:12px"]{
 
     <!-- SOPS -->
 
-    <div class="widget span-3">
+    <div class="widget span-3 bottom-row-widget">
 
         <h2>
             SOPs
