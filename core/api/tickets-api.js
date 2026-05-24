@@ -63,3 +63,67 @@ async function fetchTicketHistory(){
     return data;
 
 }
+
+// ========================================
+// WEEKLY TOTALS
+// ========================================
+
+async function getWeeklyTicketTotals(){
+
+    const history =
+        await fetchTicketHistory();
+
+    const totals = {};
+
+    history.forEach(item => {
+
+        if(!totals[item.week_key]){
+
+            totals[item.week_key] = 0;
+
+        }
+
+        totals[item.week_key]++;
+
+    });
+
+    return totals;
+
+}
+
+// ========================================
+// MONTHLY TOTALS
+// ========================================
+
+async function getMonthlyTicketTotals(){
+
+    const history =
+        await fetchTicketHistory();
+
+    const totals = {};
+
+    history.forEach(item => {
+
+        const date =
+            new Date(item.submitted_at);
+
+        const key =
+            `${date.getFullYear()}-${
+                String(
+                    date.getMonth() + 1
+                ).padStart(2,"0")
+            }`;
+
+        if(!totals[key]){
+
+            totals[key] = 0;
+
+        }
+
+        totals[key]++;
+
+    });
+
+    return totals;
+
+}

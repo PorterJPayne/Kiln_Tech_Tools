@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Kiln Analytics</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="/core/platform1.css"
+/>
+
+<script>
+window.sidebarPath = "/core/sidebar.html";
+</script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<!-- APIS -->
+<script src="/core/api/tickets-api.js"></script>
+
+<!-- LAYOUT -->
+<script src="/core/layout.js" defer></script>
+
+<!-- CHARTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* ========================================
+   ANALYTICS
+======================================== */
+
+.analytics-content{
+    padding:24px;
+}
+
+.analytics-grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:20px;
+    align-content:start;
+}
+
+/* ========================================
+   STAT CARDS
+======================================== */
+
+.stat-card{
+    grid-column:span 3;
+}
+
+.stat-value{
+    font-size:42px;
+    font-weight:700;
+    line-height:1;
+    margin-bottom:10px;
+}
+
+.stat-label{
+    color:var(--muted);
+}
+
+/* ========================================
+   CHARTS
+======================================== */
+
+.chart-widget{
+    grid-column:span 12;
+}
+
+.chart-container{
+    position:relative;
+    height:400px;
+    width:100%;
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media(max-width:1000px){
+
+    .stat-card{
+        grid-column:span 12;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body
+  class="platform-body"
+  data-title="Analytics"
+  data-description="Operational metrics and ticket trends."
+>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    ></aside>
+
+    <!-- MAIN -->
+
+    <main class="main platform-page">
+
+        <!-- TOPBAR -->
+
+        <div id="topbar"></div>
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+            <div class="analytics-content">
+
+                <div class="analytics-grid">
+
+                    <!-- TODAY -->
+
+                    <div class="widget stat-card">
+
+                        <div
+                            id="todayTotal"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Tickets Today
+                        </div>
+
+                    </div>
+
+                    <!-- WEEK -->
+
+                    <div class="widget stat-card">
+
+                        <div
+                            id="weekTotal"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            This Week
+                        </div>
+
+                    </div>
+
+                    <!-- MONTH -->
+
+                    <div class="widget stat-card">
+
+                        <div
+                            id="monthTotal"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            This Month
+                        </div>
+
+                    </div>
+
+                    <!-- ALL TIME -->
+
+                    <div class="widget stat-card">
+
+                        <div
+                            id="allTimeTotal"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            All Time
+                        </div>
+
+                    </div>
+
+                    <!-- WEEKLY CHART -->
+
+                    <div class="widget chart-widget">
+
+                        <h2>
+                            Weekly Ticket Totals
+                        </h2>
+
+                        <div style="height:20px;"></div>
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="weeklyChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                    <!-- MONTHLY CHART -->
+
+                    <div class="widget chart-widget">
+
+                        <h2>
+                            Monthly Ticket Totals
+                        </h2>
+
+                        <div style="height:20px;"></div>
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="monthlyChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+// ========================================
+// INIT
+// ========================================
+
+async function initAnalytics(){
+
+    const history =
+        await fetchTicketHistory();
+
+    renderOverviewStats(history);
+
+    renderWeeklyChart(history);
+
+    renderMonthlyChart(history);
+
+}
+
+// ========================================
+// OVERVIEW STATS
+// ========================================
+
+function renderOverviewStats(history){
+
+    const now =
+        new Date();
+
+    const today =
+        now.toISOString().split("T")[0];
+
+    const currentWeek =
+        getWeekKey();
+
+    const currentMonth =
+        `${now.getFullYear()}-${
+            String(
+                now.getMonth() + 1
+            ).padStart(2,"0")
+        }`;
+
+    let todayCount = 0;
+    let weekCount = 0;
+    let monthCount = 0;
+
+    history.forEach(item => {
+
+        const date =
+            new Date(item.submitted_at);
+
+        const itemDay =
+            date.toISOString().split("T")[0];
+
+        const itemMonth =
+            `${date.getFullYear()}-${
+                String(
+                    date.getMonth() + 1
+                ).padStart(2,"0")
+            }`;
+
+        if(itemDay === today){
+
+            todayCount++;
+
+        }
+
+        if(item.week_key === currentWeek){
+
+            weekCount++;
+
+        }
+
+        if(itemMonth === currentMonth){
+
+            monthCount++;
+
+        }
+
+    });
+
+    document.getElementById(
+        "todayTotal"
+    ).textContent = todayCount;
+
+    document.getElementById(
+        "weekTotal"
+    ).textContent = weekCount;
+
+    document.getElementById(
+        "monthTotal"
+    ).textContent = monthCount;
+
+    document.getElementById(
+        "allTimeTotal"
+    ).textContent = history.length;
+
+}
+
+// ========================================
+// WEEKLY CHART
+// ========================================
+
+function renderWeeklyChart(history){
+
+    const totals = {};
+
+    history.forEach(item => {
+
+        if(!totals[item.week_key]){
+
+            totals[item.week_key] = 0;
+
+        }
+
+        totals[item.week_key]++;
+
+    });
+
+    const labels =
+        Object.keys(totals).sort();
+
+    const values =
+        labels.map(
+            label => totals[label]
+        );
+
+    new Chart(
+
+        document.getElementById(
+            "weeklyChart"
+        ),
+
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels,
+
+                datasets:[{
+
+                    label:"Tickets",
+
+                    data:values
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false
+
+            }
+
+        }
+
+    );
+
+}
+
+// ========================================
+// MONTHLY CHART
+// ========================================
+
+function renderMonthlyChart(history){
+
+    const totals = {};
+
+    history.forEach(item => {
+
+        const date =
+            new Date(item.submitted_at);
+
+        const key =
+            `${date.getFullYear()}-${
+                String(
+                    date.getMonth() + 1
+                ).padStart(2,"0")
+            }`;
+
+        if(!totals[key]){
+
+            totals[key] = 0;
+
+        }
+
+        totals[key]++;
+
+    });
+
+    const labels =
+        Object.keys(totals).sort();
+
+    const values =
+        labels.map(
+            label => totals[label]
+        );
+
+    new Chart(
+
+        document.getElementById(
+            "monthlyChart"
+        ),
+
+        {
+
+            type:"line",
+
+            data:{
+
+                labels,
+
+                datasets:[{
+
+                    label:"Tickets",
+
+                    data:values
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false
+
+            }
+
+        }
+
+    );
+
+}
+
+// ========================================
+// WEEK KEY
+// ========================================
+
+function getWeekKey(date = new Date()){
+
+    const temp = new Date(date);
+
+    temp.setHours(0,0,0,0);
+
+    temp.setDate(
+        temp.getDate() +
+        3 -
+        (temp.getDay() + 6) % 7
+    );
+
+    const week1 =
+        new Date(
+            temp.getFullYear(),
+            0,
+            4
+        );
+
+    return temp.getFullYear() + "-W" + (
+
+        1 +
+
+        Math.round(
+
+            (
+
+                (
+                    temp - week1
+                ) / 86400000
+
+                - 3
+
+                + (
+                    week1.getDay() + 6
+                ) % 7
+
+            ) / 7
+
+        )
+
+    );
+
+}
+
+// ========================================
+// START
+// ========================================
+
+initAnalytics();
+
+</script>
+
+</body>
+</html>
