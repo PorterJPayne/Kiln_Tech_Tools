@@ -666,7 +666,7 @@ select:focus{
   padding:14px;
   text-decoration:none;
   color:var(--text);
-  border-bottom:1px solid var(--border);
+  border-bottom:0px solid var(--border);
 }
 
 .search-result:hover{
