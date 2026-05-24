@@ -13,22 +13,11 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<link
-  rel="stylesheet"
-  href="/core/platform1.css"
-/>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script src="/core/api/supabase.js"></script>
 
 <script src="/core/api/tickets-api.js"></script>
-
-<script>
-window.sidebarPath = "/core/sidebar.html";
-</script>
-
-<script src="/core/layout.js" defer></script>
 
 <style>
 
@@ -117,30 +106,60 @@ textarea{
 }
 
 /* ========================================
-   PLATFORM WRAPPER
+   PLATFORM INTEGRATION
 ======================================== */
+
+body{
+  background:transparent;
+  padding:0;
+  margin:0;
+}
+
+/* main app wrapper */
 
 .email-generator-layout{
 
   display:grid;
 
   grid-template-columns:
-    340px
+    360px
     minmax(0,1fr);
 
   gap:24px;
 
   padding:24px;
 
+  align-items:start;
+
 }
+
+/* left control panel */
 
 .email-sidebar{
 
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+  position:sticky;
+
+  top:24px;
 
 }
+
+/* control card */
+
+.email-controls{
+
+  background:var(--surface);
+
+  border:1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:20px;
+
+  box-shadow:var(--shadow-sm);
+
+}
+
+/* preview area */
 
 .email-preview-area{
 
@@ -148,9 +167,19 @@ textarea{
 
 }
 
+/* preview card */
+
 .email-preview{
 
-  min-height:100%;
+  background:#fcfaf7;
+
+  border:1px solid #ddd2c5;
+
+  border-radius:18px;
+
+  padding:40px;
+
+  box-shadow:var(--shadow-sm);
 
 }
 
@@ -158,11 +187,18 @@ textarea{
    MOBILE
 ======================================== */
 
-@media(max-width:1100px){
+@media(max-width:1200px){
 
   .email-generator-layout{
 
     grid-template-columns:1fr;
+
+  }
+
+  .email-sidebar{
+
+    position:relative;
+    top:0;
 
   }
 
@@ -171,241 +207,119 @@ textarea{
 </style>
 </head>
 
-<body
-  class="platform-body"
-  data-title="Email Generator"
-  data-description="Daily operational update creation."
->
+<body>
 
-<div class="app">
+<div class="email-generator-layout">
+  <!-- LEFT PANEL -->
+  <div class="email-sidebar">
 
-  <!-- SIDEBAR -->
+    <div class="mb-5">
 
-  <aside
-    class="sidebar"
-    id="sidebar"
-  ></aside>
+      <h1 class="serif text-5xl leading-none mb-2">
+        kiln<span class="mx-2">|</span>TECH.
+      </h1>
 
-  <!-- MAIN -->
+      <div class="tracking-[0.22em] uppercase text-[10px] text-[#766d65]">
+        Daily Update Generator
+      </div>
 
-  <main class="main platform-page">
+    </div>
 
-    <!-- TOPBAR -->
+    <div class="email-controls">
 
-    <div id="topbar"></div>
+      <!-- DATE -->
+      <div class="mb-4">
 
-    <!-- CONTENT -->
-
-    <div class="content">
-
-      <div class="email-generator-layout">
-
-        <!-- LEFT PANEL -->
-
-        <div class="email-sidebar">
-
-          <div>
-
-            <div class="mb-5">
-
-              <h1 class="serif text-5xl leading-none mb-2">
-                kiln<span class="mx-2">|</span>TECH.
-              </h1>
-
-              <div class="tracking-[0.22em] uppercase text-[10px] text-[#766d65]">
-                Daily Update Generator
-              </div>
-
-            </div>
-
-            <div class="bg-[#f7f3ee] border border-[#ddd2c5] rounded-xl p-5">
-
-              <!-- DATE -->
-
-              <div class="mb-4">
-
-                <div class="small-label mb-2">
-                  Date
-                </div>
-
-                <input
-                  id="dateInput"
-                  type="text"
-                  class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                />
-
-              </div>
-
-              <!-- INTRO -->
-
-              <div class="mb-5">
-
-                <div class="small-label mb-2">
-                  Intro
-                </div>
-
-                <textarea
-                  id="introInput"
-                  rows="2"
-                  class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                >Hola a todos,</textarea>
-
-              </div>
-
-              <div class="border-t border-[#ddd2c5] my-5"></div>
-
-              <!-- ENTRY -->
-
-              <div>
-
-                <div class="small-label mb-3">
-                  Add Entry
-                </div>
-
-                <div class="space-y-3">
-
-                  <select
-                    id="sectionInput"
-                    class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                  >
-                    <option>Completed</option>
-                    <option>In Progress</option>
-                    <option>Notes</option>
-                  </select>
-
-                  <input
-                    id="titleInput"
-                    type="text"
-                    placeholder="Entry title"
-                    class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                  />
-
-                  <textarea
-                    id="descriptionInput"
-                    rows="3"
-                    placeholder="Brief explanation..."
-                    class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                  ></textarea>
-
-                  <input
-                    id="buttonTextInput"
-                    type="text"
-                    placeholder="Ticket Number (#710088)"
-                    class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                  />
-
-                  <input
-                    id="buttonLinkInput"
-                    type="text"
-                    placeholder="Link URL"
-                    class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
-                  />
-
-                  <div class="flex gap-3 pt-1">
-
-                    <button
-                      id="addEntryBtn"
-                      class="flex-1 bg-[#7d8e71] hover:bg-[#708063] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
-                    >
-                      + Add Entry
-                    </button>
-
-                    <button
-                      id="clearBtn"
-                      class="px-5 border border-[#ddd2c5] rounded-xl hover:bg-[#f1ece6] transition text-[13px]"
-                    >
-                      Clear
-                    </button>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <!-- ENTRY LIST -->
-
-              <div
-                id="entryList"
-                class="mt-5 space-y-2"
-              ></div>
-
-              <div class="border-t border-[#ddd2c5] my-5"></div>
-
-              <!-- SUBMIT -->
-
-              <div class="mb-5">
-
-                <button
-                  id="submitCompletedBtn"
-                  class="w-full bg-[#7d8e71] hover:bg-[#6d7e61] text-white py-3 rounded-xl action-btn text-[13px] font-medium"
-                >
-                  Submit Completed Tickets
-                </button>
-
-              </div>
-
-              <div class="border-t border-[#ddd2c5] my-5"></div>
-
-              <!-- EXPORT -->
-
-              <div>
-
-                <div class="small-label mb-3">
-                  Export
-                </div>
-
-                <div class="space-y-2.5">
-
-                  <button
-                    id="copyBtn"
-                    class="w-full bg-[#a56f45] hover:bg-[#94613b] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
-                  >
-                    Copy HTML
-                  </button>
-
-                  <button
-                    id="downloadBtn"
-                    class="w-full border border-[#d8c7b7] hover:bg-[#f2ece5] py-2.5 rounded-xl action-btn text-[13px] font-medium text-[#8c603c]"
-                  >
-                    Download HTML
-                  </button>
-
-                  <button
-                    id="clearDraftBtn"
-                    class="w-full border border-[#e0d3c7] hover:bg-[#f3ebe3] py-2.5 rounded-xl text-[13px]"
-                  >
-                    Clear Draft
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
+        <div class="small-label mb-2">
+          Date
         </div>
 
-        <!-- PREVIEW -->
+        <input
+          id="dateInput"
+          type="text"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+        />
 
-        <div class="email-preview-area">
+      </div>
 
-          <div class="flex items-center justify-center gap-12 mb-4">
+      <!-- INTRO -->
+      <div class="mb-5">
 
-            <div class="flex items-center gap-3 border-b-2 border-[#7d8e71] pb-2 px-4">
-              <span>◉</span>
-              <span class="font-medium tracking-wide text-xs">
-                PREVIEW
-              </span>
-            </div>
+        <div class="small-label mb-2">
+          Intro
+        </div>
 
-          </div>
+        <textarea
+          id="introInput"
+          rows="2"
+          class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+        >Hola a todos,</textarea>
 
-          <div class="email-preview w-full">
+      </div>
 
-            <div id="previewContent"></div>
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <!-- ENTRY -->
+      <div>
+
+        <div class="small-label mb-3">
+          Add Entry
+        </div>
+
+        <div class="space-y-3">
+
+          <select
+            id="sectionInput"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          >
+            <option>Completed</option>
+            <option>In Progress</option>
+            <option>Notes</option>
+          </select>
+
+          <input
+            id="titleInput"
+            type="text"
+            placeholder="Entry title"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+          <textarea
+            id="descriptionInput"
+            rows="3"
+            placeholder="Brief explanation..."
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          ></textarea>
+
+          <input
+            id="buttonTextInput"
+            type="text"
+            placeholder="Ticket Number (#710088)"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+          <input
+            id="buttonLinkInput"
+            type="text"
+            placeholder="Link URL"
+            class="w-full bg-white border border-[#ddd2c5] rounded-xl px-4 py-2.5 text-[13px]"
+          />
+
+          <div class="flex gap-3 pt-1">
+
+            <button
+              id="addEntryBtn"
+              class="flex-1 bg-[#7d8e71] hover:bg-[#708063] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
+            >
+              + Add Entry
+            </button>
+
+            <button
+              id="clearBtn"
+              class="px-5 border border-[#ddd2c5] rounded-xl hover:bg-[#f1ece6] transition text-[13px]"
+            >
+              Clear
+            </button>
 
           </div>
 
@@ -413,11 +327,84 @@ textarea{
 
       </div>
 
+      <!-- ENTRY LIST -->
+      <div id="entryList" class="mt-5 space-y-2"></div>
+
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <!-- SUBMIT -->
+      <div class="mb-5">
+
+        <button
+          id="submitCompletedBtn"
+          class="w-full bg-[#7d8e71] hover:bg-[#6d7e61] text-white py-3 rounded-xl action-btn text-[13px] font-medium"
+        >
+          Submit Completed Tickets
+        </button>
+
+      </div>
+
+      <div class="border-t border-[#ddd2c5] my-5"></div>
+
+      <!-- EXPORT -->
+      <div>
+
+        <div class="small-label mb-3">
+          Export
+        </div>
+
+        <div class="space-y-2.5">
+
+          <button
+            id="copyBtn"
+            class="w-full bg-[#a56f45] hover:bg-[#94613b] text-white py-2.5 rounded-xl action-btn text-[13px] font-medium"
+          >
+            Copy HTML
+          </button>
+
+          <button
+            id="downloadBtn"
+            class="w-full border border-[#d8c7b7] hover:bg-[#f2ece5] py-2.5 rounded-xl action-btn text-[13px] font-medium text-[#8c603c]"
+          >
+            Download HTML
+          </button>
+
+          <button
+            id="clearDraftBtn"
+            class="w-full border border-[#e0d3c7] hover:bg-[#f3ebe3] py-2.5 rounded-xl text-[13px]"
+          >
+            Clear Draft
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
 
-  </main>
+  </div>
+
+  <!-- PREVIEW -->
+  <div>
+
+    <div class="flex items-center justify-center gap-12 mb-4">
+
+      <div class="flex items-center gap-3 border-b-2 border-[#7d8e71] pb-2 px-4">
+        <span>◉</span>
+        <span class="font-medium tracking-wide text-xs">PREVIEW</span>
+      </div>
+
+    </div>
+
+<div class="email-preview w-full">
+      <div id="previewContent"></div>
+
+    </div>
+
+  </div>
 
 </div>
+
 <script>
 
 const WEEKLY_GOAL = 22;
