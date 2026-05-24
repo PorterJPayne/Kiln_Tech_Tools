@@ -6,7 +6,7 @@ body{
   margin:0;
   font-family:Arial,sans-serif;
   overflow:hidden;
-  background:#ececec;
+  background:#1d212b;
 }
 
 .hidden{
@@ -15,7 +15,7 @@ body{
 
 .topbar{
   height:70px;
-  background:white;
+  background:#1d212b;
   border-bottom:1px solid #ccc;
   display:flex;
   align-items:center;
@@ -67,7 +67,7 @@ body{
 
 .sidebar{
   width:360px;
-  background:white;
+  background:#1d212b;
   border-left:1px solid #ccc;
   padding:18px;
   overflow-y:auto;
