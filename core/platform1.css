@@ -438,35 +438,86 @@ select:focus{
 
 @media(max-width:900px){
 
-  .sidebar{
-    display:none;
-  }
+    .app-shell{
+        display:block;
+    }
 
-  .widget-grid{
-    grid-template-columns:1fr;
-  }
+    .sidebar{
+        position:fixed;
 
-  .span-3,
-  .span-4,
-  .span-5,
-  .span-6,
-  .span-8,
-  .span-12{
-    grid-column:span 1;
-  }
+        top:0;
+        left:-280px;
 
-  .topbar{
-    flex-direction:column;
-    align-items:flex-start;
-  }
+        width:260px;
+        height:100vh;
 
-  .searchbar{
-    width:100%;
-    min-width:0;
-  }
+        z-index:1000;
+
+        transition:left 0.25s ease;
+    }
+
+    .sidebar.open{
+        left:0;
+    }
+
+    .main-content{
+        width:100%;
+        padding:16px;
+    }
+
+    .dashboard-grid{
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:16px;
+    }
+
+    .card,
+    .widget{
+        width:100%;
+        min-width:0;
+    }
+
+    .hero-section{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+    }
+
+    h1{
+        font-size:28px;
+    }
 
 }
 
+.mobile-menu-btn{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .mobile-menu-btn{
+        display:flex;
+
+        align-items:center;
+        justify-content:center;
+
+        width:42px;
+        height:42px;
+
+        border:none;
+        border-radius:10px;
+
+        background:#1e2433;
+        color:white;
+
+        font-size:22px;
+
+        cursor:pointer;
+    }
+
+}
 /* ========================================
    ADMIN CARDS
 ======================================== */

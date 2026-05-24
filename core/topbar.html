@@ -1,5 +1,8 @@
 <div class="topbar">
 
+    <button class="mobile-menu-btn">
+        ☰
+    </button>
     <div class="topbar-left">
 
         <h2 id="topbarTitle"></h2>
@@ -28,3 +31,12 @@
     </div>
 
 </div>
+
+<script>
+const btn = document.querySelector('.mobile-menu-btn');
+const sidebar = document.querySelector('.sidebar');
+
+btn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+});
+</script>
