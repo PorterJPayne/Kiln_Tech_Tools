@@ -985,58 +985,6 @@ document.getElementById(
     }
 );
 
-  const history = getHistory();
-
-  const weekKey = getWeekKey();
-
-  const existingTickets = new Set(
-    history
-      .filter(item => item.weekKey === weekKey)
-      .map(item => item.ticket)
-  );
-
-  const completedEntries = entries.filter(
-    e => e.section === "Completed"
-  );
-
-  let added = 0;
-
-  completedEntries.forEach(entry=>{
-
-    const ticket = entry.buttonText?.trim();
-
-    if(
-      ticket &&
-      ticket.startsWith("#") &&
-      !existingTickets.has(ticket)
-    ){
-
-      history.push({
-        ticket,
-        weekKey,
-        submittedAt:new Date().toISOString()
-      });
-
-      existingTickets.add(ticket);
-
-      added++;
-
-    }
-
-  });
-
-  saveHistory(history);
-
-  renderPreview();
-
-  alert(
-    added === 0
-    ? "No new completed tickets submitted."
-    : `${added} completed tickets submitted.`
-  );
-
-});
-
 dateInput.addEventListener("input",()=>{
   renderPreview();
   saveDraft();
