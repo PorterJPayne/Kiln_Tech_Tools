@@ -98,6 +98,23 @@ if(btn && sidebar){
     }
 
 }
+const closeBtn =
+    document.querySelector(
+        '.sidebar-close-btn'
+    );
+    if(closeBtn){
+
+    closeBtn.addEventListener('click', () => {
+
+        sidebar.classList.remove('open');
+
+        if(overlay){
+            overlay.classList.remove('open');
+        }
+
+    });
+
+}
 }
 
 // =========================

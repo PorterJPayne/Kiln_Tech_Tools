@@ -546,6 +546,37 @@ select:focus{
     }
 
 }
+
+.sidebar-close-btn{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .sidebar-close-btn{
+        display:flex;
+
+        align-items:center;
+        justify-content:center;
+
+        width:40px;
+        height:40px;
+
+        margin-bottom:12px;
+
+        border:none;
+        border-radius:10px;
+
+        background:var(--panel-light);
+
+        color:white;
+
+        font-size:22px;
+
+        cursor:pointer;
+    }
+
+}
 /* ========================================
    ADMIN CARDS
 ======================================== */
