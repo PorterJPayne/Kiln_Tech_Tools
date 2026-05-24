@@ -1044,6 +1044,24 @@ div[style*="height:10px"]{
 
         <div class="modal-grid">
 
+            <label
+                class="muted"
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:8px;
+                "
+            >
+
+                <input
+                    type="checkbox"
+                    id="addToEmailCheckbox"
+                >
+
+                Add to Daily Update
+
+            </label>
+
             <select
                 id="completionCategory"
                 class="input"
@@ -1457,14 +1475,41 @@ if(completeTaskBtn){
                 ).value;
 
             // =========================
-            // EMAIL ENTRY HOOK
-            // =========================
+// EMAIL ENTRY
+// =========================
 
-            console.log({
-                task: activeTask,
+const addToEmail =
+    document.getElementById(
+        "addToEmailCheckbox"
+    ).checked;
+
+if(addToEmail){
+
+    console.log({
+
+        addToEmail:true,
+
+        entry:{
+            title:
+                activeTask.title,
+
+            ticket:
+                activeTask.ticket,
+
+            link:
+                activeTask.link,
+
+            section:
                 category,
+
+            explanation:
                 report
-            });
+
+        }
+
+    });
+
+}
 
             // =========================
             // COMPLETE TASK
