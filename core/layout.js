@@ -138,16 +138,11 @@ async function loadTodayEvents(){
 
     try{
 
-        const ICS_URL =
-            "https://calendar.google.com/calendar/ical/porter.p%40kiln.com/public/basic.ics";
-
-        const proxy =
-            "https://api.allorigins.win/raw?url=";
-
         const response =
-            await fetch(
-                proxy + encodeURIComponent(ICS_URL)
-            );
+    await fetch("/api/calendar");
+
+const text =
+    await response.text();
 
         if(!response.ok){
 
