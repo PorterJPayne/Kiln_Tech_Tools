@@ -2147,165 +2147,298 @@ async () => {
 <meta charset="UTF-8">
 
 <title>
-${currentProject.title} Update
+${currentProject.title}
 </title>
 
 <style>
 
+*{
+
+    box-sizing:border-box;
+
+}
+
 body{
+
+    margin:0;
+
+    background:#f3f5f7;
 
     font-family:
         Inter,
         Arial,
         sans-serif;
 
-    background:#f4f4f4;
+    color:#111827;
 
-    color:#111;
-
-    padding:40px;
-
-    line-height:1.6;
+    padding:32px;
 
 }
 
 .report{
 
-    max-width:1000px;
+    max-width:1200px;
 
     margin:auto;
 
-    background:white;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.08);
-
 }
 
-.header{
+/* ========================================
+   HERO
+======================================== */
 
-    background:#111;
+.hero{
+
+    background:#111827;
 
     color:white;
 
-    padding:36px;
+    border-radius:14px;
+
+    padding:28px 32px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:18px;
 
 }
 
-.header-title{
+.project-title{
 
     font-size:34px;
 
     font-weight:800;
 
-    margin-bottom:10px;
+    letter-spacing:-1px;
+
+    margin-bottom:8px;
 
 }
 
-.header-meta{
+.project-meta{
+
+    font-size:13px;
 
     opacity:0.7;
 
-    font-size:14px;
-
 }
 
-.section{
+.status-pill{
 
-    padding:32px 36px;
+    background:
+        ${
+            status === "Completed"
+            ? "#256d4a"
+            : "#2d5bdb"
+        };
 
-    border-bottom:
-        1px solid #eee;
-
-}
-
-.section-title{
+    color:white;
 
     font-size:12px;
 
-    letter-spacing:2px;
+    font-weight:700;
 
-    text-transform:uppercase;
+    padding:8px 12px;
 
-    color:#777;
+    border-radius:999px;
+
+    letter-spacing:1px;
+
+}
+
+/* ========================================
+   GRID
+======================================== */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1.4fr
+        1fr;
+
+    gap:18px;
+
+}
+
+/* ========================================
+   PANELS
+======================================== */
+
+.panel{
+
+    background:white;
+
+    border-radius:14px;
+
+    padding:22px;
+
+    box-shadow:
+        0 2px 10px rgba(0,0,0,0.04);
+
+}
+
+.section-label{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1.8px;
+
+    color:#6b7280;
 
     margin-bottom:18px;
+
+}
+
+/* ========================================
+   OVERVIEW
+======================================== */
+
+.overview{
+
+    line-height:1.7;
+
+    font-size:15px;
+
+    color:#374151;
+
+    white-space:pre-wrap;
+
+}
+
+/* ========================================
+   TASKS
+======================================== */
+
+.task{
+
+    padding:12px 0;
+
+    border-bottom:
+        1px solid #edf0f2;
+
+}
+
+.task:last-child{
+
+    border-bottom:none;
+
+}
+
+.task-title{
+
+    font-size:14px;
 
     font-weight:700;
 
 }
 
-.task{
+.task-note{
 
-    margin-bottom:16px;
+    margin-top:5px;
 
-    padding-left:18px;
+    font-size:13px;
 
-    position:relative;
+    color:#6b7280;
 
-}
+    line-height:1.5;
 
-.task::before{
-
-    content:"•";
-
-    position:absolute;
-
-    left:0;
+    white-space:pre-wrap;
 
 }
 
-.task-notes{
+.task-time{
 
-    margin-top:6px;
+    margin-top:7px;
 
-    color:#555;
+    font-size:11px;
 
-    font-size:14px;
+    color:#9ca3af;
 
 }
+
+.complete .task-title{
+
+    text-decoration:line-through;
+
+    opacity:0.7;
+
+}
+
+/* ========================================
+   NOTES
+======================================== */
 
 .note{
 
-    margin-bottom:16px;
+    background:#f9fafb;
+
+    border-radius:10px;
 
     padding:14px;
 
-    background:#f8f8f8;
-
-    border-radius:8px;
+    margin-bottom:12px;
 
 }
+
+.note-title{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    margin-bottom:6px;
+
+}
+
+.note-content{
+
+    font-size:13px;
+
+    color:#4b5563;
+
+    line-height:1.6;
+
+    white-space:pre-wrap;
+
+}
+
+/* ========================================
+   FILES
+======================================== */
 
 .files-grid{
 
     display:grid;
 
     grid-template-columns:
-        repeat(auto-fill,minmax(220px,1fr));
+        repeat(auto-fill,minmax(180px,1fr));
 
-    gap:18px;
+    gap:14px;
 
 }
 
 .file-card{
 
-    border:
-        1px solid #eee;
+    text-decoration:none;
 
-    border-radius:10px;
+    color:inherit;
+
+    background:#f9fafb;
+
+    border-radius:12px;
 
     overflow:hidden;
 
-    background:white;
-
-    text-decoration:none;
-
-    color:#111;
+    border:
+        1px solid #edf0f2;
 
 }
 
@@ -2313,7 +2446,7 @@ body{
 
     width:100%;
 
-    height:180px;
+    height:120px;
 
     object-fit:cover;
 
@@ -2321,31 +2454,47 @@ body{
 
 }
 
-.file-info{
+.file-name{
 
     padding:12px;
 
-    font-size:14px;
-
-}
-
-.footer{
-
-    padding:24px 36px;
-
     font-size:12px;
 
-    color:#777;
+    font-weight:600;
+
+    color:#374151;
 
 }
 
-pre{
+/* ========================================
+   JOURNAL
+======================================== */
+
+.journal{
+
+    font-size:13px;
+
+    line-height:1.8;
+
+    color:#4b5563;
 
     white-space:pre-wrap;
 
-    font-family:inherit;
+}
 
-    margin:0;
+/* ========================================
+   FOOTER
+======================================== */
+
+.footer{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#9ca3af;
 
 }
 
@@ -2357,201 +2506,251 @@ pre{
 
 <div class="report">
 
-<div class="header">
+    <!-- HERO -->
 
-<div class="header-title">
-${currentProject.title}
-</div>
+    <div class="hero">
 
-<div class="header-meta">
+        <div>
 
-Status:
-${status}
+            <div class="project-title">
+                ${currentProject.title}
+            </div>
 
-<br>
+            <div class="project-meta">
+                Generated ${now}
+            </div>
 
-Generated:
-${now}
+        </div>
 
-</div>
-
-</div>
-
-<div class="section">
-
-<div class="section-title">
-Overview
-</div>
-
-<pre>${description || "No overview provided."}</pre>
-
-</div>
-
-${
-completed.length
-?
-`
-<div class="section">
-
-<div class="section-title">
-Completed Work
-</div>
-
-${completed.map(task => `
-
-<div class="task">
-
-<strong>
-${task.title}
-</strong>
-
-${
-task.completion_notes
-?
-`
-<div class="task-notes">
-${task.completion_notes}
-</div>
-`
-:
-""
-}
-
-</div>
-
-`).join("")}
-
-</div>
-`
-:
-""
-}
-
-${
-active.length
-?
-`
-<div class="section">
-
-<div class="section-title">
-Active Work
-</div>
-
-${active.map(task => `
-
-<div class="task">
-
-<strong>
-${task.title}
-</strong>
-
-</div>
-
-`).join("")}
-
-</div>
-`
-:
-""
-}
-
-${
-attachedNotes.length
-?
-`
-<div class="section">
-
-<div class="section-title">
-Notes & Observations
-</div>
-
-${attachedNotes.map(note => `
-
-<div class="note">
-
-<strong>
-${note.title}
-</strong>
-
-<br><br>
-
-${note.content || ""}
-
-</div>
-
-`).join("")}
-
-</div>
-`
-:
-""
-}
-
-${
-uploadedFiles.length
-?
-`
-<div class="section">
-
-<div class="section-title">
-Files & Photos
-</div>
-
-<div class="files-grid">
-
-${uploadedFiles.map(file => `
-
-<a
-    class="file-card"
-    href="${file.file_url}"
-    target="_blank"
->
-
-    <img
-        src="${file.file_url}"
-    >
-
-    <div class="file-info">
-
-        ${file.file_name}
+        <div class="status-pill">
+            ${status.toUpperCase()}
+        </div>
 
     </div>
 
-</a>
+    <!-- GRID -->
 
-`).join("")}
+    <div class="grid">
 
-</div>
+        <!-- LEFT -->
 
-</div>
-`
-:
-""
-}
+        <div
+            style="
+                display:flex;
+                flex-direction:column;
+                gap:18px;
+            "
+        >
 
-${
-journal
-?
-`
-<div class="section">
+            <!-- OVERVIEW -->
 
-<div class="section-title">
-Project Journal
-</div>
+            <div class="panel">
 
-<pre>${journal}</pre>
+                <div class="section-label">
+                    OVERVIEW
+                </div>
 
-</div>
-`
-:
-""
-}
+                <div class="overview">
 
-<div class="footer">
+                    ${description || "No overview provided."}
 
-Generated by Kiln Operations Platform
+                </div>
 
-</div>
+            </div>
+
+            <!-- COMPLETED -->
+
+            ${
+                completed.length
+                ?
+                `
+                <div class="panel">
+
+                    <div class="section-label">
+                        COMPLETED WORK
+                    </div>
+
+                    ${completed.map(task => `
+
+                        <div class="task complete">
+
+                            <div class="task-title">
+                                ${task.title}
+                            </div>
+
+                            ${
+                                task.completion_notes
+                                ?
+                                `
+                                <div class="task-note">
+                                    ${task.completion_notes}
+                                </div>
+                                `
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+                `
+                :
+                ""
+            }
+
+            <!-- ACTIVE -->
+
+            ${
+                active.length
+                ?
+                `
+                <div class="panel">
+
+                    <div class="section-label">
+                        ACTIVE WORK
+                    </div>
+
+                    ${active.map(task => `
+
+                        <div class="task">
+
+                            <div class="task-title">
+                                ${task.title}
+                            </div>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+                `
+                :
+                ""
+            }
+
+            <!-- NOTES -->
+
+            ${
+                attachedNotes.length
+                ?
+                `
+                <div class="panel">
+
+                    <div class="section-label">
+                        NOTES & OBSERVATIONS
+                    </div>
+
+                    ${attachedNotes.map(note => `
+
+                        <div class="note">
+
+                            <div class="note-title">
+                                ${note.title}
+                            </div>
+
+                            <div class="note-content">
+                                ${note.content || ""}
+                            </div>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div
+            style="
+                display:flex;
+                flex-direction:column;
+                gap:18px;
+            "
+        >
+
+            <!-- FILES -->
+
+            ${
+                uploadedFiles.length
+                ?
+                `
+                <div class="panel">
+
+                    <div class="section-label">
+                        FILES & PHOTOS
+                    </div>
+
+                    <div class="files-grid">
+
+                        ${uploadedFiles.map(file => `
+
+                            <a
+                                class="file-card"
+                                href="${file.file_url}"
+                                target="_blank"
+                            >
+
+                                <img
+                                    src="${file.file_url}"
+                                >
+
+                                <div class="file-name">
+                                    ${file.file_name}
+                                </div>
+
+                            </a>
+
+                        `).join("")}
+
+                    </div>
+
+                </div>
+                `
+                :
+                ""
+            }
+
+            <!-- JOURNAL -->
+
+            ${
+                journal
+                ?
+                `
+                <div class="panel">
+
+                    <div class="section-label">
+                        PROJECT JOURNAL
+                    </div>
+
+                    <div class="journal">
+
+                        ${journal}
+
+                    </div>
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+        Generated by Kiln Operations Platform
+
+    </div>
 
 </div>
 
