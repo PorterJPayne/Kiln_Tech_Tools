@@ -170,10 +170,14 @@ async function loadTodayEvents(){
             const startMatch =
                 event.match(/DTSTART.*:(.*)/);
 
+            const uidMatch =
+                event.match(/UID:(.*)/);
+
             if(
-                !titleMatch ||
-                !startMatch
-            ) return;
+    !titleMatch ||
+    !startMatch ||
+    !uidMatch
+) return;
 
             const googleTitle =
     titleMatch[1].trim();
@@ -181,9 +185,12 @@ async function loadTodayEvents(){
 const start =
     startMatch[1].trim();
 
+    const uid =
+    uidMatch[1].trim();
+
 const alias =
     aliases?.find(
-        a => a.event_id === start
+        a => a.event_id === uid
     );
 
 const title =
@@ -221,6 +228,7 @@ const title =
 
                 todaysEvents.push({
                     title,
+                    uid,
                     start,
                     eventDate
                 });
@@ -311,7 +319,7 @@ const title =
 
                             <div
                                 class="edit-event-btn"
-                                data-event-id="${event.start}"
+                                data-event-id="${event.uid}"
                             >
                                 ✏️
                             </div>
