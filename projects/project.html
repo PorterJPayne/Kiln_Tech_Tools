@@ -1712,6 +1712,22 @@ document.getElementById(
                         path,
                         file
                     );
+                    console.log(upload);
+
+if(upload.error){
+
+    console.error(
+        "UPLOAD ERROR:",
+        upload.error
+    );
+
+    alert(
+        upload.error.message
+    );
+
+    continue;
+
+}
 
             const publicUrl =
     supabaseClient
