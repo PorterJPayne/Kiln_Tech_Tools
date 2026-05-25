@@ -42,7 +42,9 @@ async function loadTopbar(){
     const html =
         await response.text();
 
-    topbar.innerHTML = html;
+   topbar.innerHTML = html;
+
+loadTodayEvents();
 
 // =========================
 // TODAY EVENTS
@@ -67,6 +69,13 @@ async function loadTodayEvents(){
     console.log(text);
 
 }
+
+const textElement =
+    document.getElementById(
+        "todayEventsText"
+    );
+
+if(!textElement) return;
 
 loadTodayEvents();
 
@@ -493,6 +502,3 @@ function updateTodayEvents() {
     `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${nextEvent.time}`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateTodayEvents();
-});
