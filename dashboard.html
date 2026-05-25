@@ -1548,6 +1548,7 @@ async function initDashboardNotes(){
         );
 
     }
+    await loadTickets();
 
 }
 
@@ -1668,6 +1669,8 @@ initDashboardNotes();
 let tasks = [];
 
 let activeTask = null;
+
+let tickets = [];
 
 // =========================
 // LOAD TASKS
@@ -1907,6 +1910,19 @@ if(completeTaskBtn){
                     "completionReport"
                 ).value;
 
+
+                // ========================================
+// TICKETS
+// ========================================
+
+async function loadTickets(){
+
+    tickets =
+        await fetchFreshserviceTickets();
+
+    renderSnapshot();
+
+}
             // =========================
 // EMAIL ENTRY
 // =========================
@@ -2176,54 +2192,71 @@ document.addEventListener(
 
 function renderSnapshot(){
 
-    const completedTasks =
-        tasks.filter(
-            t => t.completed
+    const completedTickets =
+    tickets.filter(ticket => {
+
+        const status =
+            (
+                ticket.status_name
+                ||
+                ""
+            ).toLowerCase();
+
+        return (
+            status.includes(
+                "resolved"
+            )
+            ||
+            status.includes(
+                "closed"
+            )
         );
+
+    });
 
     const today =
         new Date();
 
     const todayCompleted =
-        completedTasks.filter(task => {
+    completedTickets.filter(ticket => {
 
-            if(!task.completed_at)
-                return false;
+        if(!ticket.updated_at)
+            return false;
 
-            const completed =
-                new Date(
-                    task.completed_at
-                );
-
-            return (
-                completed.toDateString()
-                ===
-                today.toDateString()
+        const completed =
+            new Date(
+                ticket.updated_at
             );
 
-        });
+        return (
+            completed.toDateString()
+            ===
+            today.toDateString()
+        );
+
+    });
 
     const weekCompleted =
-        completedTasks.filter(task => {
+    completedTickets.filter(ticket => {
 
-            if(!task.completed_at)
-                return false;
+        if(!ticket.updated_at)
+            return false;
 
-            const completed =
-                new Date(
-                    task.completed_at
-                );
+        const completed =
+            new Date(
+                ticket.updated_at
+            );
 
-            const diff =
-                (
-                    today - completed
-                )
-                /
-                (1000 * 60 * 60 * 24);
+        const diff =
+            (
+                today - completed
+            )
+            /
+            (1000 * 60 * 60 * 24);
 
-            return diff <= 7;
+        return diff <= 7;
 
-        });
+    });
 
     document.getElementById(
         "todayCompleted"
