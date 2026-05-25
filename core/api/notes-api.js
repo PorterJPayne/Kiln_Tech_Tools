@@ -59,6 +59,43 @@ async function saveNote(note){
 }
 
 // =========================
+// CREATE NOTE
+// =========================
+
+async function createNote(title){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("notes")
+        .insert([{
+
+            title: title,
+            content: "",
+            pinned: false,
+            updated_at: Date.now()
+
+        }])
+        .select()
+        .single();
+
+    if(error){
+
+        console.error(
+            "Create note error:",
+            error
+        );
+
+        return null;
+
+    }
+
+    return data;
+
+}
+
+// =========================
 // DELETE NOTE
 // =========================
 

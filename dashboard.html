@@ -1683,37 +1683,39 @@ const newDashboardNoteBtn =
 
 if(newDashboardNoteBtn){
 
-    newDashboardNoteBtn.onclick =
-        async () => {
+   newDashboardNoteBtn.onclick =
+    async () => {
 
-            const title =
-                prompt(
-                    "New note title"
-                );
+        const title =
+            prompt(
+                "New note title"
+            );
 
-            if(!title) return;
+        if(!title) return;
 
-            const newNote =
-                await createDashboardNote(
-                    title
-                );
+        const newNote =
+            await createNote(
+                title
+            );
 
-            renderDashboardNoteOptions();
+        if(!newNote) return;
 
-            if(newNote){
+        dashboardNotes.unshift(
+            newNote
+        );
 
-                loadDashboardNote(
-                    newNote.id
-                );
+        renderDashboardNoteOptions();
 
-                noteSelect.value =
-                    newNote.id;
+        loadDashboardNote(
+            newNote.id
+        );
 
-            }
+        noteSelect.value =
+            newNote.id;
 
-            noteTitle.focus();
+        noteTitle.focus();
 
-        };
+    };
 
 }
 // =========================
