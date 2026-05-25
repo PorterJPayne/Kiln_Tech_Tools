@@ -515,6 +515,16 @@
 
 }
 
+.activity-feed{
+
+    max-height:420px;
+
+    overflow:auto;
+
+    padding-right:4px;
+
+}
+
 </style>
 
 </head>
@@ -601,8 +611,8 @@ Edit
 
 <div
 style="
-display:flex;
-flex-direction:column;
+display:grid;
+grid-template-columns:1fr 1.2fr;
 gap:10px;
 "
 >
@@ -706,6 +716,47 @@ placeholder="Running project notes..."
 
 </div>
 
+</div>
+
+<!-- RIGHT -->
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:10px;
+"
+>
+
+<div class="project-panel">
+
+<div class="section-title">
+Activity
+</div>
+
+<div
+    id="activityFeed"
+    class="activity-feed"
+></div>
+
+</div>
+
+<div class="project-panel">
+
+<div class="section-title">
+Project Update
+</div>
+
+<button
+class="button button-primary"
+style="width:100%;"
+id="exportBtn"
+>
+Copy Project Update
+</button>
+
+</div>
+
 <!-- FILES -->
 
 <div class="project-panel">
@@ -728,42 +779,6 @@ class="upload-grid"
 ></div>
 
 </div>
-
-</div>
-
-<!-- RIGHT -->
-
-<div
-style="
-display:flex;
-flex-direction:column;
-gap:10px;
-"
->
-
-<div class="project-panel">
-
-<div class="section-title">
-Activity
-</div>
-
-<div id="activityFeed"></div>
-
-</div>
-
-<div class="project-panel">
-
-<div class="section-title">
-Project Update
-</div>
-
-<button
-class="button button-primary"
-style="width:100%;"
-id="exportBtn"
->
-Copy Project Update
-</button>
 
 </div>
 
@@ -1698,26 +1713,28 @@ document.getElementById(
                         file
                     );
 
-            const { data } =
-                supabaseClient
-                    .storage
-                    .from(
-                        "project-files"
-                    )
-                    .getPublicUrl(path);
+            const publicUrl =
+    supabaseClient
+        .storage
+        .from(
+            "project-files"
+        )
+        .getPublicUrl(path)
+        .data
+        .publicUrl;
 
-            await saveProjectFile({
+await saveProjectFile({
 
-                projectId:
-                    currentProject.id,
+    projectId:
+        currentProject.id,
 
-                fileName:
-                    file.name,
+    fileName:
+        file.name,
 
-                fileUrl:
-                    data.publicUrl
+    fileUrl:
+        publicUrl
 
-            });
+});
 
         }
 
@@ -2006,6 +2023,78 @@ document.getElementById(
     "input",
     autosave
 );
+
+// ========================================
+// CLOSE DROPDOWNS ON OUTSIDE CLICK
+// ========================================
+
+document.addEventListener(
+    "click",
+    e => {
+
+        const tasksMenu =
+            document.getElementById(
+                "tasksMenu"
+            );
+
+        const notesMenu =
+            document.getElementById(
+                "notesMenu"
+            );
+
+        const tasksBtn =
+            document.getElementById(
+                "tasksBtn"
+            );
+
+        const notesBtn =
+            document.getElementById(
+                "notesBtn"
+            );
+
+        if(
+            tasksMenu
+            &&
+            tasksBtn
+            &&
+            !tasksMenu.contains(
+                e.target
+            )
+            &&
+            !tasksBtn.contains(
+                e.target
+            )
+        ){
+
+            tasksMenu.classList.remove(
+                "open"
+            );
+
+        }
+
+        if(
+            notesMenu
+            &&
+            notesBtn
+            &&
+            !notesMenu.contains(
+                e.target
+            )
+            &&
+            !notesBtn.contains(
+                e.target
+            )
+        ){
+
+            notesMenu.classList.remove(
+                "open"
+            );
+
+        }
+
+    }
+);
+
 
 // ========================================
 // START
