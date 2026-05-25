@@ -136,14 +136,16 @@ async function loadTodayEvents(){
         "https://api.allorigins.win/raw?url=";
 
     const response =
-        await fetch(
-            proxy + encodeURIComponent(ICS_URL)
-        );
+    await fetch(
+        proxy + encodeURIComponent(ICS_URL)
+    );
 
-    const text =
-        await response.text();
+console.log(response);
 
-    console.log(text);
+const text =
+    await response.text();
+
+console.log(text);
 
 }
 
