@@ -133,7 +133,7 @@ async function loadTodayEvents(){
         "https://calendar.google.com/calendar/ical/porter.p%40kiln.com/public/basic.ics";
 
     const proxy =
-        "https://api.allorigins.win/raw?url=";
+    "https://corsproxy.io/?";
 
     const response =
     await fetch(
@@ -141,6 +141,7 @@ async function loadTodayEvents(){
     );
 
 console.log(response);
+console.log(response.status);
 
 const text =
     await response.text();
