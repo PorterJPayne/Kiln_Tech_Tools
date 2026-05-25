@@ -2195,26 +2195,15 @@ document.addEventListener(
 function renderSnapshot(){
 
     const completedTickets =
-    tickets.filter(ticket => {
+tickets.filter(ticket => {
 
-        const status =
-            (
-                ticket.status_name
-                ||
-                ""
-            ).toLowerCase();
+    return (
+        ticket.status === 4
+        ||
+        ticket.status === 5
+    );
 
-        return (
-            status.includes(
-                "resolved"
-            )
-            ||
-            status.includes(
-                "closed"
-            )
-        );
-
-    });
+});
 
     const today =
         new Date();
