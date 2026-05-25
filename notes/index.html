@@ -578,27 +578,43 @@ let saveTimeout = null;
 
 /* NOTES */
 
-function createNewNote(){
+async function createNewNote(){
 
-    const note = {
+    const title =
+        prompt(
+            "Note title"
+        );
 
-        id: Date.now(),
-        title:"Untitled Note",
-        content:"",
-        pinned:false,
-        updatedAt:Date.now()
+    if(!title) return;
 
-    };
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("notes")
+        .insert([{
 
-    notes.unshift(note);
+            title,
+            content: "",
+            pinned: false,
+            updated_at: Date.now()
 
-    currentNoteId = note.id;
+        }])
+        .select()
+        .single();
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    notes.unshift(data);
 
     renderNotes();
 
-    loadNote(note.id);
-
-    saveNote(newNote);
+    openNote(data.id);
 
 }
 

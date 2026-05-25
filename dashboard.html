@@ -1686,20 +1686,50 @@ if(newDashboardNoteBtn){
    newDashboardNoteBtn.onclick =
     async () => {
 
-        createNewNote();
+        const title =
+            prompt(
+                "New note title"
+            );
 
-        dashboardNotes =
-            await fetchNotes();
+        if(!title) return;
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("notes")
+            .insert([{
+
+                title,
+                content: "",
+                pinned: false,
+                updated_at: Date.now()
+
+            }])
+            .select()
+            .single();
+
+        if(error){
+
+            console.error(error);
+            return;
+
+        }
+
+        dashboardNotes.unshift(
+            data
+        );
 
         renderDashboardNoteOptions();
 
-        if(dashboardNotes.length){
+        loadDashboardNote(
+            data.id
+        );
 
-            loadDashboardNote(
-                dashboardNotes[0].id
-            );
+        noteSelect.value =
+            data.id;
 
-        }
+        noteTitle.focus();
 
     };
 }
