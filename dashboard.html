@@ -1555,6 +1555,26 @@ const noteContent =
 // =========================
 // INIT
 // =========================
+async function createDashboardNote(title){
+
+    const newNote = {
+
+        title: title,
+        content: "",
+        pinned: false,
+        updatedAt: Date.now()
+
+    };
+
+    await saveNote(newNote);
+
+    dashboardNotes =
+        await fetchNotes();
+
+    return dashboardNotes[0];
+
+}
+
 
 async function initDashboardNotes(){
 
@@ -1663,53 +1683,38 @@ const newDashboardNoteBtn =
 
 if(newDashboardNoteBtn){
 
-   newDashboardNoteBtn.onclick =
-    async () => {
+    newDashboardNoteBtn.onclick =
+        async () => {
 
-        const title =
-            prompt(
-                "New note title"
-            );
+            const title =
+                prompt(
+                    "New note title"
+                );
 
-        if(!title) return;
+            if(!title) return;
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("notes")
-            .insert([{
+            const newNote =
+                await createDashboardNote(
+                    title
+                );
 
-                title: title,
-                content: "",
-                pinned: false
+            renderDashboardNoteOptions();
 
-            }])
-            .select()
-            .single();
+            if(newNote){
 
-        if(error){
+                loadDashboardNote(
+                    newNote.id
+                );
 
-            console.error(error);
-            return;
+                noteSelect.value =
+                    newNote.id;
 
-        }
+            }
 
-        dashboardNotes =
-            await fetchNotes();
+            noteTitle.focus();
 
-        renderDashboardNoteOptions();
+        };
 
-        loadDashboardNote(
-            data.id
-        );
-
-        noteSelect.value =
-            data.id;
-
-        noteTitle.focus();
-
-    };
 }
 // =========================
 // EVENTS
