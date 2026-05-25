@@ -178,6 +178,9 @@ async function loadTodayEvents(){
             const googleTitle =
     titleMatch[1].trim();
 
+const start =
+    startMatch[1].trim();
+
 const alias =
     aliases?.find(
         a => a.event_id === start
@@ -186,9 +189,6 @@ const alias =
 const title =
     alias?.custom_title ||
     googleTitle;
-
-            const start =
-                startMatch[1].trim();
 
             const year =
                 start.substring(0,4);
@@ -336,7 +336,6 @@ const title =
 
         }
 
-    }
 
     document
     .querySelectorAll(
