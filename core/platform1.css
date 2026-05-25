@@ -859,3 +859,82 @@ select:focus{
   overflow:hidden;
   text-overflow:ellipsis;
 }
+
+.today-events-wrapper{
+    position:relative;
+}
+
+.today-events-dropdown{
+
+    position:absolute;
+
+    top:48px;
+    left:0;
+
+    width:320px;
+
+    background:#111;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:14px;
+
+    padding:10px;
+
+    z-index:999;
+
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.35);
+
+}
+
+.today-events-dropdown.hidden{
+    display:none;
+}
+
+.today-event-row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.03);
+
+}
+
+.today-event-info{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.today-event-time{
+    font-size:12px;
+    opacity:.6;
+}
+
+.today-event-title{
+    font-size:14px;
+    font-weight:500;
+}
+
+.edit-event-btn{
+
+    cursor:pointer;
+
+    opacity:.6;
+
+    transition:.2s;
+}
+
+.edit-event-btn:hover{
+    opacity:1;
+}

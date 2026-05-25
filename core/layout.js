@@ -252,7 +252,7 @@ const nextEvent =
     upcomingEvents[0] ||
     todaysEvents[0];
 
-        const formattedTime =
+       const formattedTime =
     nextEvent.eventDate
     .toLocaleTimeString(
         [],
@@ -262,8 +262,77 @@ const nextEvent =
         }
     );
 
-    textElement.textContent =
+const dropdown =
+    document.getElementById(
+        "todayEventsDropdown"
+    );
+
+dropdown.innerHTML =
+    todaysEvents.map(event => {
+
+        const time =
+            event.eventDate
+            .toLocaleTimeString(
+                [],
+                {
+                    hour:"numeric",
+                    minute:"2-digit"
+                }
+            );
+
+        return `
+
+            <div class="today-event-row">
+
+                <div class="today-event-info">
+
+                    <div class="today-event-time">
+                        ${time}
+                    </div>
+
+                    <div class="today-event-title">
+                        ${event.title}
+                    </div>
+
+                </div>
+
+                <div
+                    class="edit-event-btn"
+                    data-event-id="${event.start}"
+                >
+                    ✏️
+                </div>
+
+            </div>
+
+        `;
+
+    }).join("");
+
+textElement.textContent =
     `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
+
+const pill =
+    document.getElementById(
+        "todayEventsPill"
+    );
+
+const dropdown =
+    document.getElementById(
+        "todayEventsDropdown"
+    );
+
+if(pill && dropdown){
+
+    pill.onclick = () => {
+
+        dropdown.classList.toggle(
+            "hidden"
+        );
+
+    };
+
+}
 
     }
 
