@@ -48,16 +48,27 @@ async function loadTopbar(){
 // TODAY EVENTS
 // =========================
 
-const todaysEvents = [
-    {
-        title: "Client Tour",
-        time: "1:30 PM"
-    },
-    {
-        title: "Vendor Call",
-        time: "3:00 PM"
-    }
-];
+async function loadTodayEvents(){
+
+    const ICS_URL =
+        "https://calendar.google.com/calendar/ical/porter.p%40kiln.com/public/basic.ics";
+
+    const proxy =
+        "https://api.allorigins.win/raw?url=";
+
+    const response =
+        await fetch(
+            proxy + encodeURIComponent(ICS_URL)
+        );
+
+    const text =
+        await response.text();
+
+    console.log(text);
+
+}
+
+loadTodayEvents();
 
 function updateTodayEvents(){
 
