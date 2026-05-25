@@ -1653,15 +1653,17 @@ async function saveDashboardNote(){
 // =========================
 
 // =========================
-// NEW NOTE
+// NEW NOTE BUTTON
 // =========================
 
-document
-    .getElementById(
+const newDashboardNoteBtn =
+    document.getElementById(
         "newDashboardNoteBtn"
-    )
-    .addEventListener(
-        "click",
+    );
+
+if(newDashboardNoteBtn){
+
+    newDashboardNoteBtn.onclick =
         async () => {
 
             const title =
@@ -1673,9 +1675,11 @@ document
 
             const newNote =
                 await createNote({
+
                     title,
                     content: "",
                     pinned: false
+
                 });
 
             dashboardNotes.unshift(
@@ -1688,8 +1692,14 @@ document
                 newNote.id
             );
 
-        }
-    );
+            noteSelect.value =
+                newNote.id;
+
+            noteTitle.focus();
+
+        };
+
+}
 
 // =========================
 // EVENTS
