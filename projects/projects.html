@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Project</title>
+
+<link rel="stylesheet"
+href="/core/platform1.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<script src="/core/api/projects-api.js"></script>
+
+<script src="/core/layout.js" defer></script>
+
+</head>
+
+<body
+class="platform-body"
+data-title="Project"
+data-description="Operational project workspace."
+>
+
+<div class="app">
+
+<aside
+class="sidebar"
+id="sidebar"
+></aside>
+
+<main class="main platform-page">
+
+<div id="topbar"></div>
+
+<div class="content">
+
+<h1 id="projectTitle">
+Loading...
+</h1>
+
+<div style="height:12px;"></div>
+
+<div
+id="projectDescription"
+class="muted"
+></div>
+
+</div>
+
+</main>
+
+</div>
+
+<script>
+
+async function initProject(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        params.get("id");
+
+    const projects =
+        await fetchProjects();
+
+    const project =
+        projects.find(
+            p => p.id == id
+        );
+
+    if(!project) return;
+
+    document.getElementById(
+        "projectTitle"
+    ).textContent =
+        project.title;
+
+    document.getElementById(
+        "projectDescription"
+    ).textContent =
+        project.description || "";
+
+}
+
+initProject();
+
+</script>
+
+</body>
+</html>

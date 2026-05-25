@@ -26,6 +26,8 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script src="/core/api/email-api.js"></script>
 
+<script src="/core/api/projects-api.js"></script>
+
 <script src="/core/api/search-api.js"></script>
 
 <script src="/core/layout.js" defer></script>
@@ -979,68 +981,31 @@ div[style*="height:10px"]{
 
  <!-- PROJECTS -->
 
-   <div class="widget middle-row-widget projects-widget">
+<div class="widget middle-row-widget projects-widget">
+
+    <div class="flex-between">
 
         <h2>
-            Active Projects
+            Projects
         </h2>
 
-        <div style="height:18px;"></div>
-
-        <div class="flex-column gap-md">
-
-            <div class="widget-card">
-
-                <div class="flex-between">
-
-                    <strong>
-                        Cable Holders & Hole Repair
-                    </strong>
-
-                    <span class="muted">
-                        3 rooms
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="widget-card">
-
-                <div class="flex-between">
-
-                    <strong>
-                        Phone Booth Panel Repairs
-                    </strong>
-
-                    <span class="muted">
-                        8 booths
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="widget-card">
-
-                <div class="flex-between">
-
-                    <strong>
-                        Paint Touchups
-                    </strong>
-
-                    <span class="muted">
-                        Multi-location
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
+        <button
+            class="button button-primary"
+            id="newProjectBtn"
+        >
+            + Project
+        </button>
 
     </div>
 
+    <div style="height:8px;"></div>
+
+    <div
+        id="projectsList"
+        class="flex-column gap-sm"
+    ></div>
+
+</div>
 
 <div class="widget middle-row-widget">
 
@@ -1210,6 +1175,59 @@ div[style*="height:10px"]{
                 id="completeTaskBtn"
             >
                 Submit
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     PROJECT MODAL
+========================= -->
+
+<div
+    class="modal-overlay hidden"
+    id="projectModal"
+>
+
+    <div class="task-modal">
+
+        <div class="modal-title">
+            New Project
+        </div>
+
+        <div class="modal-grid">
+
+            <input
+                id="projectTitle"
+                class="input"
+                placeholder="Project title"
+            >
+
+            <textarea
+                id="projectDescription"
+                class="input modal-textarea"
+                placeholder="Description"
+            ></textarea>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="button"
+                id="closeProjectModal"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="button button-primary"
+                id="saveProjectBtn"
+            >
+                Create
             </button>
 
         </div>
@@ -1677,10 +1695,174 @@ if(closeCompleteModal){
 }
 
 // =========================
+// PROJECTS
+// =========================
+
+let projects = [];
+
+// =========================
+// LOAD PROJECTS
+// =========================
+
+async function loadProjects(){
+
+    projects =
+        await fetchProjects();
+
+    renderProjects();
+
+}
+
+// =========================
+// RENDER
+// =========================
+
+function renderProjects(){
+
+    const list =
+        document.getElementById(
+            "projectsList"
+        );
+
+    if(!list) return;
+
+    list.innerHTML = "";
+
+    projects.forEach(project => {
+
+        const item =
+            document.createElement("a");
+
+        item.className =
+            "rail-link";
+
+        item.href =
+            `/projects/project.html?id=${project.id}`;
+
+        item.innerHTML = `
+
+            <div>
+
+                <div>
+                    ${project.title}
+                </div>
+
+                <div
+                    class="muted"
+                    style="font-size:10px;"
+                >
+                    ${project.status || "Active"}
+                </div>
+
+            </div>
+
+            <span>↗</span>
+
+        `;
+
+        list.appendChild(item);
+
+    });
+
+}
+
+// =========================
+// OPEN MODAL
+// =========================
+
+document.addEventListener(
+    "click",
+    e => {
+
+        if(
+            e.target.id ===
+            "newProjectBtn"
+        ){
+
+            document
+                .getElementById(
+                    "projectModal"
+                )
+                .classList
+                .remove("hidden");
+
+        }
+
+    }
+);
+
+// =========================
+// CLOSE MODAL
+// =========================
+
+document.addEventListener(
+    "click",
+    e => {
+
+        if(
+            e.target.id ===
+            "closeProjectModal"
+        ){
+
+            document
+                .getElementById(
+                    "projectModal"
+                )
+                .classList
+                .add("hidden");
+
+        }
+
+    }
+);
+
+// =========================
+// SAVE PROJECT
+// =========================
+
+document.addEventListener(
+    "click",
+    async e => {
+
+        if(
+            e.target.id ===
+            "saveProjectBtn"
+        ){
+
+            await createProject({
+
+                title:
+                    document.getElementById(
+                        "projectTitle"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "projectDescription"
+                    ).value
+
+            });
+
+            document
+                .getElementById(
+                    "projectModal"
+                )
+                .classList
+                .add("hidden");
+
+            loadProjects();
+
+        }
+
+    }
+);
+
+// =========================
 // START
 // =========================
 
 loadTasks();
+loadProjects();
 
 </script>
 
