@@ -1700,12 +1700,14 @@ if(newDashboardNoteBtn){
             .from("notes")
             .insert([{
 
-                title,
-                content: "",
-                pinned: false,
-                updated_at: Date.now()
+    id: crypto.randomUUID(),
 
-            }])
+    title,
+    content: "",
+    pinned: false,
+    updated_at: Date.now()
+
+}])
             .select()
             .single();
 
