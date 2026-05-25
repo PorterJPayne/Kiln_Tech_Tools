@@ -1118,13 +1118,26 @@ min-height:180px;
 
     <!-- TOP OPERATIONS ROW -->
 
-<div class="widget top-row-widget notes-widget">
+<div class="flex-between">
 
-    <div class="flex-between">
+    <h2>
+        Operational Notes
+    </h2>
 
-        <h2>
-            Operational Notes
-        </h2>
+    <div
+        style="
+            display:flex;
+            gap:6px;
+            align-items:center;
+        "
+    >
+
+        <button
+            class="button button-primary"
+            id="newDashboardNoteBtn"
+        >
+            + Note
+        </button>
 
         <select
             id="dashboardNoteSelect"
@@ -1133,6 +1146,8 @@ min-height:180px;
         ></select>
 
     </div>
+
+</div>
 
     <div style="height:10px;"></div>
 
