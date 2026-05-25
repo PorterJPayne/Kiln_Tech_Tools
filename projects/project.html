@@ -45,7 +45,7 @@
     display:grid;
 
     grid-template-columns:
-        2.1fr
+        2.2fr
         1fr;
 
     gap:10px;
@@ -90,11 +90,11 @@
 
     margin-top:8px;
 
+    color:rgba(255,255,255,0.65);
+
+    line-height:1.55;
+
     font-size:12px;
-
-    line-height:1.5;
-
-    color:rgba(255,255,255,0.68);
 
     white-space:pre-wrap;
 
@@ -102,15 +102,49 @@
 
 .description-edit{
 
+    display:none;
+
     width:100%;
 
     min-height:100px;
 
-    resize:vertical;
-
-    display:none;
-
     margin-top:8px;
+
+}
+
+.utility-controls{
+
+    display:flex;
+
+    gap:6px;
+
+    align-items:center;
+
+}
+
+.mini-button{
+
+    background:none;
+
+    border:none;
+
+    color:rgba(255,255,255,0.45);
+
+    font-size:11px;
+
+    cursor:pointer;
+
+    padding:4px 6px;
+
+    border-radius:4px;
+
+}
+
+.mini-button:hover{
+
+    background:rgba(255,255,255,0.05);
+
+    color:white;
 
 }
 
@@ -134,29 +168,29 @@
 
     display:flex;
 
-    gap:8px;
+    gap:6px;
 
     margin-bottom:10px;
 
 }
 
-.attach-menu{
+.attach-dropdown{
 
     position:relative;
 
 }
 
-.dropdown{
+.attach-menu{
 
     position:absolute;
 
-    top:34px;
+    top:28px;
 
     left:0;
 
-    width:280px;
+    width:320px;
 
-    max-height:260px;
+    max-height:300px;
 
     overflow:auto;
 
@@ -174,13 +208,13 @@
 
 }
 
-.dropdown.open{
+.attach-menu.open{
 
     display:block;
 
 }
 
-.dropdown-item{
+.attach-row{
 
     display:flex;
 
@@ -194,11 +228,11 @@
 
 }
 
-.dropdown-footer{
-
-    padding-top:8px;
+.attach-footer{
 
     margin-top:8px;
+
+    padding-top:8px;
 
     border-top:1px solid rgba(255,255,255,0.06);
 
@@ -214,33 +248,67 @@
 
 .attached-item{
 
-    display:flex;
+    border-bottom:1px solid rgba(255,255,255,0.05);
 
-    justify-content:space-between;
+}
+
+.attached-header{
+
+    min-height:36px;
+
+    display:flex;
 
     align-items:center;
 
-    min-height:34px;
+    justify-content:space-between;
 
-    padding:0 2px;
-
-    border-bottom:1px solid rgba(255,255,255,0.05);
+    cursor:pointer;
 
     font-size:11px;
 
 }
 
-.attached-item:last-child{
+.attached-left{
 
-    border-bottom:none;
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.expand-arrow{
+
+    opacity:0.45;
+
+}
+
+.attached-preview{
+
+    display:none;
+
+    padding:0 0 10px 22px;
+
+    color:rgba(255,255,255,0.65);
+
+    line-height:1.5;
+
+    font-size:11px;
+
+}
+
+.attached-preview.open{
+
+    display:block;
 
 }
 
 .remove-link{
 
-    cursor:pointer;
-
     opacity:0.45;
+
+    cursor:pointer;
 
 }
 
@@ -254,27 +322,15 @@
 
     width:100%;
 
-    min-height:260px;
+    min-height:240px;
 
     resize:vertical;
 
-    line-height:1.55;
+    line-height:1.6;
 
 }
 
-.upload-area{
-
-    border:1px dashed rgba(255,255,255,0.12);
-
-    border-radius:6px;
-
-    padding:20px;
-
-    text-align:center;
-
-}
-
-.upload-preview{
+.upload-grid{
 
     display:grid;
 
@@ -283,11 +339,15 @@
 
     gap:8px;
 
-    margin-top:12px;
+}
+
+.upload-card{
+
+    position:relative;
 
 }
 
-.upload-preview img{
+.upload-card img{
 
     width:100%;
 
@@ -297,7 +357,15 @@
 
     border-radius:6px;
 
-    border:1px solid rgba(255,255,255,0.08);
+}
+
+.upload-name{
+
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,0.5);
 
 }
 
@@ -309,7 +377,7 @@
 
     font-size:11px;
 
-    line-height:1.4;
+    line-height:1.45;
 
 }
 
@@ -383,13 +451,7 @@ class="input description-edit"
 
 </div>
 
-<div
-style="
-display:flex;
-gap:8px;
-align-items:flex-start;
-"
->
+<div class="utility-controls">
 
 <select
 id="projectStatus"
@@ -405,7 +467,7 @@ class="input"
 </select>
 
 <button
-class="button"
+class="mini-button"
 id="editDescriptionBtn"
 >
 Edit
@@ -445,28 +507,28 @@ Operational Links
 
 <!-- TASKS -->
 
-<div class="attach-menu">
+<div class="attach-dropdown">
 
 <button
-class="button"
-id="tasksMenuBtn"
+class="mini-button"
+id="tasksBtn"
 >
-+ Tasks
+Add Tasks ▾
 </button>
 
 <div
-class="dropdown"
-id="tasksDropdown"
+class="attach-menu"
+id="tasksMenu"
 >
 
-<div id="tasksDropdownContent"></div>
+<div id="tasksMenuContent"></div>
 
-<div class="dropdown-footer">
+<div class="attach-footer">
 
 <button
 class="button button-primary"
-id="attachTasksBtn"
 style="width:100%;"
+id="attachTasksBtn"
 >
 Attach Selected
 </button>
@@ -479,28 +541,28 @@ Attach Selected
 
 <!-- NOTES -->
 
-<div class="attach-menu">
+<div class="attach-dropdown">
 
 <button
-class="button"
-id="notesMenuBtn"
+class="mini-button"
+id="notesBtn"
 >
-+ Notes
+Add Notes ▾
 </button>
 
 <div
-class="dropdown"
-id="notesDropdown"
+class="attach-menu"
+id="notesMenu"
 >
 
-<div id="notesDropdownContent"></div>
+<div id="notesMenuContent"></div>
 
-<div class="dropdown-footer">
+<div class="attach-footer">
 
 <button
 class="button button-primary"
-id="attachNotesBtn"
 style="width:100%;"
+id="attachNotesBtn"
 >
 Attach Selected
 </button>
@@ -541,10 +603,8 @@ placeholder="Running project notes..."
 <div class="project-panel">
 
 <div class="section-title">
-Photos & Files
+Files & Photos
 </div>
-
-<div class="upload-area">
 
 <input
 type="file"
@@ -552,12 +612,12 @@ id="fileUpload"
 multiple
 >
 
-<div
-class="upload-preview"
-id="uploadPreview"
-></div>
+<div style="height:10px;"></div>
 
-</div>
+<div
+id="uploadGrid"
+class="upload-grid"
+></div>
 
 </div>
 
@@ -590,15 +650,15 @@ Activity
 <div class="project-panel">
 
 <div class="section-title">
-Export
+Project Update
 </div>
 
 <button
 class="button button-primary"
-id="exportBtn"
 style="width:100%;"
+id="exportBtn"
 >
-Generate Project Update
+Copy Project Update
 </button>
 
 </div>
@@ -631,6 +691,8 @@ let currentProject = null;
 let attachedTasks = [];
 
 let attachedNotes = [];
+
+let uploadedFiles = [];
 
 // ========================================
 // INIT
@@ -670,18 +732,31 @@ async function initProject(){
             ) || "[]"
         );
 
+    uploadedFiles =
+        JSON.parse(
+            localStorage.getItem(
+                `project_files_${id}`
+            ) || "[]"
+        );
+
     renderProject();
 
     renderAttached();
 
-    loadTaskDropdown();
+    renderUploads();
 
-    loadNoteDropdown();
+    loadTaskMenu();
+
+    loadNoteMenu();
+
+    addActivity(
+        "Opened project"
+    );
 
 }
 
 // ========================================
-// RENDER
+// PROJECT
 // ========================================
 
 function renderProject(){
@@ -717,7 +792,7 @@ function renderProject(){
 // AUTOSAVE
 // ========================================
 
-async function autosaveProject(){
+async function autosave(){
 
     document.getElementById(
         "autosaveStatus"
@@ -784,36 +859,64 @@ document.getElementById(
 
     if(edit.style.display === "block"){
 
-        text.style.display = "block";
-
         edit.style.display = "none";
 
-        autosaveProject();
+        text.style.display = "block";
+
+        autosave();
+
+        addActivity(
+            "Updated description"
+        );
 
     }
 
     else {
 
-        text.style.display = "none";
-
         edit.style.display = "block";
+
+        text.style.display = "none";
 
     }
 
 };
 
 // ========================================
-// TASKS
+// ACTIVITY
 // ========================================
 
-async function loadTaskDropdown(){
+function addActivity(text){
+
+    const feed =
+        document.getElementById(
+            "activityFeed"
+        );
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "activity-item";
+
+    item.textContent =
+        text;
+
+    feed.prepend(item);
+
+}
+
+// ========================================
+// TASK MENU
+// ========================================
+
+async function loadTaskMenu(){
 
     const tasks =
         await fetchTasks();
 
     const container =
         document.getElementById(
-            "tasksDropdownContent"
+            "tasksMenuContent"
         );
 
     container.innerHTML = "";
@@ -821,25 +924,9 @@ async function loadTaskDropdown(){
     const filtered =
         tasks.filter(task => {
 
-            if(
-                attachedTasks.includes(
-                    task.title
-                )
-            ){
-                return false;
-            }
-
-            const created =
-                new Date(
-                    task.created_at
-                );
-
-            const projectCreated =
-                new Date(
-                    currentProject.created_at
-                );
-
-            return created >= projectCreated;
+            return !attachedTasks.some(
+                t => t.id === task.id
+            );
 
         });
 
@@ -849,13 +936,13 @@ async function loadTaskDropdown(){
             document.createElement("label");
 
         row.className =
-            "dropdown-item";
+            "attach-row";
 
         row.innerHTML = `
 
             <input
                 type="checkbox"
-                value="${task.title}"
+                value="${task.id}"
             >
 
             ${task.title}
@@ -869,17 +956,17 @@ async function loadTaskDropdown(){
 }
 
 // ========================================
-// NOTES
+// NOTE MENU
 // ========================================
 
-async function loadNoteDropdown(){
+async function loadNoteMenu(){
 
     const notes =
         await fetchNotes();
 
     const container =
         document.getElementById(
-            "notesDropdownContent"
+            "notesMenuContent"
         );
 
     container.innerHTML = "";
@@ -887,8 +974,8 @@ async function loadNoteDropdown(){
     const filtered =
         notes.filter(note => {
 
-            return !attachedNotes.includes(
-                note.title
+            return !attachedNotes.some(
+                n => n.id === note.id
             );
 
         });
@@ -899,13 +986,13 @@ async function loadNoteDropdown(){
             document.createElement("label");
 
         row.className =
-            "dropdown-item";
+            "attach-row";
 
         row.innerHTML = `
 
             <input
                 type="checkbox"
-                value="${note.title}"
+                value="${note.id}"
             >
 
             ${note.title}
@@ -919,17 +1006,17 @@ async function loadNoteDropdown(){
 }
 
 // ========================================
-// DROPDOWNS
+// MENUS
 // ========================================
 
 document.getElementById(
-    "tasksMenuBtn"
+    "tasksBtn"
 ).onclick =
 () => {
 
     document
         .getElementById(
-            "tasksDropdown"
+            "tasksMenu"
         )
         .classList
         .toggle("open");
@@ -937,13 +1024,13 @@ document.getElementById(
 };
 
 document.getElementById(
-    "notesMenuBtn"
+    "notesBtn"
 ).onclick =
 () => {
 
     document
         .getElementById(
-            "notesDropdown"
+            "notesMenu"
         )
         .classList
         .toggle("open");
@@ -957,25 +1044,31 @@ document.getElementById(
 document.getElementById(
     "attachTasksBtn"
 ).onclick =
-() => {
+async () => {
 
     const checked =
         [
             ...document.querySelectorAll(
-                "#tasksDropdown input:checked"
+                "#tasksMenu input:checked"
             )
         ];
 
+    const tasks =
+        await fetchTasks();
+
     checked.forEach(item => {
 
-        if(
-            !attachedTasks.includes(
-                item.value
-            )
-        ){
+        const task =
+            tasks.find(
+                t => t.id == item.value
+            );
 
-            attachedTasks.push(
-                item.value
+        if(task){
+
+            attachedTasks.push(task);
+
+            addActivity(
+                `Attached task: ${task.title}`
             );
 
         }
@@ -989,11 +1082,11 @@ document.getElementById(
 
     renderAttached();
 
-    loadTaskDropdown();
+    loadTaskMenu();
 
     document
         .getElementById(
-            "tasksDropdown"
+            "tasksMenu"
         )
         .classList
         .remove("open");
@@ -1007,25 +1100,31 @@ document.getElementById(
 document.getElementById(
     "attachNotesBtn"
 ).onclick =
-() => {
+async () => {
 
     const checked =
         [
             ...document.querySelectorAll(
-                "#notesDropdown input:checked"
+                "#notesMenu input:checked"
             )
         ];
 
+    const notes =
+        await fetchNotes();
+
     checked.forEach(item => {
 
-        if(
-            !attachedNotes.includes(
-                item.value
-            )
-        ){
+        const note =
+            notes.find(
+                n => n.id == item.value
+            );
 
-            attachedNotes.push(
-                item.value
+        if(note){
+
+            attachedNotes.push(note);
+
+            addActivity(
+                `Attached note: ${note.title}`
             );
 
         }
@@ -1039,11 +1138,11 @@ document.getElementById(
 
     renderAttached();
 
-    loadNoteDropdown();
+    loadNoteMenu();
 
     document
         .getElementById(
-            "notesDropdown"
+            "notesMenu"
         )
         .classList
         .remove("open");
@@ -1065,57 +1164,127 @@ function renderAttached(){
 
     attachedTasks.forEach(task => {
 
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "attached-item";
-
-        div.innerHTML = `
-
-            <span>
-                ✓ ${task}
-            </span>
-
-            <span
-                class="remove-link"
-                onclick="removeTask('${task}')"
-            >
-                Remove
-            </span>
-
-        `;
-
-        container.appendChild(div);
+        renderAttachedItem(
+            container,
+            "✓",
+            task.title,
+            task.description ||
+            "No description",
+            () => removeTask(task.id)
+        );
 
     });
 
     attachedNotes.forEach(note => {
 
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "attached-item";
-
-        div.innerHTML = `
-
-            <span>
-                📝 ${note}
-            </span>
-
-            <span
-                class="remove-link"
-                onclick="removeNote('${note}')"
-            >
-                Remove
-            </span>
-
-        `;
-
-        container.appendChild(div);
+        renderAttachedItem(
+            container,
+            "📝",
+            note.title,
+            note.content ||
+            "No content",
+            () => removeNote(note.id)
+        );
 
     });
+
+}
+
+function renderAttachedItem(
+    container,
+    icon,
+    title,
+    preview,
+    remove
+){
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "attached-item";
+
+    const previewId =
+        crypto.randomUUID();
+
+    wrapper.innerHTML = `
+
+        <div
+            class="attached-header"
+        >
+
+            <div class="attached-left">
+
+                <span>
+                    ${icon}
+                </span>
+
+                <span>
+                    ${title}
+                </span>
+
+            </div>
+
+            <div
+                style="
+                    display:flex;
+                    gap:10px;
+                    align-items:center;
+                "
+            >
+
+                <span class="expand-arrow">
+                    ▼
+                </span>
+
+                <span class="remove-link">
+                    Remove
+                </span>
+
+            </div>
+
+        </div>
+
+        <div
+            class="attached-preview"
+            id="${previewId}"
+        >
+            ${preview}
+        </div>
+
+    `;
+
+    const header =
+        wrapper.querySelector(
+            ".attached-header"
+        );
+
+    const previewEl =
+        wrapper.querySelector(
+            ".attached-preview"
+        );
+
+    header.onclick =
+    () => {
+
+        previewEl.classList.toggle(
+            "open"
+        );
+
+    };
+
+    wrapper.querySelector(
+        ".remove-link"
+    ).onclick =
+    e => {
+
+        e.stopPropagation();
+
+        remove();
+
+    };
+
+    container.appendChild(wrapper);
 
 }
 
@@ -1123,11 +1292,11 @@ function renderAttached(){
 // REMOVE
 // ========================================
 
-function removeTask(task){
+function removeTask(id){
 
     attachedTasks =
         attachedTasks.filter(
-            t => t !== task
+            t => t.id !== id
         );
 
     localStorage.setItem(
@@ -1137,15 +1306,15 @@ function removeTask(task){
 
     renderAttached();
 
-    loadTaskDropdown();
+    loadTaskMenu();
 
 }
 
-function removeNote(note){
+function removeNote(id){
 
     attachedNotes =
         attachedNotes.filter(
-            n => n !== note
+            n => n.id !== id
         );
 
     localStorage.setItem(
@@ -1155,12 +1324,12 @@ function removeNote(note){
 
     renderAttached();
 
-    loadNoteDropdown();
+    loadNoteMenu();
 
 }
 
 // ========================================
-// FILE UPLOAD
+// FILES
 // ========================================
 
 document.getElementById(
@@ -1169,38 +1338,75 @@ document.getElementById(
     "change",
     e => {
 
-        const preview =
-            document.getElementById(
-                "uploadPreview"
-            );
-
         [...e.target.files]
             .forEach(file => {
 
-                if(
-                    file.type.startsWith(
-                        "image/"
-                    )
-                ){
+                const reader =
+                    new FileReader();
 
-                    const img =
-                        document.createElement(
-                            "img"
-                        );
+                reader.onload =
+                () => {
 
-                    img.src =
-                        URL.createObjectURL(
-                            file
-                        );
+                    uploadedFiles.push({
 
-                    preview.appendChild(img);
+                        name:file.name,
 
-                }
+                        data:reader.result
+
+                    });
+
+                    localStorage.setItem(
+                        `project_files_${currentProject.id}`,
+                        JSON.stringify(uploadedFiles)
+                    );
+
+                    renderUploads();
+
+                    addActivity(
+                        `Uploaded file: ${file.name}`
+                    );
+
+                };
+
+                reader.readAsDataURL(file);
 
             });
 
     }
 );
+
+function renderUploads(){
+
+    const grid =
+        document.getElementById(
+            "uploadGrid"
+        );
+
+    grid.innerHTML = "";
+
+    uploadedFiles.forEach(file => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "upload-card";
+
+        card.innerHTML = `
+
+            <img src="${file.data}">
+
+            <div class="upload-name">
+                ${file.name}
+            </div>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+
+}
 
 // ========================================
 // EXPORT
@@ -1211,33 +1417,84 @@ document.getElementById(
 ).onclick =
 () => {
 
-    const exportText = `
+    const lines = [];
 
-PROJECT UPDATE
-======================
+    lines.push(
+`PROJECT UPDATE`
+    );
 
-PROJECT:
-${currentProject.title}
+    lines.push(
+`========================`
+    );
 
-STATUS:
-${document.getElementById("projectStatus").value}
+    lines.push("");
 
-DESCRIPTION:
-${document.getElementById("projectDescription").textContent}
+    lines.push(
+`PROJECT: ${currentProject.title}`
+    );
 
-TASKS:
-${attachedTasks.join("\n")}
+    lines.push(
+`STATUS: ${document.getElementById("projectStatus").value}`
+    );
 
-NOTES:
-${attachedNotes.join("\n")}
+    lines.push("");
 
-JOURNAL:
-${document.getElementById("projectJournal").value}
+    lines.push(
+`DESCRIPTION`
+    );
 
-    `;
+    lines.push(
+document.getElementById(
+    "projectDescription"
+).textContent
+    );
+
+    lines.push("");
+
+    lines.push(
+`TASKS`
+    );
+
+    attachedTasks.forEach(task => {
+
+        lines.push(
+`• ${task.title}`
+        );
+
+    });
+
+    lines.push("");
+
+    lines.push(
+`NOTES`
+    );
+
+    attachedNotes.forEach(note => {
+
+        lines.push(
+`• ${note.title}`
+        );
+
+    });
+
+    lines.push("");
+
+    lines.push(
+`PROJECT JOURNAL`
+    );
+
+    lines.push(
+document.getElementById(
+    "projectJournal"
+).value
+    );
 
     navigator.clipboard.writeText(
-        exportText
+        lines.join("\n")
+    );
+
+    addActivity(
+        "Generated project update"
     );
 
     alert(
@@ -1254,14 +1511,22 @@ document.getElementById(
     "projectStatus"
 ).addEventListener(
     "change",
-    autosaveProject
+    () => {
+
+        autosave();
+
+        addActivity(
+            "Updated project status"
+        );
+
+    }
 );
 
 document.getElementById(
     "projectJournal"
 ).addEventListener(
     "input",
-    autosaveProject
+    autosave
 );
 
 // ========================================
