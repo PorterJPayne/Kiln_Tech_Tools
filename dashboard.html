@@ -2220,27 +2220,51 @@ const completed =
 
     });
 
-    const weekCompleted =
-    completedTickets.filter(ticket => {
+    const startOfWeek =
+    new Date();
 
-       if(!ticket.submitted_at)
-    return false;
+startOfWeek.setHours(
+    0,0,0,0
+);
 
-const completed =
-    new Date(
-        ticket.submitted_at
+// Monday-based week
+
+const mondayOffset =
+    (
+        startOfWeek.getDay()
+        + 6
+    ) % 7;
+
+startOfWeek.setDate(
+    startOfWeek.getDate()
+    - mondayOffset
+);
+
+const endOfWeek =
+    new Date(startOfWeek);
+
+endOfWeek.setDate(
+    endOfWeek.getDate() + 7
+);
+
+const weekCompleted =
+completedTickets.filter(ticket => {
+
+    if(!ticket.submitted_at)
+        return false;
+
+    const completed =
+        new Date(
+            ticket.submitted_at
+        );
+
+    return (
+        completed >= startOfWeek
+        &&
+        completed < endOfWeek
     );
 
-        const diff =
-            (
-                today - completed
-            )
-            /
-            (1000 * 60 * 60 * 24);
-
-        return diff <= 7;
-
-    });
+});
 
     document.getElementById(
         "todayCompleted"
