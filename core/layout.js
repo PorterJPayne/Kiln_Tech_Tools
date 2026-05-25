@@ -123,9 +123,6 @@ const closeBtn =
 }
 }
 
-// =========================
-// TODAY EVENTS
-// =========================
 
 async function loadTodayEvents(){
 
@@ -139,9 +136,7 @@ async function loadTodayEvents(){
     try{
 
         const response =
-    await fetch("/api/calendar");
-
-
+            await fetch("/api/calendar");
 
         if(!response.ok){
 
@@ -158,12 +153,6 @@ async function loadTodayEvents(){
         const events =
             text.split("BEGIN:VEVENT")
             .slice(1);
-
-        const today =
-            new Date()
-            .toISOString()
-            .split("T")[0]
-            .replaceAll("-", "");
 
         const todaysEvents = [];
 
@@ -186,43 +175,42 @@ async function loadTodayEvents(){
             const start =
                 startMatch[1].trim();
 
-const year =
-    start.substring(0,4);
+            const year =
+                start.substring(0,4);
 
-const month =
-    start.substring(4,6);
+            const month =
+                start.substring(4,6);
 
-const day =
-    start.substring(6,8);
+            const day =
+                start.substring(6,8);
 
-const hour =
-    start.substring(9,11);
+            const hour =
+                start.substring(9,11);
 
-const minute =
-    start.substring(11,13);
+            const minute =
+                start.substring(11,13);
 
-const eventDate =
-    new Date(
-        `${year}-${month}-${day}T${hour}:${minute}:00Z`
-    );
-
+            const eventDate =
+                new Date(
+                    `${year}-${month}-${day}T${hour}:${minute}:00Z`
+                );
 
             const now =
-    new Date();
+                new Date();
 
-const isToday =
-    eventDate.toDateString() ===
-    now.toDateString();
+            const isToday =
+                eventDate.toDateString() ===
+                now.toDateString();
 
-if(isToday){
+            if(isToday){
 
-    todaysEvents.push({
-        title,
-        start,
-        eventDate
-    });
+                todaysEvents.push({
+                    title,
+                    start,
+                    eventDate
+                });
 
-}
+            }
 
         });
 
@@ -236,99 +224,102 @@ if(isToday){
         }
 
         todaysEvents.sort((a,b)=>
-            a.start.localeCompare(b.start)
+            a.eventDate - b.eventDate
         );
 
         const now =
             new Date();
 
-const upcomingEvents =
-    todaysEvents.filter(
-        event =>
-            event.eventDate > now
-    );
+        const upcomingEvents =
+            todaysEvents.filter(
+                event =>
+                    event.eventDate > now
+            );
 
-const nextEvent =
-    upcomingEvents[0] ||
-    todaysEvents[0];
+        const nextEvent =
+            upcomingEvents[0] ||
+            todaysEvents[0];
 
-       const formattedTime =
-    nextEvent.eventDate
-    .toLocaleTimeString(
-        [],
-        {
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
-
-
-dropdown.innerHTML =
-    todaysEvents.map(event => {
-
-        const time =
-            event.eventDate
+        const formattedTime =
+            nextEvent.eventDate
             .toLocaleTimeString(
                 [],
                 {
-                    hour:"numeric",
-                    minute:"2-digit"
+                    hour: "numeric",
+                    minute: "2-digit"
                 }
             );
 
-        return `
+        textElement.textContent =
+            `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
 
-            <div class="today-event-row">
+        const pill =
+            document.getElementById(
+                "todayEventsPill"
+            );
 
-                <div class="today-event-info">
+        const dropdown =
+            document.getElementById(
+                "todayEventsDropdown"
+            );
 
-                    <div class="today-event-time">
-                        ${time}
-                    </div>
+        if(dropdown){
 
-                    <div class="today-event-title">
-                        ${event.title}
-                    </div>
+            dropdown.innerHTML =
+                todaysEvents.map(event => {
 
-                </div>
+                    const time =
+                        event.eventDate
+                        .toLocaleTimeString(
+                            [],
+                            {
+                                hour:"numeric",
+                                minute:"2-digit"
+                            }
+                        );
 
-                <div
-                    class="edit-event-btn"
-                    data-event-id="${event.start}"
-                >
-                    ✏️
-                </div>
+                    return `
 
-            </div>
+                        <div class="today-event-row">
 
-        `;
+                            <div class="today-event-info">
 
-    }).join("");
+                                <div class="today-event-time">
+                                    ${time}
+                                </div>
 
-textElement.textContent =
-    `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
+                                <div class="today-event-title">
+                                    ${event.title}
+                                </div>
 
-const pill =
-    document.getElementById(
-        "todayEventsPill"
-    );
+                            </div>
 
-const dropdown =
-    document.getElementById(
-        "todayEventsDropdown"
-    );
+                            <div
+                                class="edit-event-btn"
+                                data-event-id="${event.start}"
+                            >
+                                ✏️
+                            </div>
 
-if(pill && dropdown){
+                        </div>
 
-    pill.onclick = () => {
+                    `;
 
-        dropdown.classList.toggle(
-            "hidden"
-        );
+                }).join("");
 
-    };
+        }
 
-}
+        if(pill && dropdown){
+
+            pill.onclick = () => {
+
+                dropdown.classList.toggle(
+                    "hidden"
+                );
+
+            };
+
+        }
 
     }
 
@@ -342,7 +333,6 @@ if(pill && dropdown){
     }
 
 }
-
 // =========================
 // ACTIVE PAGE
 // =========================
