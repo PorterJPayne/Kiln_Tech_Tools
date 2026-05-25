@@ -191,7 +191,7 @@ async function loadTodayEvents(){
 
             const start =
                 startMatch[1].trim();
-
+console.log(start, today);
             if(start.startsWith(today)){
 
                 todaysEvents.push({
