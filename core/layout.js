@@ -439,4 +439,6 @@ function updateTodayEvents() {
     `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${nextEvent.time}`;
 }
 
-updateTodayEvents();
+document.addEventListener("DOMContentLoaded", () => {
+  updateTodayEvents();
+});
