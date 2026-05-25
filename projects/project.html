@@ -34,6 +34,12 @@
    PROJECT PAGE
 ======================================== */
 
+.content{
+
+    padding:10px;
+
+}
+
 .project-layout{
 
     display:grid;
@@ -72,43 +78,47 @@
 
 .project-title{
 
-    font-size:22px;
+    width:100%;
+
+    font-size:24px;
 
     font-weight:700;
 
-    line-height:1.1;
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    outline:none;
+
+    padding:0;
 
 }
 
 .project-description{
 
-    margin-top:6px;
+    margin-top:8px;
 
-    color:rgba(255,255,255,0.62);
+    width:100%;
 
-    font-size:12px;
+    min-height:90px;
 
-    line-height:1.4;
+    resize:vertical;
 
-    max-width:720px;
+    line-height:1.45;
 
 }
 
 .project-status{
 
-    font-size:11px;
-
-    padding:4px 8px;
-
-    border-radius:999px;
-
-    background:rgba(255,255,255,0.05);
+    min-width:140px;
 
 }
 
 .section-title{
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
@@ -152,11 +162,11 @@
 
     align-items:center;
 
-    min-height:32px;
+    min-height:34px;
 
-    padding:0 2px;
+    padding:0 4px;
 
-    border-bottom:1px solid rgba(255,255,255,0.04);
+    border-bottom:1px solid rgba(255,255,255,0.05);
 
     font-size:11px;
 
@@ -184,7 +194,7 @@
 
     font-size:11px;
 
-    line-height:1.35;
+    line-height:1.4;
 
 }
 
@@ -196,7 +206,7 @@
 
 .photo-placeholder{
 
-    height:120px;
+    height:140px;
 
     border-radius:6px;
 
@@ -211,6 +221,62 @@
     font-size:11px;
 
     color:rgba(255,255,255,0.4);
+
+}
+
+.project-save{
+
+    position:fixed;
+
+    bottom:16px;
+
+    right:16px;
+
+    z-index:100;
+
+}
+
+/* ========================================
+   STATUS COLORS
+======================================== */
+
+.status-active{
+
+    background:rgba(80,180,120,0.12);
+
+    color:#8ee0a7;
+
+}
+
+.status-planning{
+
+    background:rgba(120,120,255,0.12);
+
+    color:#a7b0ff;
+
+}
+
+.status-waiting{
+
+    background:rgba(255,180,0,0.12);
+
+    color:#ffd27a;
+
+}
+
+.status-blocked{
+
+    background:rgba(255,80,80,0.12);
+
+    color:#ff9d9d;
+
+}
+
+.status-completed{
+
+    background:rgba(180,180,180,0.12);
+
+    color:#cfcfcf;
 
 }
 
@@ -243,28 +309,48 @@
 
                 <div class="project-header">
 
-                    <div>
+                    <div style="flex:1;">
 
-                        <div
-                            class="project-title"
+                        <input
                             id="projectTitle"
+                            class="project-title"
+                            placeholder="Project title"
                         >
-                            Loading...
-                        </div>
 
-                        <div
-                            class="project-description"
+                        <textarea
                             id="projectDescription"
-                        ></div>
+                            class="input project-description"
+                            placeholder="Project description..."
+                        ></textarea>
 
                     </div>
 
-                    <div
-                        class="project-status"
+                    <select
                         id="projectStatus"
+                        class="input project-status"
                     >
-                        Active
-                    </div>
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Planning">
+                            Planning
+                        </option>
+
+                        <option value="Waiting">
+                            Waiting
+                        </option>
+
+                        <option value="Blocked">
+                            Blocked
+                        </option>
+
+                        <option value="Completed">
+                            Completed
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -272,7 +358,7 @@
 
             <div style="height:10px;"></div>
 
-            <!-- MAIN LAYOUT -->
+            <!-- MAIN -->
 
             <div class="project-layout">
 
@@ -286,7 +372,7 @@
                     "
                 >
 
-                    <!-- TASKS + NOTES -->
+                    <!-- LINKS -->
 
                     <div class="project-panel">
 
@@ -301,21 +387,14 @@
                             <div class="project-card">
 
                                 <input
+                                    id="taskSearch"
                                     class="input quick-add"
-                                    placeholder="Add existing task..."
+                                    placeholder="Search tasks..."
                                 >
 
-                                <div id="projectTasks">
-
-                                    <div class="project-item">
-                                        Replace phone booth panels
-                                    </div>
-
-                                    <div class="project-item">
-                                        Wiring overlay fixes
-                                    </div>
-
-                                </div>
+                                <div
+                                    id="projectTasks"
+                                ></div>
 
                             </div>
 
@@ -324,21 +403,14 @@
                             <div class="project-card">
 
                                 <input
+                                    id="noteSearch"
                                     class="input quick-add"
-                                    placeholder="Add existing note..."
+                                    placeholder="Search notes..."
                                 >
 
-                                <div id="projectNotes">
-
-                                    <div class="project-item">
-                                        Paint touchups list
-                                    </div>
-
-                                    <div class="project-item">
-                                        Lehi 2 walkthrough
-                                    </div>
-
-                                </div>
+                                <div
+                                    id="projectNotes"
+                                ></div>
 
                             </div>
 
@@ -346,7 +418,29 @@
 
                     </div>
 
-                    <!-- PHOTOS -->
+                    <!-- JOURNAL -->
+
+                    <div class="project-panel">
+
+                        <div class="section-title">
+                            Project Journal
+                        </div>
+
+                        <textarea
+                            id="projectJournal"
+                            class="input"
+                            style="
+                                width:100%;
+                                min-height:220px;
+                                resize:vertical;
+                                line-height:1.5;
+                            "
+                            placeholder="Running project notes..."
+                        ></textarea>
+
+                    </div>
+
+                    <!-- FILES -->
 
                     <div class="project-panel">
 
@@ -355,7 +449,7 @@
                         </div>
 
                         <div class="photo-placeholder">
-                            Future upload area
+                            Upload system coming soon
                         </div>
 
                     </div>
@@ -380,17 +474,12 @@
                             Activity
                         </div>
 
-                        <div class="activity-item">
-                            Added project
-                        </div>
+                        <div id="activityFeed">
 
-                        <div class="activity-item">
-                            Linked task:
-                            Replace phone booth panels
-                        </div>
+                            <div class="activity-item">
+                                Project created
+                            </div>
 
-                        <div class="activity-item">
-                            Daily update sent
                         </div>
 
                     </div>
@@ -422,10 +511,23 @@
 
 </div>
 
+<button
+    class="button button-primary project-save"
+    id="saveProjectBtn"
+>
+    Save Project
+</button>
+
 <script>
 
 // =========================
-// LOAD PROJECT
+// STATE
+// =========================
+
+let currentProject = null;
+
+// =========================
+// INIT
 // =========================
 
 async function initProject(){
@@ -441,29 +543,190 @@ async function initProject(){
     const projects =
         await fetchProjects();
 
-    const project =
+    currentProject =
         projects.find(
             p => p.id == id
         );
 
-    if(!project) return;
+    if(!currentProject) return;
+
+    loadProject();
+
+    loadTasksIntoProject();
+
+    loadNotesIntoProject();
+
+}
+
+// =========================
+// LOAD
+// =========================
+
+function loadProject(){
 
     document.getElementById(
         "projectTitle"
-    ).textContent =
-        project.title;
+    ).value =
+        currentProject.title || "";
 
     document.getElementById(
         "projectDescription"
-    ).textContent =
-        project.description || "";
+    ).value =
+        currentProject.description || "";
 
     document.getElementById(
         "projectStatus"
-    ).textContent =
-        project.status || "Active";
+    ).value =
+        currentProject.status || "Active";
 
 }
+
+// =========================
+// SAVE
+// =========================
+
+document.getElementById(
+    "saveProjectBtn"
+).onclick =
+async () => {
+
+    const { error } =
+        await supabaseClient
+            .from("projects")
+            .update({
+
+                title:
+                    document.getElementById(
+                        "projectTitle"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "projectDescription"
+                    ).value,
+
+                status:
+                    document.getElementById(
+                        "projectStatus"
+                    ).value
+
+            })
+            .eq(
+                "id",
+                currentProject.id
+            );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    alert("Project saved");
+
+};
+
+// =========================
+// TASKS
+// =========================
+
+async function loadTasksIntoProject(){
+
+    const tasks =
+        await fetchTasks();
+
+    const container =
+        document.getElementById(
+            "projectTasks"
+        );
+
+    container.innerHTML = "";
+
+    tasks.slice(0,8).forEach(task => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "project-item";
+
+        div.innerHTML = `
+
+            <span>
+                ${task.title}
+            </span>
+
+            <button
+                class="button"
+                style="
+                    min-height:24px;
+                    padding:0 8px;
+                "
+            >
+                Add
+            </button>
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+// =========================
+// NOTES
+// =========================
+
+async function loadNotesIntoProject(){
+
+    const notes =
+        await fetchNotes();
+
+    const container =
+        document.getElementById(
+            "projectNotes"
+        );
+
+    container.innerHTML = "";
+
+    notes.slice(0,8).forEach(note => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "project-item";
+
+        div.innerHTML = `
+
+            <span>
+                ${note.title}
+            </span>
+
+            <button
+                class="button"
+                style="
+                    min-height:24px;
+                    padding:0 8px;
+                "
+            >
+                Add
+            </button>
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+// =========================
+// START
+// =========================
 
 initProject();
 
