@@ -2194,10 +2194,7 @@ document.addEventListener(
 // ========================================
 
 async function renderSnapshot(){
-console.log(
-    "SNAPSHOT RUNNING",
-    tickets
-);
+
     const completedTickets =
     await fetchTicketHistory();
 
@@ -2207,13 +2204,13 @@ console.log(
     const todayCompleted =
     completedTickets.filter(ticket => {
 
-        if(!ticket.updated_at)
-            return false;
+       if(!ticket.submitted_at)
+    return false;
 
-        const completed =
-            new Date(
-                ticket.updated_at
-            );
+const completed =
+    new Date(
+        ticket.submitted_at
+    );
 
         return (
             completed.toDateString()
@@ -2226,13 +2223,13 @@ console.log(
     const weekCompleted =
     completedTickets.filter(ticket => {
 
-        if(!ticket.updated_at)
-            return false;
+       if(!ticket.submitted_at)
+    return false;
 
-        const completed =
-            new Date(
-                ticket.updated_at
-            );
+const completed =
+    new Date(
+        ticket.submitted_at
+    );
 
         const diff =
             (
