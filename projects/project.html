@@ -110,6 +110,8 @@
 
     display:none;
 
+    margin-top:8px;
+
 }
 
 .section-title{
@@ -138,27 +140,41 @@
 
 }
 
-.dropdown-panel{
+.attach-menu{
 
-    display:none;
-
-    margin-top:8px;
-
-    padding:10px;
-
-    border-radius:6px;
-
-    background:rgba(255,255,255,0.025);
-
-    border:1px solid rgba(255,255,255,0.05);
-
-    max-height:240px;
-
-    overflow:auto;
+    position:relative;
 
 }
 
-.dropdown-panel.open{
+.dropdown{
+
+    position:absolute;
+
+    top:34px;
+
+    left:0;
+
+    width:280px;
+
+    max-height:260px;
+
+    overflow:auto;
+
+    background:#111;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:6px;
+
+    padding:8px;
+
+    display:none;
+
+    z-index:100;
+
+}
+
+.dropdown.open{
 
     display:block;
 
@@ -172,9 +188,19 @@
 
     gap:8px;
 
-    min-height:28px;
+    min-height:30px;
 
     font-size:11px;
+
+}
+
+.dropdown-footer{
+
+    padding-top:8px;
+
+    margin-top:8px;
+
+    border-top:1px solid rgba(255,255,255,0.06);
 
 }
 
@@ -207,6 +233,20 @@
 .attached-item:last-child{
 
     border-bottom:none;
+
+}
+
+.remove-link{
+
+    cursor:pointer;
+
+    opacity:0.45;
+
+}
+
+.remove-link:hover{
+
+    opacity:1;
 
 }
 
@@ -279,15 +319,17 @@
 
 }
 
-.project-save{
+.autosave{
 
     position:fixed;
 
-    bottom:16px;
+    bottom:12px;
 
     right:16px;
 
-    z-index:100;
+    font-size:11px;
+
+    opacity:0.5;
 
 }
 
@@ -296,16 +338,16 @@
 </head>
 
 <body
-    class="platform-body"
-    data-title="Project"
-    data-description="Operational project workspace."
+class="platform-body"
+data-title="Project"
+data-description="Operational project workspace."
 >
 
 <div class="app">
 
 <aside
-    class="sidebar"
-    id="sidebar"
+class="sidebar"
+id="sidebar"
 ></aside>
 
 <main class="main platform-page">
@@ -323,35 +365,35 @@
 <div style="flex:1;">
 
 <div
-    id="projectTitle"
-    class="project-title"
+id="projectTitle"
+class="project-title"
 >
-    Loading...
+Loading...
 </div>
 
 <div
-    id="projectDescription"
-    class="project-description"
+id="projectDescription"
+class="project-description"
 ></div>
 
 <textarea
-    id="projectDescriptionEdit"
-    class="input description-edit"
+id="projectDescriptionEdit"
+class="input description-edit"
 ></textarea>
 
 </div>
 
 <div
-    style="
-        display:flex;
-        gap:8px;
-        align-items:flex-start;
-    "
+style="
+display:flex;
+gap:8px;
+align-items:flex-start;
+"
 >
 
 <select
-    id="projectStatus"
-    class="input"
+id="projectStatus"
+class="input"
 >
 
 <option>Active</option>
@@ -363,10 +405,10 @@
 </select>
 
 <button
-    class="button"
-    id="editDescriptionBtn"
+class="button"
+id="editDescriptionBtn"
 >
-    Edit
+Edit
 </button>
 
 </div>
@@ -401,41 +443,79 @@ Operational Links
 
 <div class="attach-toolbar">
 
-<button
-    class="button"
-    id="toggleTasksBtn"
->
-    + Tasks
-</button>
+<!-- TASKS -->
+
+<div class="attach-menu">
 
 <button
-    class="button"
-    id="toggleNotesBtn"
+class="button"
+id="tasksMenuBtn"
 >
-    + Notes
++ Tasks
+</button>
+
+<div
+class="dropdown"
+id="tasksDropdown"
+>
+
+<div id="tasksDropdownContent"></div>
+
+<div class="dropdown-footer">
+
+<button
+class="button button-primary"
+id="attachTasksBtn"
+style="width:100%;"
+>
+Attach Selected
 </button>
 
 </div>
 
-<!-- TASK DROPDOWN -->
+</div>
+
+</div>
+
+<!-- NOTES -->
+
+<div class="attach-menu">
+
+<button
+class="button"
+id="notesMenuBtn"
+>
++ Notes
+</button>
 
 <div
-    id="tasksDropdown"
-    class="dropdown-panel"
-></div>
+class="dropdown"
+id="notesDropdown"
+>
 
-<!-- NOTES DROPDOWN -->
+<div id="notesDropdownContent"></div>
+
+<div class="dropdown-footer">
+
+<button
+class="button button-primary"
+id="attachNotesBtn"
+style="width:100%;"
+>
+Attach Selected
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <div
-    id="notesDropdown"
-    class="dropdown-panel"
-></div>
-
-<div style="height:10px;"></div>
-
-<div
-    id="attachedItems"
-    class="attached-list"
+id="attachedItems"
+class="attached-list"
 ></div>
 
 </div>
@@ -449,9 +529,9 @@ Project Journal
 </div>
 
 <textarea
-    id="projectJournal"
-    class="input journal"
-    placeholder="Running project notes..."
+id="projectJournal"
+class="input journal"
+placeholder="Running project notes..."
 ></textarea>
 
 </div>
@@ -467,14 +547,14 @@ Photos & Files
 <div class="upload-area">
 
 <input
-    type="file"
-    id="fileUpload"
-    multiple
+type="file"
+id="fileUpload"
+multiple
 >
 
 <div
-    class="upload-preview"
-    id="uploadPreview"
+class="upload-preview"
+id="uploadPreview"
 ></div>
 
 </div>
@@ -501,13 +581,7 @@ gap:10px;
 Activity
 </div>
 
-<div id="activityFeed">
-
-<div class="activity-item">
-Project created
-</div>
-
-</div>
+<div id="activityFeed"></div>
 
 </div>
 
@@ -520,11 +594,11 @@ Export
 </div>
 
 <button
-    class="button button-primary"
-    id="exportBtn"
-    style="width:100%;"
+class="button button-primary"
+id="exportBtn"
+style="width:100%;"
 >
-    Generate Project Update
+Generate Project Update
 </button>
 
 </div>
@@ -539,12 +613,12 @@ Export
 
 </div>
 
-<button
-class="button button-primary project-save"
-id="saveProjectBtn"
+<div
+class="autosave"
+id="autosaveStatus"
 >
-Save Project
-</button>
+Saved
+</div>
 
 <script>
 
@@ -554,7 +628,9 @@ Save Project
 
 let currentProject = null;
 
-let attachedItems = [];
+let attachedTasks = [];
+
+let attachedNotes = [];
 
 // ========================================
 // INIT
@@ -580,7 +656,23 @@ async function initProject(){
 
     if(!currentProject) return;
 
+    attachedTasks =
+        JSON.parse(
+            localStorage.getItem(
+                `project_tasks_${id}`
+            ) || "[]"
+        );
+
+    attachedNotes =
+        JSON.parse(
+            localStorage.getItem(
+                `project_notes_${id}`
+            ) || "[]"
+        );
+
     renderProject();
+
+    renderAttached();
 
     loadTaskDropdown();
 
@@ -614,6 +706,61 @@ function renderProject(){
     ).value =
         currentProject.status || "Active";
 
+    document.getElementById(
+        "projectJournal"
+    ).value =
+        currentProject.journal || "";
+
+}
+
+// ========================================
+// AUTOSAVE
+// ========================================
+
+async function autosaveProject(){
+
+    document.getElementById(
+        "autosaveStatus"
+    ).textContent =
+        "Saving...";
+
+    await supabaseClient
+        .from("projects")
+        .update({
+
+            description:
+                document.getElementById(
+                    "projectDescriptionEdit"
+                ).value,
+
+            status:
+                document.getElementById(
+                    "projectStatus"
+                ).value,
+
+            journal:
+                document.getElementById(
+                    "projectJournal"
+                ).value
+
+        })
+        .eq(
+            "id",
+            currentProject.id
+        );
+
+    document.getElementById(
+        "projectDescription"
+    ).textContent =
+        document.getElementById(
+            "projectDescriptionEdit"
+        ).value;
+
+    document.getElementById(
+        "autosaveStatus"
+    ).textContent =
+        "Saved";
+
 }
 
 // ========================================
@@ -641,8 +788,7 @@ document.getElementById(
 
         edit.style.display = "none";
 
-        text.textContent =
-            edit.value;
+        autosaveProject();
 
     }
 
@@ -667,13 +813,21 @@ async function loadTaskDropdown(){
 
     const container =
         document.getElementById(
-            "tasksDropdown"
+            "tasksDropdownContent"
         );
 
     container.innerHTML = "";
 
-    const recentTasks =
+    const filtered =
         tasks.filter(task => {
+
+            if(
+                attachedTasks.includes(
+                    task.title
+                )
+            ){
+                return false;
+            }
 
             const created =
                 new Date(
@@ -685,13 +839,11 @@ async function loadTaskDropdown(){
                     currentProject.created_at
                 );
 
-            return (
-                created >= projectCreated
-            );
+            return created >= projectCreated;
 
         });
 
-    recentTasks.forEach(task => {
+    filtered.forEach(task => {
 
         const row =
             document.createElement("label");
@@ -727,12 +879,21 @@ async function loadNoteDropdown(){
 
     const container =
         document.getElementById(
-            "notesDropdown"
+            "notesDropdownContent"
         );
 
     container.innerHTML = "";
 
-    notes.forEach(note => {
+    const filtered =
+        notes.filter(note => {
+
+            return !attachedNotes.includes(
+                note.title
+            );
+
+        });
+
+    filtered.forEach(note => {
 
         const row =
             document.createElement("label");
@@ -762,7 +923,7 @@ async function loadNoteDropdown(){
 // ========================================
 
 document.getElementById(
-    "toggleTasksBtn"
+    "tasksMenuBtn"
 ).onclick =
 () => {
 
@@ -776,7 +937,7 @@ document.getElementById(
 };
 
 document.getElementById(
-    "toggleNotesBtn"
+    "notesMenuBtn"
 ).onclick =
 () => {
 
@@ -790,28 +951,108 @@ document.getElementById(
 };
 
 // ========================================
-// ATTACH
+// ATTACH TASKS
 // ========================================
 
-document.addEventListener(
-    "change",
-    e => {
+document.getElementById(
+    "attachTasksBtn"
+).onclick =
+() => {
+
+    const checked =
+        [
+            ...document.querySelectorAll(
+                "#tasksDropdown input:checked"
+            )
+        ];
+
+    checked.forEach(item => {
 
         if(
-            e.target.type ===
-            "checkbox"
+            !attachedTasks.includes(
+                item.value
+            )
         ){
 
-            attachedItems.push(
-                e.target.value
+            attachedTasks.push(
+                item.value
             );
-
-            renderAttached();
 
         }
 
-    }
-);
+    });
+
+    localStorage.setItem(
+        `project_tasks_${currentProject.id}`,
+        JSON.stringify(attachedTasks)
+    );
+
+    renderAttached();
+
+    loadTaskDropdown();
+
+    document
+        .getElementById(
+            "tasksDropdown"
+        )
+        .classList
+        .remove("open");
+
+};
+
+// ========================================
+// ATTACH NOTES
+// ========================================
+
+document.getElementById(
+    "attachNotesBtn"
+).onclick =
+() => {
+
+    const checked =
+        [
+            ...document.querySelectorAll(
+                "#notesDropdown input:checked"
+            )
+        ];
+
+    checked.forEach(item => {
+
+        if(
+            !attachedNotes.includes(
+                item.value
+            )
+        ){
+
+            attachedNotes.push(
+                item.value
+            );
+
+        }
+
+    });
+
+    localStorage.setItem(
+        `project_notes_${currentProject.id}`,
+        JSON.stringify(attachedNotes)
+    );
+
+    renderAttached();
+
+    loadNoteDropdown();
+
+    document
+        .getElementById(
+            "notesDropdown"
+        )
+        .classList
+        .remove("open");
+
+};
+
+// ========================================
+// RENDER ATTACHED
+// ========================================
 
 function renderAttached(){
 
@@ -822,7 +1063,7 @@ function renderAttached(){
 
     container.innerHTML = "";
 
-    attachedItems.forEach(item => {
+    attachedTasks.forEach(task => {
 
         const div =
             document.createElement("div");
@@ -833,11 +1074,14 @@ function renderAttached(){
         div.innerHTML = `
 
             <span>
-                ${item}
+                ✓ ${task}
             </span>
 
-            <span>
-                ↗
+            <span
+                class="remove-link"
+                onclick="removeTask('${task}')"
+            >
+                Remove
             </span>
 
         `;
@@ -845,6 +1089,73 @@ function renderAttached(){
         container.appendChild(div);
 
     });
+
+    attachedNotes.forEach(note => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "attached-item";
+
+        div.innerHTML = `
+
+            <span>
+                📝 ${note}
+            </span>
+
+            <span
+                class="remove-link"
+                onclick="removeNote('${note}')"
+            >
+                Remove
+            </span>
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+// ========================================
+// REMOVE
+// ========================================
+
+function removeTask(task){
+
+    attachedTasks =
+        attachedTasks.filter(
+            t => t !== task
+        );
+
+    localStorage.setItem(
+        `project_tasks_${currentProject.id}`,
+        JSON.stringify(attachedTasks)
+    );
+
+    renderAttached();
+
+    loadTaskDropdown();
+
+}
+
+function removeNote(note){
+
+    attachedNotes =
+        attachedNotes.filter(
+            n => n !== note
+        );
+
+    localStorage.setItem(
+        `project_notes_${currentProject.id}`,
+        JSON.stringify(attachedNotes)
+    );
+
+    renderAttached();
+
+    loadNoteDropdown();
 
 }
 
@@ -902,6 +1213,9 @@ document.getElementById(
 
     const exportText = `
 
+PROJECT UPDATE
+======================
+
 PROJECT:
 ${currentProject.title}
 
@@ -911,8 +1225,11 @@ ${document.getElementById("projectStatus").value}
 DESCRIPTION:
 ${document.getElementById("projectDescription").textContent}
 
-LINKED ITEMS:
-${attachedItems.join("\n")}
+TASKS:
+${attachedTasks.join("\n")}
+
+NOTES:
+${attachedNotes.join("\n")}
 
 JOURNAL:
 ${document.getElementById("projectJournal").value}
@@ -930,46 +1247,22 @@ ${document.getElementById("projectJournal").value}
 };
 
 // ========================================
-// SAVE
+// AUTOSAVE EVENTS
 // ========================================
 
 document.getElementById(
-    "saveProjectBtn"
-).onclick =
-async () => {
+    "projectStatus"
+).addEventListener(
+    "change",
+    autosaveProject
+);
 
-    const { error } =
-        await supabaseClient
-            .from("projects")
-            .update({
-
-                description:
-                    document.getElementById(
-                        "projectDescriptionEdit"
-                    ).value,
-
-                status:
-                    document.getElementById(
-                        "projectStatus"
-                    ).value
-
-            })
-            .eq(
-                "id",
-                currentProject.id
-            );
-
-    if(error){
-
-        console.error(error);
-
-        return;
-
-    }
-
-    alert("Project saved");
-
-};
+document.getElementById(
+    "projectJournal"
+).addEventListener(
+    "input",
+    autosaveProject
+);
 
 // ========================================
 // START
