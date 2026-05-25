@@ -1377,23 +1377,129 @@ function renderAttached(){
 
     container.innerHTML = "";
 
-    attachedTasks.forEach(task => {
+   attachedTasks.forEach(task => {
 
-        renderAttachedItem({
+    const wrapper =
+        document.createElement("div");
 
-            icon:"✓",
+    wrapper.className =
+        "attached-item";
 
-            title:task.title,
+    if(task.completed){
 
-            preview:
-                task.description ||
-                "No description",
+        wrapper.classList.add(
+            "completed-task"
+        );
 
-            task
+    }
 
-        });
+    wrapper.innerHTML = `
 
-    });
+        <div class="attached-header">
+
+            <div class="attached-left">
+
+                <span>✓</span>
+
+                <span>
+                    ${task.title}
+                </span>
+
+            </div>
+
+            ${
+                task.completed
+                ?
+                `
+                <div class="completed-badge">
+                    Completed
+                </div>
+                `
+                :
+                `
+                <div class="complete-link">
+                    Complete
+                </div>
+                `
+            }
+
+        </div>
+
+        <div class="attached-preview">
+
+            ${task.description || "No description"}
+
+            ${
+                task.completion_notes
+                ?
+                `
+                <div class="completed-time">
+
+                    ${task.completion_notes}
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    `;
+
+    const preview =
+        wrapper.querySelector(
+            ".attached-preview"
+        );
+
+    wrapper.querySelector(
+        ".attached-header"
+    ).onclick =
+    e => {
+
+        if(
+            e.target.classList.contains(
+                "complete-link"
+            )
+        ){
+            return;
+        }
+
+        preview.classList.toggle(
+            "open"
+        );
+
+    };
+
+    const completeBtn =
+        wrapper.querySelector(
+            ".complete-link"
+        );
+
+    if(completeBtn){
+
+        completeBtn.onclick =
+        e => {
+
+            e.stopPropagation();
+
+            activeCompletionTask =
+                task;
+
+            document
+                .getElementById(
+                    "completeModal"
+                )
+                .classList
+                .remove("hidden");
+
+        };
+
+    }
+
+    container.appendChild(wrapper);
+
+});
 
    attachedNotes.forEach(note => {
 
