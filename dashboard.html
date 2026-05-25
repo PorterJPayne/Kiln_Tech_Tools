@@ -1657,6 +1657,45 @@ async function saveDashboardNote(){
 // =========================
 
 // =========================
+// NEW NOTE
+// =========================
+
+document
+    .getElementById(
+        "newDashboardNoteBtn"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const title =
+                prompt(
+                    "New note title"
+                );
+
+            if(!title) return;
+
+            const newNote =
+                await createNote({
+                    title,
+                    content: "",
+                    pinned: false
+                });
+
+            dashboardNotes.unshift(
+                newNote
+            );
+
+            renderDashboardNoteOptions();
+
+            loadDashboardNote(
+                newNote.id
+            );
+
+        }
+    );
+
+// =========================
 // EVENTS
 // =========================
 
