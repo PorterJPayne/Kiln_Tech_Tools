@@ -1407,21 +1407,37 @@ function renderAttached(){
 
             </div>
 
-            ${
-                task.completed
-                ?
-                `
-                <div class="completed-badge">
-                    Completed
-                </div>
-                `
-                :
-                `
-                <div class="complete-link">
-                    Complete
-                </div>
-                `
-            }
+            <div
+    style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+    "
+>
+
+    ${
+        task.completed
+        ?
+        `
+        <div class="completed-badge">
+            Completed
+        </div>
+        `
+        :
+        `
+        <div class="complete-link">
+            Complete
+        </div>
+        `
+    }
+
+    <div
+        class="remove-link remove-task-btn"
+    >
+        ✕
+    </div>
+
+</div>
 
         </div>
 
@@ -1471,6 +1487,11 @@ function renderAttached(){
 
     };
 
+    const removeBtn =
+    wrapper.querySelector(
+        ".remove-task-btn"
+    );
+
     const completeBtn =
         wrapper.querySelector(
             ".complete-link"
@@ -1496,6 +1517,50 @@ function renderAttached(){
         };
 
     }
+
+    // ========================================
+// REMOVE TASK
+// ========================================
+
+removeBtn.onclick =
+async e => {
+
+    e.stopPropagation();
+
+    preview.classList.remove(
+        "open"
+    );
+
+    await removeProjectItem({
+
+        projectId:
+            currentProject.id,
+
+        itemType:
+            "task",
+
+        itemId:
+            task.id
+
+    });
+
+    await addProjectActivity({
+
+        projectId:
+            currentProject.id,
+
+        activity:
+            `Removed task: ${task.title}`
+
+    });
+
+    await loadLinks();
+
+    await loadTaskMenu();
+
+    await loadActivity();
+
+};
 
     container.appendChild(wrapper);
 
