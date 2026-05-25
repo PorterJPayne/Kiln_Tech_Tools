@@ -262,6 +262,9 @@ const nextEvent =
         }
     );
 
+    textElement.textContent =
+    `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
+
     }
 
     catch(error){
