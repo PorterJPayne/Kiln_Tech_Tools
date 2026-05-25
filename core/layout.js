@@ -336,6 +336,24 @@ const title =
 
 }
 
+
+attachEventEditListeners();
+
+
+    
+}
+
+    catch(error){
+
+        console.error(error);
+
+        textElement.textContent =
+            "Events unavailable";
+
+    }
+
+}
+
 function attachEventEditListeners(){
 
     document
@@ -380,23 +398,6 @@ function attachEventEditListeners(){
                 };
 
         });
-
-}
-
-attachEventEditListeners();
-
-
-    
-}
-
-    catch(error){
-
-        console.error(error);
-
-        textElement.textContent =
-            "Events unavailable";
-
-    }
 
 }
 // =========================
