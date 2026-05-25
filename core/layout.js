@@ -326,60 +326,67 @@ const title =
 
         if(pill && dropdown){
 
-            pill.onclick = () => {
+    pill.onclick = () => {
 
-                dropdown.classList.toggle(
-                    "hidden"
-                );
+        dropdown.classList.toggle(
+            "hidden"
+        );
 
-            };
+    };
 
-        }
+}
 
+function attachEventEditListeners(){
 
     document
-    .querySelectorAll(
-        ".edit-event-btn"
-    )
-    .forEach(button => {
+        .querySelectorAll(
+            ".edit-event-btn"
+        )
+        .forEach(button => {
 
-        button.onclick =
-            async () => {
+            button.onclick =
+                async () => {
 
-                const eventId =
-                    button.dataset.eventId;
+                    const eventId =
+                        button.dataset.eventId;
 
-                const currentTitle =
-                    button
-                    .closest(
-                        ".today-event-row"
-                    )
-                    .querySelector(
-                        ".today-event-title"
-                    )
-                    .textContent;
+                    const currentTitle =
+                        button
+                        .closest(
+                            ".today-event-row"
+                        )
+                        .querySelector(
+                            ".today-event-title"
+                        )
+                        .textContent;
 
-                const newTitle =
-                    prompt(
-                        "Rename event",
-                        currentTitle
-                    );
+                    const newTitle =
+                        prompt(
+                            "Rename event",
+                            currentTitle
+                        );
 
-                if(!newTitle) return;
+                    if(!newTitle) return;
 
-                await supabaseClient
-    .from("event_aliases")
-                    .upsert({
-                        event_id: eventId,
-                        custom_title: newTitle
-                    });
+                    await supabaseClient
+                        .from("event_aliases")
+                        .upsert({
+                            event_id: eventId,
+                            custom_title: newTitle
+                        });
 
-                loadTodayEvents();
+                    await loadTodayEvents();
 
-            };
+                };
 
-    });
+        });
 
+}
+
+attachEventEditListeners();
+
+
+    
 }
 
     catch(error){
