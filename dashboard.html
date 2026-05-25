@@ -1673,34 +1673,38 @@ if(newDashboardNoteBtn){
 
             if(!title) return;
 
-            const newNote =
-                await createNote({
+            await createNote({
 
-                    title,
-                    content: "",
-                    pinned: false
+                title,
+                content: "",
+                pinned: false
 
-                });
+            });
 
-            dashboardNotes.unshift(
-                newNote
-            );
+            dashboardNotes =
+                await fetchNotes();
 
             renderDashboardNoteOptions();
 
-            loadDashboardNote(
-                newNote.id
-            );
+            const newestNote =
+                dashboardNotes[0];
 
-            noteSelect.value =
-                newNote.id;
+            if(newestNote){
+
+                loadDashboardNote(
+                    newestNote.id
+                );
+
+                noteSelect.value =
+                    newestNote.id;
+
+            }
 
             noteTitle.focus();
 
         };
 
 }
-
 // =========================
 // EVENTS
 // =========================
