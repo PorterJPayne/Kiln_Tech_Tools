@@ -45,7 +45,7 @@
     display:grid;
 
     grid-template-columns:
-        2.2fr
+        2.1fr
         1fr;
 
     gap:10px;
@@ -78,21 +78,11 @@
 
 .project-title{
 
-    width:100%;
-
     font-size:24px;
 
     font-weight:700;
 
-    background:none;
-
-    border:none;
-
-    color:white;
-
-    outline:none;
-
-    padding:0;
+    line-height:1.1;
 
 }
 
@@ -100,19 +90,25 @@
 
     margin-top:8px;
 
-    width:100%;
+    font-size:12px;
 
-    min-height:90px;
+    line-height:1.5;
 
-    resize:vertical;
+    color:rgba(255,255,255,0.68);
 
-    line-height:1.45;
+    white-space:pre-wrap;
 
 }
 
-.project-status{
+.description-edit{
 
-    min-width:140px;
+    width:100%;
+
+    min-height:100px;
+
+    resize:vertical;
+
+    display:none;
 
 }
 
@@ -126,23 +122,27 @@
 
     text-transform:uppercase;
 
-    color:rgba(255,255,255,0.4);
+    color:rgba(255,255,255,0.42);
 
     margin-bottom:10px;
 
 }
 
-.project-grid{
+.attach-toolbar{
 
-    display:grid;
+    display:flex;
 
-    grid-template-columns:1fr 1fr;
+    gap:8px;
 
-    gap:10px;
+    margin-bottom:10px;
 
 }
 
-.project-card{
+.dropdown-panel{
+
+    display:none;
+
+    margin-top:8px;
 
     padding:10px;
 
@@ -152,9 +152,41 @@
 
     border:1px solid rgba(255,255,255,0.05);
 
+    max-height:240px;
+
+    overflow:auto;
+
 }
 
-.project-item{
+.dropdown-panel.open{
+
+    display:block;
+
+}
+
+.dropdown-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    min-height:28px;
+
+    font-size:11px;
+
+}
+
+.attached-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.attached-item{
 
     display:flex;
 
@@ -164,7 +196,7 @@
 
     min-height:34px;
 
-    padding:0 4px;
+    padding:0 2px;
 
     border-bottom:1px solid rgba(255,255,255,0.05);
 
@@ -172,17 +204,60 @@
 
 }
 
-.project-item:last-child{
+.attached-item:last-child{
 
     border-bottom:none;
 
 }
 
-.quick-add{
+.journal{
 
     width:100%;
 
-    margin-bottom:8px;
+    min-height:260px;
+
+    resize:vertical;
+
+    line-height:1.55;
+
+}
+
+.upload-area{
+
+    border:1px dashed rgba(255,255,255,0.12);
+
+    border-radius:6px;
+
+    padding:20px;
+
+    text-align:center;
+
+}
+
+.upload-preview{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(120px,1fr));
+
+    gap:8px;
+
+    margin-top:12px;
+
+}
+
+.upload-preview img{
+
+    width:100%;
+
+    height:120px;
+
+    object-fit:cover;
+
+    border-radius:6px;
+
+    border:1px solid rgba(255,255,255,0.08);
 
 }
 
@@ -204,26 +279,6 @@
 
 }
 
-.photo-placeholder{
-
-    height:140px;
-
-    border-radius:6px;
-
-    border:1px dashed rgba(255,255,255,0.12);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:11px;
-
-    color:rgba(255,255,255,0.4);
-
-}
-
 .project-save{
 
     position:fixed;
@@ -233,50 +288,6 @@
     right:16px;
 
     z-index:100;
-
-}
-
-/* ========================================
-   STATUS COLORS
-======================================== */
-
-.status-active{
-
-    background:rgba(80,180,120,0.12);
-
-    color:#8ee0a7;
-
-}
-
-.status-planning{
-
-    background:rgba(120,120,255,0.12);
-
-    color:#a7b0ff;
-
-}
-
-.status-waiting{
-
-    background:rgba(255,180,0,0.12);
-
-    color:#ffd27a;
-
-}
-
-.status-blocked{
-
-    background:rgba(255,80,80,0.12);
-
-    color:#ff9d9d;
-
-}
-
-.status-completed{
-
-    background:rgba(180,180,180,0.12);
-
-    color:#cfcfcf;
 
 }
 
@@ -292,243 +303,262 @@
 
 <div class="app">
 
-    <aside
-        class="sidebar"
-        id="sidebar"
-    ></aside>
+<aside
+    class="sidebar"
+    id="sidebar"
+></aside>
 
-    <main class="main platform-page">
+<main class="main platform-page">
 
-        <div id="topbar"></div>
+<div id="topbar"></div>
 
-        <div class="content">
+<div class="content">
 
-            <!-- HEADER -->
+<!-- HEADER -->
 
-            <div class="project-panel">
+<div class="project-panel">
 
-                <div class="project-header">
+<div class="project-header">
 
-                    <div style="flex:1;">
+<div style="flex:1;">
 
-                        <input
-                            id="projectTitle"
-                            class="project-title"
-                            placeholder="Project title"
-                        >
+<div
+    id="projectTitle"
+    class="project-title"
+>
+    Loading...
+</div>
 
-                        <textarea
-                            id="projectDescription"
-                            class="input project-description"
-                            placeholder="Project description..."
-                        ></textarea>
+<div
+    id="projectDescription"
+    class="project-description"
+></div>
 
-                    </div>
+<textarea
+    id="projectDescriptionEdit"
+    class="input description-edit"
+></textarea>
 
-                    <select
-                        id="projectStatus"
-                        class="input project-status"
-                    >
+</div>
 
-                        <option value="Active">
-                            Active
-                        </option>
+<div
+    style="
+        display:flex;
+        gap:8px;
+        align-items:flex-start;
+    "
+>
 
-                        <option value="Planning">
-                            Planning
-                        </option>
+<select
+    id="projectStatus"
+    class="input"
+>
 
-                        <option value="Waiting">
-                            Waiting
-                        </option>
+<option>Active</option>
+<option>Planning</option>
+<option>Waiting</option>
+<option>Blocked</option>
+<option>Completed</option>
 
-                        <option value="Blocked">
-                            Blocked
-                        </option>
+</select>
 
-                        <option value="Completed">
-                            Completed
-                        </option>
+<button
+    class="button"
+    id="editDescriptionBtn"
+>
+    Edit
+</button>
 
-                    </select>
+</div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div style="height:10px;"></div>
+<div style="height:10px;"></div>
 
-            <!-- MAIN -->
+<!-- MAIN -->
 
-            <div class="project-layout">
+<div class="project-layout">
 
-                <!-- LEFT -->
+<!-- LEFT -->
 
-                <div
-                    style="
-                        display:flex;
-                        flex-direction:column;
-                        gap:10px;
-                    "
-                >
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:10px;
+"
+>
 
-                    <!-- LINKS -->
+<!-- LINKS -->
 
-                    <div class="project-panel">
+<div class="project-panel">
 
-                        <div class="section-title">
-                            Operational Links
-                        </div>
+<div class="section-title">
+Operational Links
+</div>
 
-                        <div class="project-grid">
+<div class="attach-toolbar">
 
-                            <!-- TASKS -->
+<button
+    class="button"
+    id="toggleTasksBtn"
+>
+    + Tasks
+</button>
 
-                            <div class="project-card">
+<button
+    class="button"
+    id="toggleNotesBtn"
+>
+    + Notes
+</button>
 
-                                <input
-                                    id="taskSearch"
-                                    class="input quick-add"
-                                    placeholder="Search tasks..."
-                                >
+</div>
 
-                                <div
-                                    id="projectTasks"
-                                ></div>
+<!-- TASK DROPDOWN -->
 
-                            </div>
+<div
+    id="tasksDropdown"
+    class="dropdown-panel"
+></div>
 
-                            <!-- NOTES -->
+<!-- NOTES DROPDOWN -->
 
-                            <div class="project-card">
+<div
+    id="notesDropdown"
+    class="dropdown-panel"
+></div>
 
-                                <input
-                                    id="noteSearch"
-                                    class="input quick-add"
-                                    placeholder="Search notes..."
-                                >
+<div style="height:10px;"></div>
 
-                                <div
-                                    id="projectNotes"
-                                ></div>
+<div
+    id="attachedItems"
+    class="attached-list"
+></div>
 
-                            </div>
+</div>
 
-                        </div>
+<!-- JOURNAL -->
 
-                    </div>
+<div class="project-panel">
 
-                    <!-- JOURNAL -->
+<div class="section-title">
+Project Journal
+</div>
 
-                    <div class="project-panel">
+<textarea
+    id="projectJournal"
+    class="input journal"
+    placeholder="Running project notes..."
+></textarea>
 
-                        <div class="section-title">
-                            Project Journal
-                        </div>
+</div>
 
-                        <textarea
-                            id="projectJournal"
-                            class="input"
-                            style="
-                                width:100%;
-                                min-height:220px;
-                                resize:vertical;
-                                line-height:1.5;
-                            "
-                            placeholder="Running project notes..."
-                        ></textarea>
+<!-- FILES -->
 
-                    </div>
+<div class="project-panel">
 
-                    <!-- FILES -->
+<div class="section-title">
+Photos & Files
+</div>
 
-                    <div class="project-panel">
+<div class="upload-area">
 
-                        <div class="section-title">
-                            Photos & Files
-                        </div>
+<input
+    type="file"
+    id="fileUpload"
+    multiple
+>
 
-                        <div class="photo-placeholder">
-                            Upload system coming soon
-                        </div>
+<div
+    class="upload-preview"
+    id="uploadPreview"
+></div>
 
-                    </div>
+</div>
 
-                </div>
+</div>
 
-                <!-- RIGHT -->
+</div>
 
-                <div
-                    style="
-                        display:flex;
-                        flex-direction:column;
-                        gap:10px;
-                    "
-                >
+<!-- RIGHT -->
 
-                    <!-- ACTIVITY -->
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:10px;
+"
+>
 
-                    <div class="project-panel">
+<!-- ACTIVITY -->
 
-                        <div class="section-title">
-                            Activity
-                        </div>
+<div class="project-panel">
 
-                        <div id="activityFeed">
+<div class="section-title">
+Activity
+</div>
 
-                            <div class="activity-item">
-                                Project created
-                            </div>
+<div id="activityFeed">
 
-                        </div>
+<div class="activity-item">
+Project created
+</div>
 
-                    </div>
+</div>
 
-                    <!-- EXPORT -->
+</div>
 
-                    <div class="project-panel">
+<!-- EXPORT -->
 
-                        <div class="section-title">
-                            Export
-                        </div>
+<div class="project-panel">
 
-                        <button
-                            class="button button-primary"
-                            style="width:100%;"
-                        >
-                            Generate Project Update
-                        </button>
+<div class="section-title">
+Export
+</div>
 
-                    </div>
+<button
+    class="button button-primary"
+    id="exportBtn"
+    style="width:100%;"
+>
+    Generate Project Update
+</button>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </main>
+</div>
+
+</main>
 
 </div>
 
 <button
-    class="button button-primary project-save"
-    id="saveProjectBtn"
+class="button button-primary project-save"
+id="saveProjectBtn"
 >
-    Save Project
+Save Project
 </button>
 
 <script>
 
-// =========================
+// ========================================
 // STATE
-// =========================
+// ========================================
 
 let currentProject = null;
 
-// =========================
+let attachedItems = [];
+
+// ========================================
 // INIT
-// =========================
+// ========================================
 
 async function initProject(){
 
@@ -550,27 +580,32 @@ async function initProject(){
 
     if(!currentProject) return;
 
-    loadProject();
+    renderProject();
 
-    loadTasksIntoProject();
+    loadTaskDropdown();
 
-    loadNotesIntoProject();
+    loadNoteDropdown();
 
 }
 
-// =========================
-// LOAD
-// =========================
+// ========================================
+// RENDER
+// ========================================
 
-function loadProject(){
+function renderProject(){
 
     document.getElementById(
         "projectTitle"
-    ).value =
-        currentProject.title || "";
+    ).textContent =
+        currentProject.title;
 
     document.getElementById(
         "projectDescription"
+    ).textContent =
+        currentProject.description || "";
+
+    document.getElementById(
+        "projectDescriptionEdit"
     ).value =
         currentProject.description || "";
 
@@ -581,9 +616,322 @@ function loadProject(){
 
 }
 
-// =========================
+// ========================================
+// DESCRIPTION EDIT
+// ========================================
+
+document.getElementById(
+    "editDescriptionBtn"
+).onclick =
+() => {
+
+    const text =
+        document.getElementById(
+            "projectDescription"
+        );
+
+    const edit =
+        document.getElementById(
+            "projectDescriptionEdit"
+        );
+
+    if(edit.style.display === "block"){
+
+        text.style.display = "block";
+
+        edit.style.display = "none";
+
+        text.textContent =
+            edit.value;
+
+    }
+
+    else {
+
+        text.style.display = "none";
+
+        edit.style.display = "block";
+
+    }
+
+};
+
+// ========================================
+// TASKS
+// ========================================
+
+async function loadTaskDropdown(){
+
+    const tasks =
+        await fetchTasks();
+
+    const container =
+        document.getElementById(
+            "tasksDropdown"
+        );
+
+    container.innerHTML = "";
+
+    const recentTasks =
+        tasks.filter(task => {
+
+            const created =
+                new Date(
+                    task.created_at
+                );
+
+            const projectCreated =
+                new Date(
+                    currentProject.created_at
+                );
+
+            return (
+                created >= projectCreated
+            );
+
+        });
+
+    recentTasks.forEach(task => {
+
+        const row =
+            document.createElement("label");
+
+        row.className =
+            "dropdown-item";
+
+        row.innerHTML = `
+
+            <input
+                type="checkbox"
+                value="${task.title}"
+            >
+
+            ${task.title}
+
+        `;
+
+        container.appendChild(row);
+
+    });
+
+}
+
+// ========================================
+// NOTES
+// ========================================
+
+async function loadNoteDropdown(){
+
+    const notes =
+        await fetchNotes();
+
+    const container =
+        document.getElementById(
+            "notesDropdown"
+        );
+
+    container.innerHTML = "";
+
+    notes.forEach(note => {
+
+        const row =
+            document.createElement("label");
+
+        row.className =
+            "dropdown-item";
+
+        row.innerHTML = `
+
+            <input
+                type="checkbox"
+                value="${note.title}"
+            >
+
+            ${note.title}
+
+        `;
+
+        container.appendChild(row);
+
+    });
+
+}
+
+// ========================================
+// DROPDOWNS
+// ========================================
+
+document.getElementById(
+    "toggleTasksBtn"
+).onclick =
+() => {
+
+    document
+        .getElementById(
+            "tasksDropdown"
+        )
+        .classList
+        .toggle("open");
+
+};
+
+document.getElementById(
+    "toggleNotesBtn"
+).onclick =
+() => {
+
+    document
+        .getElementById(
+            "notesDropdown"
+        )
+        .classList
+        .toggle("open");
+
+};
+
+// ========================================
+// ATTACH
+// ========================================
+
+document.addEventListener(
+    "change",
+    e => {
+
+        if(
+            e.target.type ===
+            "checkbox"
+        ){
+
+            attachedItems.push(
+                e.target.value
+            );
+
+            renderAttached();
+
+        }
+
+    }
+);
+
+function renderAttached(){
+
+    const container =
+        document.getElementById(
+            "attachedItems"
+        );
+
+    container.innerHTML = "";
+
+    attachedItems.forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "attached-item";
+
+        div.innerHTML = `
+
+            <span>
+                ${item}
+            </span>
+
+            <span>
+                ↗
+            </span>
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+// ========================================
+// FILE UPLOAD
+// ========================================
+
+document.getElementById(
+    "fileUpload"
+).addEventListener(
+    "change",
+    e => {
+
+        const preview =
+            document.getElementById(
+                "uploadPreview"
+            );
+
+        [...e.target.files]
+            .forEach(file => {
+
+                if(
+                    file.type.startsWith(
+                        "image/"
+                    )
+                ){
+
+                    const img =
+                        document.createElement(
+                            "img"
+                        );
+
+                    img.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+                    preview.appendChild(img);
+
+                }
+
+            });
+
+    }
+);
+
+// ========================================
+// EXPORT
+// ========================================
+
+document.getElementById(
+    "exportBtn"
+).onclick =
+() => {
+
+    const exportText = `
+
+PROJECT:
+${currentProject.title}
+
+STATUS:
+${document.getElementById("projectStatus").value}
+
+DESCRIPTION:
+${document.getElementById("projectDescription").textContent}
+
+LINKED ITEMS:
+${attachedItems.join("\n")}
+
+JOURNAL:
+${document.getElementById("projectJournal").value}
+
+    `;
+
+    navigator.clipboard.writeText(
+        exportText
+    );
+
+    alert(
+        "Project update copied"
+    );
+
+};
+
+// ========================================
 // SAVE
-// =========================
+// ========================================
 
 document.getElementById(
     "saveProjectBtn"
@@ -595,14 +943,9 @@ async () => {
             .from("projects")
             .update({
 
-                title:
-                    document.getElementById(
-                        "projectTitle"
-                    ).value,
-
                 description:
                     document.getElementById(
-                        "projectDescription"
+                        "projectDescriptionEdit"
                     ).value,
 
                 status:
@@ -628,105 +971,9 @@ async () => {
 
 };
 
-// =========================
-// TASKS
-// =========================
-
-async function loadTasksIntoProject(){
-
-    const tasks =
-        await fetchTasks();
-
-    const container =
-        document.getElementById(
-            "projectTasks"
-        );
-
-    container.innerHTML = "";
-
-    tasks.slice(0,8).forEach(task => {
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "project-item";
-
-        div.innerHTML = `
-
-            <span>
-                ${task.title}
-            </span>
-
-            <button
-                class="button"
-                style="
-                    min-height:24px;
-                    padding:0 8px;
-                "
-            >
-                Add
-            </button>
-
-        `;
-
-        container.appendChild(div);
-
-    });
-
-}
-
-// =========================
-// NOTES
-// =========================
-
-async function loadNotesIntoProject(){
-
-    const notes =
-        await fetchNotes();
-
-    const container =
-        document.getElementById(
-            "projectNotes"
-        );
-
-    container.innerHTML = "";
-
-    notes.slice(0,8).forEach(note => {
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "project-item";
-
-        div.innerHTML = `
-
-            <span>
-                ${note.title}
-            </span>
-
-            <button
-                class="button"
-                style="
-                    min-height:24px;
-                    padding:0 8px;
-                "
-            >
-                Add
-            </button>
-
-        `;
-
-        container.appendChild(div);
-
-    });
-
-}
-
-// =========================
+// ========================================
 // START
-// =========================
+// ========================================
 
 initProject();
 
