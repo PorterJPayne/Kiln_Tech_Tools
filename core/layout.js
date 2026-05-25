@@ -395,6 +395,19 @@ function attachEventEditListeners(){
 
                     await loadTodayEvents();
 
+const dropdown =
+    document.getElementById(
+        "todayEventsDropdown"
+    );
+
+if(dropdown){
+
+    dropdown.classList.remove(
+        "hidden"
+    );
+
+}
+
                 };
 
         });
