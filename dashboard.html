@@ -1672,7 +1672,7 @@ let tasks = [];
 
 let activeTask = null;
 
-let tickets = [];
+
 
 // =========================
 // LOAD TASKS
@@ -1889,35 +1889,13 @@ function openCompleteTask(id){
 // TICKETS
 // ========================================
 
+// ========================================
+// TICKETS
+// ========================================
+
 async function loadTickets(){
 
-    try{
-
-        tickets =
-            await fetchFreshserviceTickets();
-
-        console.log(
-            "TICKETS:",
-            tickets
-        );
-
-        console.log(
-            "FIRST TICKET:",
-            tickets?.[0]
-        );
-
-        renderSnapshot();
-
-    }
-
-    catch(error){
-
-        console.error(
-            "LOAD TICKETS ERROR:",
-            error
-        );
-
-    }
+    renderSnapshot();
 
 }
 // =========================
@@ -2215,21 +2193,13 @@ document.addEventListener(
 // SNAPSHOT
 // ========================================
 
-function renderSnapshot(){
+async function renderSnapshot(){
 console.log(
     "SNAPSHOT RUNNING",
     tickets
 );
     const completedTickets =
-tickets.filter(ticket => {
-
-    return (
-        ticket.status === 4
-        ||
-        ticket.status === 5
-    );
-
-});
+    await fetchTicketHistory();
 
     const today =
         new Date();

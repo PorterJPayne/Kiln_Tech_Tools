@@ -127,6 +127,3 @@ async function getMonthlyTicketTotals(){
     return totals;
 
 }
-
-window.fetchFreshserviceTickets =
-    fetchFreshserviceTickets;
