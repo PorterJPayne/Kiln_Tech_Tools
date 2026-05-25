@@ -1891,10 +1891,33 @@ function openCompleteTask(id){
 
 async function loadTickets(){
 
-    tickets =
-        await fetchFreshserviceTickets();
+    try{
 
-    renderSnapshot();
+        tickets =
+            await fetchFreshserviceTickets();
+
+        console.log(
+            "TICKETS:",
+            tickets
+        );
+
+        console.log(
+            "FIRST TICKET:",
+            tickets?.[0]
+        );
+
+        renderSnapshot();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "LOAD TICKETS ERROR:",
+            error
+        );
+
+    }
 
 }
 // =========================
@@ -2193,7 +2216,10 @@ document.addEventListener(
 // ========================================
 
 function renderSnapshot(){
-
+console.log(
+    "SNAPSHOT RUNNING",
+    tickets
+);
     const completedTickets =
 tickets.filter(ticket => {
 
