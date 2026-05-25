@@ -50,7 +50,10 @@ window.sidebarPath = "/core/sidebar.html";
 
     display:grid;
 
-    grid-template-columns:repeat(12,1fr);
+    grid-template-columns:
+    2.5fr
+    5fr
+    4fr;
 
     gap:8px;
 
@@ -694,9 +697,39 @@ div[style*="height:10px"]{
 
 }
 
-.tall-rail-widget{
+.utility-rail{
 
-    height:668px;
+    grid-row:span 2;
+
+    min-height:668px;
+
+}
+
+/* ========================================
+   GRID PLACEMENT
+======================================== */
+
+.utility-rail{
+
+    grid-column:1;
+
+}
+
+.notes-widget{
+
+    grid-column:2;
+
+}
+
+.queue-widget{
+
+    grid-column:3;
+
+}
+
+.projects-widget{
+
+    grid-column:2 / 4;
 
 }
 
@@ -755,7 +788,7 @@ div[style*="height:10px"]{
 
     <!-- HERO -->
 
-<div class="widget span-2 tall-rail-widget utility-rail">
+<div class="widget tall-rail-widget utility-rail">
     <!-- QUICK ACTIONS -->
 
     <div class="rail-section">
@@ -874,7 +907,7 @@ div[style*="height:10px"]{
 
     <!-- TOP OPERATIONS ROW -->
 
-<div class="widget span-5 top-row-widget">
+<div class="widget top-row-widget notes-widget">
 
     <div class="flex-between">
 
@@ -916,8 +949,7 @@ div[style*="height:10px"]{
 
  <!-- TODAY QUEUE -->
 
-<div class="widget span-4 top-row-widget">
-
+<div class="widget top-row-widget queue-widget">
     <div class="flex-between">
 
         <h2>
@@ -947,7 +979,7 @@ div[style*="height:10px"]{
 
  <!-- PROJECTS -->
 
-   <div class="widget span-4 middle-row-widget">
+   <div class="widget middle-row-widget projects-widget">
 
         <h2>
             Active Projects
@@ -1010,7 +1042,7 @@ div[style*="height:10px"]{
     </div>
 
 
-<div class="widget span-3 middle-row-widget">
+<div class="widget middle-row-widget">
 
     <h2>
         Operational Snapshot
@@ -1061,7 +1093,7 @@ div[style*="height:10px"]{
 
     <!-- SEARCH -->
 
-   <div class="widget span-3 bottom-row-widget">
+   <div class="widget bottom-row-widget">
 
         <h2>
             Search
