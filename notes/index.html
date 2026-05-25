@@ -600,7 +600,7 @@ async function createNewNote(){
     content: "",
     pinned: false,
     updated_at:
-    new Date().toISOString()
+    Date.now()
 
 }])
         .select()
