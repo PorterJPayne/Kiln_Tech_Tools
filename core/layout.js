@@ -195,9 +195,10 @@ console.log(start, today);
             if(start.startsWith(today)){
 
                 todaysEvents.push({
-                    title,
-                    start
-                });
+    title,
+    start,
+    eventDate
+});
 
             }
 
@@ -216,8 +217,18 @@ console.log(start, today);
             a.start.localeCompare(b.start)
         );
 
-        const nextEvent =
-            todaysEvents[0];
+        const now =
+            new Date();
+
+const upcomingEvents =
+    todaysEvents.filter(
+        event =>
+            event.eventDate > now
+    );
+
+const nextEvent =
+    upcomingEvents[0] ||
+    todaysEvents[0];
 
         const rawTime =
             nextEvent.start.substring(
