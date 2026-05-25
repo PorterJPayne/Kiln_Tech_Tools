@@ -599,7 +599,8 @@ async function createNewNote(){
     title,
     content: "",
     pinned: false,
-    updated_at: Date.now()
+    updated_at:
+    new Date().toISOString()
 
 }])
         .select()
@@ -616,7 +617,7 @@ async function createNewNote(){
 
     renderNotes();
 
-    openNote(data.id);
+    loadNote(data.id);
 
 }
 
