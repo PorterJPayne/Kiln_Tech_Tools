@@ -572,6 +572,128 @@ div[style*="height:10px"]{
 
 }
 
+/* ========================================
+   OPERATIONAL RAIL
+======================================== */
+
+.utility-rail{
+
+    padding:0;
+
+    overflow:hidden;
+
+    border-radius:6px;
+
+}
+
+.rail-section{
+
+    padding:10px 12px;
+
+    border-bottom:1px solid rgba(255,255,255,0.05);
+
+}
+
+.rail-section:last-child{
+
+    border-bottom:none;
+
+}
+
+.rail-label{
+
+    font-size:9px;
+
+    font-weight:700;
+
+    letter-spacing:1.4px;
+
+    text-transform:uppercase;
+
+    color:rgba(255,255,255,0.38);
+
+    margin-bottom:8px;
+
+}
+
+.rail-links{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.rail-link{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    min-height:28px;
+
+    padding:0 2px;
+
+    font-size:11px;
+
+    color:rgba(255,255,255,0.82);
+
+    text-decoration:none;
+
+    transition:0.12s ease;
+
+    border-radius:4px;
+
+}
+
+.rail-link:hover{
+
+    background:rgba(255,255,255,0.04);
+
+    padding-left:6px;
+
+}
+
+.rail-link span{
+
+    color:rgba(255,255,255,0.32);
+
+    font-size:10px;
+
+}
+
+.widget{
+
+    border-radius:6px;
+
+}
+
+.button{
+
+    border-radius:5px;
+
+}
+
+.input{
+
+    border-radius:5px;
+
+}
+
+.task-item{
+
+    border-radius:5px;
+
+}
+
+.widget-card{
+
+    border-radius:5px;
+
+}
+
 </style>
 
 </head>
@@ -626,6 +748,124 @@ div[style*="height:10px"]{
             <div class="widget-grid">
 
     <!-- HERO -->
+
+    <div class="widget span-2 top-row-widget utility-rail">
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="rail-section">
+
+        <div class="rail-label">
+            Actions
+        </div>
+
+        <div class="rail-links">
+
+            <a
+                class="rail-link"
+                href="/notes/index.html"
+            >
+                Notes
+                <span>↗</span>
+            </a>
+
+            <a
+                class="rail-link"
+                href="/paint/index.html"
+            >
+                Paint Map
+                <span>↗</span>
+            </a>
+
+            <a
+                class="rail-link"
+                href="/analytics.html"
+            >
+                Analytics
+                <span>↗</span>
+            </a>
+
+            <a
+                class="rail-link"
+                href="/forms/request.html"
+            >
+                Forms
+                <span>↗</span>
+            </a>
+
+            <a
+                class="rail-link"
+                href="/email-generator/index.html"
+            >
+                Daily Update
+                <span>↗</span>
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- SOPS -->
+
+    <div class="rail-section">
+
+        <div class="rail-label">
+            SOPs
+        </div>
+
+        <div class="rail-links">
+
+            <a class="rail-link" href="#">
+                Daily Walkthrough
+            </a>
+
+            <a class="rail-link" href="#">
+                Paint Process
+            </a>
+
+            <a class="rail-link" href="#">
+                Booth Repairs
+            </a>
+
+            <a class="rail-link" href="#">
+                Event Prep
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- MAPS -->
+
+    <div class="rail-section">
+
+        <div class="rail-label">
+            Maps
+        </div>
+
+        <div class="rail-links">
+
+            <a class="rail-link" href="#">
+                Snowbird
+            </a>
+
+            <a class="rail-link" href="#">
+                Alta
+            </a>
+
+            <a class="rail-link" href="#">
+                Brighton
+            </a>
+
+            <a class="rail-link" href="#">
+                Wiring Overlay
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- TOP OPERATIONS ROW -->
 
@@ -698,52 +938,7 @@ div[style*="height:10px"]{
 </div>
 
 
-<div class="widget span-3 top-row-widget">
 
-    <h2>
-        Quick Actions
-    </h2>
-
-    <div class="flex-column gap-sm">
-
-        <button
-            class="button button-primary"
-            onclick="window.location.href='/notes/index.html'"
-        >
-            Notes
-        </button>
-
-        <button
-            class="button"
-            onclick="window.location.href='/paint/index.html'"
-        >
-            Paint Map
-        </button>
-
-        <button
-            class="button"
-            onclick="window.location.href='/analytics.html'"
-        >
-            Analytics
-        </button>
-
-        <button
-            class="button"
-            onclick="window.location.href='/forms/request.html'"
-        >
-            Forms
-        </button>
-
-        <button
-            class="button"
-            onclick="window.location.href='/email-generator/index.html'"
-        >
-            Daily Update
-        </button>
-
-    </div>
-
-</div>
 
  <!-- PROJECTS -->
 
@@ -858,90 +1053,7 @@ div[style*="height:10px"]{
 
 </div>
 
-<!-- SOPS -->
 
-    <div class="widget span-3 middle-row-widget">
-
-        <h2>
-            SOPs
-        </h2>
-
-        <div style="height:18px;"></div>
-
-        <div class="flex-column gap-sm">
-
-            <button class="button">
-                Daily Walkthrough
-            </button>
-
-            <button class="button">
-                Paint Process
-            </button>
-
-            <button class="button">
-                Phone Booth Repair
-            </button>
-
-            <button class="button">
-                Event Prep
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- STATS -->
-
-   
-    <!-- MAPS -->
-
-   <div class="widget span-4 bottom-row-widget">
-
-        <div class="flex-between">
-
-            <h2>
-                Maps & Infrastructure
-            </h2>
-
-            <button
-                class="button"
-                onclick="window.location.href='/paint-map.html'"
-            >
-                Open
-            </button>
-
-        </div>
-
-        <div style="height:18px;"></div>
-
-        <div class="flex-column gap-sm">
-
-            <button class="button">
-                Snowbird
-            </button>
-
-            <button class="button">
-                Alta
-            </button>
-
-            <button class="button">
-                Brighton
-            </button>
-
-            <button class="button">
-                Lehi 2 Storage
-            </button>
-
-            <button class="button">
-                Wiring Overlay
-            </button>
-
-        </div>
-
-    </div>
-
-   
     <!-- SEARCH -->
 
    <div class="widget span-3 bottom-row-widget">
