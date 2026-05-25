@@ -136,101 +136,125 @@ async function loadTodayEvents(){
 
     if(!textElement) return;
 
-    const ICS_URL =
-        "https://calendar.google.com/calendar/ical/porter.p%40kiln.com/public/basic.ics";
+    try{
 
-    const proxy =
-        "https://corsproxy.io/?";
+        const ICS_URL =
+            "https://calendar.google.com/calendar/ical/porter.p%40kiln.com/public/basic.ics";
 
-    const response =
-        await fetch(
-            proxy + encodeURIComponent(ICS_URL)
-        );
+        const proxy =
+            "https://api.allorigins.win/raw?url=";
 
-    const text =
-        await response.text();
+        const response =
+            await fetch(
+                proxy + encodeURIComponent(ICS_URL)
+            );
 
-    const events =
-        text.split("BEGIN:VEVENT")
-        .slice(1);
+        if(!response.ok){
 
-    const today =
-        new Date()
-        .toISOString()
-        .split("T")[0]
-        .replaceAll("-", "");
+            textElement.textContent =
+                "Events unavailable";
 
-    const todaysEvents = [];
-
-    events.forEach(event => {
-
-        const titleMatch =
-            event.match(/SUMMARY:(.*)/);
-
-        const startMatch =
-            event.match(/DTSTART.*:(.*)/);
-
-        if(!titleMatch || !startMatch)
             return;
-
-        const title =
-            titleMatch[1].trim();
-
-        const start =
-            startMatch[1].trim();
-
-        if(start.startsWith(today)){
-
-            todaysEvents.push({
-                title,
-                start
-            });
 
         }
 
-    });
+        const text =
+            await response.text();
 
-    if(!todaysEvents.length){
+        const events =
+            text.split("BEGIN:VEVENT")
+            .slice(1);
+
+        const today =
+            new Date()
+            .toISOString()
+            .split("T")[0]
+            .replaceAll("-", "");
+
+        const todaysEvents = [];
+
+        events.forEach(event => {
+
+            const titleMatch =
+                event.match(/SUMMARY:(.*)/);
+
+            const startMatch =
+                event.match(/DTSTART.*:(.*)/);
+
+            if(
+                !titleMatch ||
+                !startMatch
+            ) return;
+
+            const title =
+                titleMatch[1].trim();
+
+            const start =
+                startMatch[1].trim();
+
+            if(start.startsWith(today)){
+
+                todaysEvents.push({
+                    title,
+                    start
+                });
+
+            }
+
+        });
+
+        if(!todaysEvents.length){
+
+            textElement.textContent =
+                "No events today";
+
+            return;
+
+        }
+
+        todaysEvents.sort((a,b)=>
+            a.start.localeCompare(b.start)
+        );
+
+        const nextEvent =
+            todaysEvents[0];
+
+        const rawTime =
+            nextEvent.start.substring(
+                9,
+                13
+            );
+
+        const hours =
+            parseInt(
+                rawTime.substring(0,2)
+            );
+
+        const minutes =
+            rawTime.substring(2,4);
+
+        const formattedHour =
+            hours % 12 || 12;
+
+        const ampm =
+            hours >= 12 ? "PM" : "AM";
+
+        const formattedTime =
+            `${formattedHour}:${minutes} ${ampm}`;
 
         textElement.textContent =
-            "No events today";
-
-        return;
+            `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
 
     }
 
-    todaysEvents.sort((a,b)=>
-        a.start.localeCompare(b.start)
-    );
+    catch(error){
 
-    const nextEvent =
-        todaysEvents[0];
+        console.error(error);
 
-    const rawTime =
-        nextEvent.start.substring(
-            9,
-            13
-        );
+        textElement.textContent =
+            "Events unavailable";
 
-    const hours =
-        parseInt(
-            rawTime.substring(0,2)
-        );
-
-    const minutes =
-        rawTime.substring(2,4);
-
-    const formattedHour =
-        hours % 12 || 12;
-
-    const ampm =
-        hours >= 12 ? "PM" : "AM";
-
-    const formattedTime =
-        `${formattedHour}:${minutes} ${ampm}`;
-
-    textElement.textContent =
-        `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
+    }
 
 }
 
