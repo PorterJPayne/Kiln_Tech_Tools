@@ -1871,13 +1871,13 @@ function renderUploads(){
 }
 
 // ========================================
-// EXPORT
+// HTML EXPORT
 // ========================================
 
 document.getElementById(
     "exportBtn"
 ).onclick =
-() => {
+async () => {
 
     const completed =
         attachedTasks.filter(
@@ -1889,157 +1889,479 @@ document.getElementById(
             t => !t.completed
         );
 
-    const lines = [];
-
-    lines.push(
-`PROJECT UPDATE`
-    );
-
-    lines.push(
-`================================`
-    );
-
-    lines.push("");
-
-    lines.push(
-`${currentProject.title}`
-    );
-
-    lines.push(
-`Status: ${document.getElementById("projectStatus").value}`
-    );
-
-    lines.push("");
-
-    lines.push(
-`OVERVIEW`
-    );
-
-    lines.push(
-document.getElementById(
-    "projectDescription"
-).textContent || "No overview provided."
-    );
-
-    lines.push("");
-
-    if(
-        completed.length
-    ){
-
-        lines.push(
-`RECENT COMPLETED WORK`
-        );
-
-        completed.forEach(task => {
-
-            lines.push(
-`• ${task.title}`
-            );
-
-            if(
-                task.completion_notes
-            ){
-
-                lines.push(
-`  ${task.completion_notes}`
-                );
-
-            }
-
-        });
-
-        lines.push("");
-
-    }
-
-    if(
-        active.length
-    ){
-
-        lines.push(
-`ACTIVE WORK`
-        );
-
-        active.forEach(task => {
-
-            lines.push(
-`• ${task.title}`
-            );
-
-        });
-
-        lines.push("");
-
-    }
-
-    if(
-        attachedNotes.length
-    ){
-
-        lines.push(
-`NOTES & OBSERVATIONS`
-        );
-
-        attachedNotes.forEach(note => {
-
-            lines.push(
-`• ${note.title}`
-            );
-
-        });
-
-        lines.push("");
-
-    }
-
-    if(
-        uploadedFiles.length
-    ){
-
-        lines.push(
-`FILES`
-        );
-
-        uploadedFiles.forEach(file => {
-
-            lines.push(
-`• ${file.file_name}`
-            );
-
-            lines.push(
-`${file.file_url}`
-            );
-
-        });
-
-        lines.push("");
-
-    }
+    const status =
+        document.getElementById(
+            "projectStatus"
+        ).value;
 
     const journal =
         document.getElementById(
             "projectJournal"
         ).value;
 
-    if(journal){
+    const description =
+        document.getElementById(
+            "projectDescription"
+        ).textContent;
 
-        lines.push(
-`PROJECT JOURNAL`
-        );
+    const now =
+        new Date()
+            .toLocaleString();
 
-        lines.push(
+    const html = `
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+${currentProject.title} Update
+</title>
+
+<style>
+
+body{
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background:#f4f4f4;
+
+    color:#111;
+
+    padding:40px;
+
+    line-height:1.6;
+
+}
+
+.report{
+
+    max-width:1000px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+.header{
+
+    background:#111;
+
+    color:white;
+
+    padding:36px;
+
+}
+
+.header-title{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    margin-bottom:10px;
+
+}
+
+.header-meta{
+
+    opacity:0.7;
+
+    font-size:14px;
+
+}
+
+.section{
+
+    padding:32px 36px;
+
+    border-bottom:
+        1px solid #eee;
+
+}
+
+.section-title{
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+    color:#777;
+
+    margin-bottom:18px;
+
+    font-weight:700;
+
+}
+
+.task{
+
+    margin-bottom:16px;
+
+    padding-left:18px;
+
+    position:relative;
+
+}
+
+.task::before{
+
+    content:"•";
+
+    position:absolute;
+
+    left:0;
+
+}
+
+.task-notes{
+
+    margin-top:6px;
+
+    color:#555;
+
+    font-size:14px;
+
+}
+
+.note{
+
+    margin-bottom:16px;
+
+    padding:14px;
+
+    background:#f8f8f8;
+
+    border-radius:8px;
+
+}
+
+.files-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(220px,1fr));
+
+    gap:18px;
+
+}
+
+.file-card{
+
+    border:
+        1px solid #eee;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    background:white;
+
+    text-decoration:none;
+
+    color:#111;
+
+}
+
+.file-card img{
+
+    width:100%;
+
+    height:180px;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+.file-info{
+
+    padding:12px;
+
+    font-size:14px;
+
+}
+
+.footer{
+
+    padding:24px 36px;
+
+    font-size:12px;
+
+    color:#777;
+
+}
+
+pre{
+
+    white-space:pre-wrap;
+
+    font-family:inherit;
+
+    margin:0;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="report">
+
+<div class="header">
+
+<div class="header-title">
+${currentProject.title}
+</div>
+
+<div class="header-meta">
+
+Status:
+${status}
+
+<br>
+
+Generated:
+${now}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="section-title">
+Overview
+</div>
+
+<pre>${description || "No overview provided."}</pre>
+
+</div>
+
+${
+completed.length
+?
+`
+<div class="section">
+
+<div class="section-title">
+Completed Work
+</div>
+
+${completed.map(task => `
+
+<div class="task">
+
+<strong>
+${task.title}
+</strong>
+
+${
+task.completion_notes
+?
+`
+<div class="task-notes">
+${task.completion_notes}
+</div>
+`
+:
+""
+}
+
+</div>
+
+`).join("")}
+
+</div>
+`
+:
+""
+}
+
+${
+active.length
+?
+`
+<div class="section">
+
+<div class="section-title">
+Active Work
+</div>
+
+${active.map(task => `
+
+<div class="task">
+
+<strong>
+${task.title}
+</strong>
+
+</div>
+
+`).join("")}
+
+</div>
+`
+:
+""
+}
+
+${
+attachedNotes.length
+?
+`
+<div class="section">
+
+<div class="section-title">
+Notes & Observations
+</div>
+
+${attachedNotes.map(note => `
+
+<div class="note">
+
+<strong>
+${note.title}
+</strong>
+
+<br><br>
+
+${note.content || ""}
+
+</div>
+
+`).join("")}
+
+</div>
+`
+:
+""
+}
+
+${
+uploadedFiles.length
+?
+`
+<div class="section">
+
+<div class="section-title">
+Files & Photos
+</div>
+
+<div class="files-grid">
+
+${uploadedFiles.map(file => `
+
+<a
+    class="file-card"
+    href="${file.file_url}"
+    target="_blank"
+>
+
+    <img
+        src="${file.file_url}"
+    >
+
+    <div class="file-info">
+
+        ${file.file_name}
+
+    </div>
+
+</a>
+
+`).join("")}
+
+</div>
+
+</div>
+`
+:
+""
+}
+
+${
 journal
+?
+`
+<div class="section">
+
+<div class="section-title">
+Project Journal
+</div>
+
+<pre>${journal}</pre>
+
+</div>
+`
+:
+""
+}
+
+<div class="footer">
+
+Generated by Kiln Operations Platform
+
+</div>
+
+</div>
+
+</body>
+</html>
+
+`;
+
+    const blob =
+        new Blob(
+            [html],
+            {
+                type:"text/html"
+            }
         );
 
-    }
+    const url =
+        URL.createObjectURL(
+            blob
+        );
 
-    navigator.clipboard.writeText(
-        lines.join("\n")
-    );
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        `${currentProject.title
+            .replace(/\s+/g,"-")
+        }-update.html`;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(url);
 
 };
-
 // ========================================
 // EDIT DESCRIPTION
 // ========================================
