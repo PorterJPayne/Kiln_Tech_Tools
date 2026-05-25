@@ -137,7 +137,7 @@ async function loadTodayEvents(){
 
         const {
     data: aliases
-} = await supabase
+} = await supabaseClient
     .from("event_aliases")
     .select("*");
 
