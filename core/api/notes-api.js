@@ -36,16 +36,31 @@ async function fetchNotes(){
 
 async function saveNote(note){
 
-    const { error } =
-        await supabaseClient
-            .from("notes")
-            .upsert({
-                id: note.id,
-                title: note.title,
-                content: note.content,
-                pinned: note.pinned,
-                updated_at: note.updatedAt
-            });
+    const payload = {
+
+        title: note.title,
+        content: note.content,
+        pinned: note.pinned,
+        updated_at: note.updatedAt
+
+    };
+
+    // only include id if it exists
+
+    if(note.id){
+
+        payload.id = note.id;
+
+    }
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("notes")
+        .upsert(payload)
+        .select()
+        .single();
 
     if(error){
 
@@ -54,7 +69,11 @@ async function saveNote(note){
             error
         );
 
+        return null;
+
     }
+
+    return data;
 
 }
 
