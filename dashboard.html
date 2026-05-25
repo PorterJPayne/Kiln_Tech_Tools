@@ -26,6 +26,8 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script src="/core/api/email-api.js"></script>
 
+<script src="/core/api/tickets-api.js"></script>
+
 <script src="/core/api/projects-api.js"></script>
 
 <script src="/core/api/search-api.js"></script>
@@ -1883,7 +1885,18 @@ function openCompleteTask(id){
     }
 
 }
+// ========================================
+// TICKETS
+// ========================================
 
+async function loadTickets(){
+
+    tickets =
+        await fetchFreshserviceTickets();
+
+    renderSnapshot();
+
+}
 // =========================
 // COMPLETE TASK
 // =========================
@@ -1911,18 +1924,7 @@ if(completeTaskBtn){
                 ).value;
 
 
-                // ========================================
-// TICKETS
-// ========================================
-
-async function loadTickets(){
-
-    tickets =
-        await fetchFreshserviceTickets();
-
-    renderSnapshot();
-
-}
+                
             // =========================
 // EMAIL ENTRY
 // =========================
@@ -2326,6 +2328,7 @@ function renderSnapshot(){
 
 loadTasks();
 loadProjects();
+loadTickets();
 
 </script>
 
