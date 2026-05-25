@@ -367,8 +367,8 @@ const title =
 
                 if(!newTitle) return;
 
-                await supabase
-                    .from("event_aliases")
+                await supabaseClient
+    .from("event_aliases")
                     .upsert({
                         event_id: eventId,
                         custom_title: newTitle
