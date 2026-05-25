@@ -742,6 +742,194 @@ div[style*="height:10px"]{
 
 }
 
+/* ========================================
+   SNAPSHOT
+======================================== */
+
+.snapshot-widget{
+
+    overflow:hidden;
+
+}
+
+.snapshot-live{
+
+    font-size:9px;
+
+    font-weight:700;
+
+    letter-spacing:1.4px;
+
+    color:#7ee787;
+
+}
+
+.snapshot-horizontal{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1.6fr;
+
+    gap:8px;
+
+}
+
+.snapshot-card{
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:8px;
+
+    padding:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.snapshot-kicker{
+
+    font-size:9px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    color:rgba(255,255,255,0.38);
+
+    margin-bottom:8px;
+
+}
+
+.snapshot-number{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    line-height:1;
+
+    letter-spacing:-1px;
+
+}
+
+.snapshot-caption{
+
+    margin-top:6px;
+
+    font-size:11px;
+
+    color:rgba(255,255,255,0.5);
+
+}
+
+/* ========================================
+   GOAL RING
+======================================== */
+
+.goal-card{
+
+    align-items:center;
+
+}
+
+.goal-ring-wrap{
+
+    position:relative;
+
+    width:110px;
+
+    height:110px;
+
+    margin:auto;
+
+}
+
+.goal-ring{
+
+    transform:rotate(-90deg);
+
+}
+
+.goal-ring-bg{
+
+    fill:none;
+
+    stroke:
+        rgba(255,255,255,0.08);
+
+    stroke-width:8;
+
+}
+
+.goal-ring-progress{
+
+    fill:none;
+
+    stroke:#7ee787;
+
+    stroke-width:8;
+
+    stroke-linecap:round;
+
+    stroke-dasharray:264;
+
+    stroke-dashoffset:264;
+
+    transition:
+        stroke-dashoffset
+        0.35s ease;
+
+}
+
+.goal-center{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.goal-number{
+
+    font-size:24px;
+
+    font-weight:800;
+
+    line-height:1;
+
+}
+
+.goal-total{
+
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:rgba(255,255,255,0.5);
+
+}
+
 </style>
 
 </head>
@@ -1014,46 +1202,117 @@ div[style*="height:10px"]{
 
 </div>
 
-<div class="widget middle-row-widget">
+<div class="widget middle-row-widget snapshot-widget">
 
-    <h2>
-        Operational Snapshot
-    </h2>
+    <div class="flex-between">
 
-    <div class="flex-column gap-md">
+        <h2>
+            Operational Snapshot
+        </h2>
 
-        <div>
+        <div class="snapshot-live">
+            LIVE
+        </div>
 
-            <div class="muted">
-                Tickets This Week
+    </div>
+
+    <div style="height:10px;"></div>
+
+    <div class="snapshot-horizontal">
+
+        <!-- TODAY -->
+
+        <div class="snapshot-card">
+
+            <div class="snapshot-kicker">
+                TODAY
             </div>
 
-            <div class="stat-number">
-                37
+            <div
+                class="snapshot-number"
+                id="todayCompleted"
+            >
+                —
+            </div>
+
+            <div class="snapshot-caption">
+                completed tasks
             </div>
 
         </div>
 
-        <div>
+        <!-- WEEK -->
 
-            <div class="muted">
-                Active Projects
+        <div class="snapshot-card">
+
+            <div class="snapshot-kicker">
+                THIS WEEK
             </div>
 
-            <div class="stat-number">
-                8
+            <div
+                class="snapshot-number"
+                id="weekCompleted"
+            >
+                —
+            </div>
+
+            <div class="snapshot-caption">
+                completed tasks
             </div>
 
         </div>
 
-        <div>
+        <!-- GOAL -->
 
-            <div class="muted">
-                Open Rooms
+        <div class="snapshot-card goal-card">
+
+            <div class="snapshot-kicker">
+                WEEKLY GOAL
             </div>
 
-            <div class="stat-number">
-                12
+            <div class="goal-ring-wrap">
+
+                <svg
+                    class="goal-ring"
+                    width="110"
+                    height="110"
+                >
+
+                    <circle
+                        class="goal-ring-bg"
+                        cx="55"
+                        cy="55"
+                        r="42"
+                    ></circle>
+
+                    <circle
+                        class="goal-ring-progress"
+                        id="goalRingProgress"
+                        cx="55"
+                        cy="55"
+                        r="42"
+                    ></circle>
+
+                </svg>
+
+                <div class="goal-center">
+
+                    <div
+                        class="goal-number"
+                        id="goalPercent"
+                    >
+                        0%
+                    </div>
+
+                    <div
+                        class="goal-total"
+                        id="goalSubtext"
+                    >
+                        0 / 22
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
@@ -1061,7 +1320,6 @@ div[style*="height:10px"]{
     </div>
 
 </div>
-
 
     <!-- SEARCH -->
 
@@ -1417,6 +1675,7 @@ async function loadTasks(){
         await fetchTasks();
 
     renderTasks();
+    renderSnapshot();
 
 }
 
@@ -1906,6 +2165,123 @@ document.addEventListener(
 
     }
 );
+
+// ========================================
+// SNAPSHOT
+// ========================================
+
+function renderSnapshot(){
+
+    const completedTasks =
+        tasks.filter(
+            t => t.completed
+        );
+
+    const today =
+        new Date();
+
+    const todayCompleted =
+        completedTasks.filter(task => {
+
+            if(!task.completed_at)
+                return false;
+
+            const completed =
+                new Date(
+                    task.completed_at
+                );
+
+            return (
+                completed.toDateString()
+                ===
+                today.toDateString()
+            );
+
+        });
+
+    const weekCompleted =
+        completedTasks.filter(task => {
+
+            if(!task.completed_at)
+                return false;
+
+            const completed =
+                new Date(
+                    task.completed_at
+                );
+
+            const diff =
+                (
+                    today - completed
+                )
+                /
+                (1000 * 60 * 60 * 24);
+
+            return diff <= 7;
+
+        });
+
+    document.getElementById(
+        "todayCompleted"
+    ).textContent =
+        todayCompleted.length;
+
+    document.getElementById(
+        "weekCompleted"
+    ).textContent =
+        weekCompleted.length;
+
+    // ========================================
+    // GOAL
+    // ========================================
+
+    const weeklyGoal =
+        22;
+
+    const rawProgress =
+        weekCompleted.length
+        /
+        weeklyGoal;
+
+    const progress =
+        Math.min(
+            rawProgress,
+            1
+        );
+
+    const percent =
+        Math.round(
+            rawProgress * 100
+        );
+
+    const circumference =
+        264;
+
+    const offset =
+        circumference
+        -
+        (
+            circumference
+            *
+            progress
+        );
+
+    document.getElementById(
+        "goalPercent"
+    ).textContent =
+        `${percent}%`;
+
+    document.getElementById(
+        "goalSubtext"
+    ).textContent =
+        `${weekCompleted.length} / ${weeklyGoal}`;
+
+    document.getElementById(
+        "goalRingProgress"
+    ).style.strokeDashoffset =
+        offset;
+
+}
 
 // =========================
 // START
