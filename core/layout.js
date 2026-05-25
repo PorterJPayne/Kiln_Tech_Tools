@@ -141,8 +141,7 @@ async function loadTodayEvents(){
         const response =
     await fetch("/api/calendar");
 
-const text =
-    await response.text();
+
 
         if(!response.ok){
 
@@ -186,16 +185,44 @@ const text =
 
             const start =
                 startMatch[1].trim();
-console.log(start, today);
-            if(start.startsWith(today)){
 
-                todaysEvents.push({
-    title,
-    start,
-    eventDate
-});
+const year =
+    start.substring(0,4);
 
-            }
+const month =
+    start.substring(4,6);
+
+const day =
+    start.substring(6,8);
+
+const hour =
+    start.substring(9,11);
+
+const minute =
+    start.substring(11,13);
+
+const eventDate =
+    new Date(
+        `${year}-${month}-${day}T${hour}:${minute}:00`
+    );
+
+
+            const now =
+    new Date();
+
+const isToday =
+    eventDate.toDateString() ===
+    now.toDateString();
+
+if(isToday){
+
+    todaysEvents.push({
+        title,
+        start,
+        eventDate
+    });
+
+}
 
         });
 
