@@ -22,9 +22,15 @@
 
 <script src="/core/api/projects-api.js"></script>
 
+<script src="/core/api/project-links-api.js"></script>
+
+<script src="/core/api/project-activity-api.js"></script>
+
 <script src="/core/api/tasks-api.js"></script>
 
 <script src="/core/api/notes-api.js"></script>
+
+<script src="/core/api/email-api.js"></script>
 
 <script src="/core/layout.js" defer></script>
 
@@ -278,12 +284,6 @@
 
 }
 
-.expand-arrow{
-
-    opacity:0.45;
-
-}
-
 .attached-preview{
 
     display:none;
@@ -318,6 +318,22 @@
 
 }
 
+.complete-link{
+
+    color:#8ee0a7;
+
+    cursor:pointer;
+
+    opacity:0.8;
+
+}
+
+.complete-link:hover{
+
+    opacity:1;
+
+}
+
 .journal{
 
     width:100%;
@@ -338,12 +354,6 @@
         repeat(auto-fill,minmax(120px,1fr));
 
     gap:8px;
-
-}
-
-.upload-card{
-
-    position:relative;
 
 }
 
@@ -381,9 +391,73 @@
 
 }
 
-.activity-item:last-child{
+.modal-overlay{
 
-    border-bottom:none;
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.5);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:1000;
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+.task-modal{
+
+    width:420px;
+
+    background:#111;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:8px;
+
+    padding:14px;
+
+}
+
+.modal-title{
+
+    font-size:14px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+.modal-grid{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.modal-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:14px;
 
 }
 
@@ -423,8 +497,6 @@ id="sidebar"
 <div id="topbar"></div>
 
 <div class="content">
-
-<!-- HEADER -->
 
 <div class="project-panel">
 
@@ -481,8 +553,6 @@ Edit
 
 <div style="height:10px;"></div>
 
-<!-- MAIN -->
-
 <div class="project-layout">
 
 <!-- LEFT -->
@@ -504,8 +574,6 @@ Operational Links
 </div>
 
 <div class="attach-toolbar">
-
-<!-- TASKS -->
 
 <div class="attach-dropdown">
 
@@ -538,8 +606,6 @@ Attach Selected
 </div>
 
 </div>
-
-<!-- NOTES -->
 
 <div class="attach-dropdown">
 
@@ -633,8 +699,6 @@ gap:10px;
 "
 >
 
-<!-- ACTIVITY -->
-
 <div class="project-panel">
 
 <div class="section-title">
@@ -644,8 +708,6 @@ Activity
 <div id="activityFeed"></div>
 
 </div>
-
-<!-- EXPORT -->
 
 <div class="project-panel">
 
@@ -673,6 +735,95 @@ Copy Project Update
 
 </div>
 
+<!-- COMPLETE TASK MODAL -->
+
+<div
+class="modal-overlay hidden"
+id="completeModal"
+>
+
+<div class="task-modal">
+
+<div class="modal-title">
+Complete Task
+</div>
+
+<div class="modal-grid">
+
+<textarea
+id="completionNotes"
+class="input"
+placeholder="Completion notes..."
+></textarea>
+
+<select
+id="completionSection"
+class="input"
+>
+
+<option value="Completed">
+Completed
+</option>
+
+<option value="In Progress">
+In Progress
+</option>
+
+<option value="Notes">
+Notes
+</option>
+
+</select>
+
+<input
+id="completionTicket"
+class="input"
+placeholder="Ticket URL (optional)"
+>
+
+<label
+style="
+display:flex;
+gap:8px;
+align-items:center;
+font-size:11px;
+"
+>
+
+<input
+type="checkbox"
+id="addToEmailCheckbox"
+checked
+>
+
+Add To Daily Update
+
+</label>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+class="button"
+id="closeCompleteModal"
+>
+Cancel
+</button>
+
+<button
+class="button button-primary"
+id="submitCompletionBtn"
+>
+Submit
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 <div
 class="autosave"
 id="autosaveStatus"
@@ -693,6 +844,8 @@ let attachedTasks = [];
 let attachedNotes = [];
 
 let uploadedFiles = [];
+
+let activeCompletionTask = null;
 
 // ========================================
 // INIT
@@ -718,40 +871,95 @@ async function initProject(){
 
     if(!currentProject) return;
 
-    attachedTasks =
-        JSON.parse(
-            localStorage.getItem(
-                `project_tasks_${id}`
-            ) || "[]"
+    renderProject();
+
+    await loadLinks();
+
+    await loadActivity();
+
+    await loadTaskMenu();
+
+    await loadNoteMenu();
+
+}
+
+// ========================================
+// LOAD LINKS
+// ========================================
+
+async function loadLinks(){
+
+    const links =
+        await fetchProjectLinks(
+            currentProject.id
         );
+
+    const tasks =
+        await fetchTasks();
+
+    const notes =
+        await fetchNotes();
+
+    attachedTasks =
+        links
+            .filter(
+                l => l.item_type === "task"
+            )
+            .map(link =>
+                tasks.find(
+                    t => t.id === link.item_id
+                )
+            )
+            .filter(Boolean);
 
     attachedNotes =
-        JSON.parse(
-            localStorage.getItem(
-                `project_notes_${id}`
-            ) || "[]"
-        );
-
-    uploadedFiles =
-        JSON.parse(
-            localStorage.getItem(
-                `project_files_${id}`
-            ) || "[]"
-        );
-
-    renderProject();
+        links
+            .filter(
+                l => l.item_type === "note"
+            )
+            .map(link =>
+                notes.find(
+                    n => n.id === link.item_id
+                )
+            )
+            .filter(Boolean);
 
     renderAttached();
 
-    renderUploads();
+}
 
-    loadTaskMenu();
+// ========================================
+// ACTIVITY
+// ========================================
 
-    loadNoteMenu();
+async function loadActivity(){
 
-    addActivity(
-        "Opened project"
-    );
+    const activity =
+        await fetchProjectActivity(
+            currentProject.id
+        );
+
+    const feed =
+        document.getElementById(
+            "activityFeed"
+        );
+
+    feed.innerHTML = "";
+
+    activity.forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "activity-item";
+
+        div.textContent =
+            item.activity;
+
+        feed.appendChild(div);
+
+    });
 
 }
 
@@ -839,71 +1047,36 @@ async function autosave(){
 }
 
 // ========================================
-// DESCRIPTION EDIT
+// MENUS
 // ========================================
 
 document.getElementById(
-    "editDescriptionBtn"
+    "tasksBtn"
 ).onclick =
 () => {
 
-    const text =
-        document.getElementById(
-            "projectDescription"
-        );
-
-    const edit =
-        document.getElementById(
-            "projectDescriptionEdit"
-        );
-
-    if(edit.style.display === "block"){
-
-        edit.style.display = "none";
-
-        text.style.display = "block";
-
-        autosave();
-
-        addActivity(
-            "Updated description"
-        );
-
-    }
-
-    else {
-
-        edit.style.display = "block";
-
-        text.style.display = "none";
-
-    }
+    document
+        .getElementById(
+            "tasksMenu"
+        )
+        .classList
+        .toggle("open");
 
 };
 
-// ========================================
-// ACTIVITY
-// ========================================
+document.getElementById(
+    "notesBtn"
+).onclick =
+() => {
 
-function addActivity(text){
+    document
+        .getElementById(
+            "notesMenu"
+        )
+        .classList
+        .toggle("open");
 
-    const feed =
-        document.getElementById(
-            "activityFeed"
-        );
-
-    const item =
-        document.createElement("div");
-
-    item.className =
-        "activity-item";
-
-    item.textContent =
-        text;
-
-    feed.prepend(item);
-
-}
+};
 
 // ========================================
 // TASK MENU
@@ -1006,38 +1179,6 @@ async function loadNoteMenu(){
 }
 
 // ========================================
-// MENUS
-// ========================================
-
-document.getElementById(
-    "tasksBtn"
-).onclick =
-() => {
-
-    document
-        .getElementById(
-            "tasksMenu"
-        )
-        .classList
-        .toggle("open");
-
-};
-
-document.getElementById(
-    "notesBtn"
-).onclick =
-() => {
-
-    document
-        .getElementById(
-            "notesMenu"
-        )
-        .classList
-        .toggle("open");
-
-};
-
-// ========================================
 // ATTACH TASKS
 // ========================================
 
@@ -1053,43 +1194,38 @@ async () => {
             )
         ];
 
-    const tasks =
-        await fetchTasks();
+    checked.forEach(async item => {
 
-    checked.forEach(item => {
+        await attachProjectItem({
 
-        const task =
-            tasks.find(
-                t => t.id == item.value
-            );
+            projectId:
+                currentProject.id,
 
-        if(task){
+            itemType:
+                "task",
 
-            attachedTasks.push(task);
+            itemId:
+                Number(item.value)
 
-            addActivity(
-                `Attached task: ${task.title}`
-            );
-
-        }
+        });
 
     });
 
-    localStorage.setItem(
-        `project_tasks_${currentProject.id}`,
-        JSON.stringify(attachedTasks)
-    );
+    await addProjectActivity({
 
-    renderAttached();
+        projectId:
+            currentProject.id,
 
-    loadTaskMenu();
+        activity:
+            "Attached tasks"
 
-    document
-        .getElementById(
-            "tasksMenu"
-        )
-        .classList
-        .remove("open");
+    });
+
+    await loadLinks();
+
+    await loadTaskMenu();
+
+    await loadActivity();
 
 };
 
@@ -1109,43 +1245,38 @@ async () => {
             )
         ];
 
-    const notes =
-        await fetchNotes();
+    checked.forEach(async item => {
 
-    checked.forEach(item => {
+        await attachProjectItem({
 
-        const note =
-            notes.find(
-                n => n.id == item.value
-            );
+            projectId:
+                currentProject.id,
 
-        if(note){
+            itemType:
+                "note",
 
-            attachedNotes.push(note);
+            itemId:
+                Number(item.value)
 
-            addActivity(
-                `Attached note: ${note.title}`
-            );
-
-        }
+        });
 
     });
 
-    localStorage.setItem(
-        `project_notes_${currentProject.id}`,
-        JSON.stringify(attachedNotes)
-    );
+    await addProjectActivity({
 
-    renderAttached();
+        projectId:
+            currentProject.id,
 
-    loadNoteMenu();
+        activity:
+            "Attached notes"
 
-    document
-        .getElementById(
-            "notesMenu"
-        )
-        .classList
-        .remove("open");
+    });
+
+    await loadLinks();
+
+    await loadNoteMenu();
+
+    await loadActivity();
 
 };
 
@@ -1164,39 +1295,56 @@ function renderAttached(){
 
     attachedTasks.forEach(task => {
 
-        renderAttachedItem(
-            container,
-            "✓",
-            task.title,
-            task.description ||
-            "No description",
-            () => removeTask(task.id)
-        );
+        renderAttachedItem({
+
+            icon:"✓",
+
+            title:task.title,
+
+            preview:
+                task.description ||
+                "No description",
+
+            task
+
+        });
 
     });
 
     attachedNotes.forEach(note => {
 
-        renderAttachedItem(
-            container,
-            "📝",
-            note.title,
-            note.content ||
-            "No content",
-            () => removeNote(note.id)
-        );
+        renderAttachedItem({
+
+            icon:"📝",
+
+            title:note.title,
+
+            preview:
+                note.content ||
+                "No content",
+
+            note
+
+        });
 
     });
 
 }
 
-function renderAttachedItem(
-    container,
+function renderAttachedItem({
+
     icon,
     title,
     preview,
-    remove
-){
+    task,
+    note
+
+}){
+
+    const container =
+        document.getElementById(
+            "attachedItems"
+        );
 
     const wrapper =
         document.createElement("div");
@@ -1209,9 +1357,7 @@ function renderAttachedItem(
 
     wrapper.innerHTML = `
 
-        <div
-            class="attached-header"
-        >
+        <div class="attached-header">
 
             <div class="attached-left">
 
@@ -1228,14 +1374,24 @@ function renderAttachedItem(
             <div
                 style="
                     display:flex;
-                    gap:10px;
+                    gap:12px;
                     align-items:center;
                 "
             >
 
-                <span class="expand-arrow">
-                    ▼
-                </span>
+                ${
+                    task
+                    ?
+                    `
+                    <span
+                        class="complete-link"
+                    >
+                        Complete
+                    </span>
+                    `
+                    :
+                    ""
+                }
 
                 <span class="remove-link">
                     Remove
@@ -1254,17 +1410,14 @@ function renderAttachedItem(
 
     `;
 
-    const header =
-        wrapper.querySelector(
-            ".attached-header"
-        );
-
     const previewEl =
         wrapper.querySelector(
             ".attached-preview"
         );
 
-    header.onclick =
+    wrapper.querySelector(
+        ".attached-header"
+    ).onclick =
     () => {
 
         previewEl.classList.toggle(
@@ -1276,137 +1429,189 @@ function renderAttachedItem(
     wrapper.querySelector(
         ".remove-link"
     ).onclick =
-    e => {
+    async e => {
 
         e.stopPropagation();
 
-        remove();
+        await removeProjectItem({
+
+            projectId:
+                currentProject.id,
+
+            itemType:
+                task
+                ? "task"
+                : "note",
+
+            itemId:
+                task
+                ? task.id
+                : note.id
+
+        });
+
+        await loadLinks();
 
     };
+
+    const completeBtn =
+        wrapper.querySelector(
+            ".complete-link"
+        );
+
+    if(completeBtn){
+
+        completeBtn.onclick =
+        e => {
+
+            e.stopPropagation();
+
+            activeCompletionTask =
+                task;
+
+            document
+                .getElementById(
+                    "completeModal"
+                )
+                .classList
+                .remove("hidden");
+
+        };
+
+    }
 
     container.appendChild(wrapper);
 
 }
 
 // ========================================
-// REMOVE
+// COMPLETE TASK
 // ========================================
 
-function removeTask(id){
+document.getElementById(
+    "closeCompleteModal"
+).onclick =
+() => {
 
-    attachedTasks =
-        attachedTasks.filter(
-            t => t.id !== id
-        );
+    document
+        .getElementById(
+            "completeModal"
+        )
+        .classList
+        .add("hidden");
 
-    localStorage.setItem(
-        `project_tasks_${currentProject.id}`,
-        JSON.stringify(attachedTasks)
-    );
+};
 
-    renderAttached();
+document.getElementById(
+    "submitCompletionBtn"
+).onclick =
+async () => {
 
-    loadTaskMenu();
+    const notes =
+        document.getElementById(
+            "completionNotes"
+        ).value;
 
-}
+    const section =
+        document.getElementById(
+            "completionSection"
+        ).value;
 
-function removeNote(id){
+    const ticket =
+        document.getElementById(
+            "completionTicket"
+        ).value;
 
-    attachedNotes =
-        attachedNotes.filter(
-            n => n.id !== id
-        );
+    const addToEmail =
+        document.getElementById(
+            "addToEmailCheckbox"
+        ).checked;
 
-    localStorage.setItem(
-        `project_notes_${currentProject.id}`,
-        JSON.stringify(attachedNotes)
-    );
+    if(addToEmail){
 
-    renderAttached();
+        await createEmailEntry({
 
-    loadNoteMenu();
+            section,
 
-}
+            title:
+                activeCompletionTask.title,
+
+            explanation:
+                notes,
+
+            ticket,
+
+            link:ticket
+
+        });
+
+    }
+
+    await addProjectActivity({
+
+        projectId:
+            currentProject.id,
+
+        activity:
+            `Completed task: ${activeCompletionTask.title}`
+
+    });
+
+    document
+        .getElementById(
+            "completeModal"
+        )
+        .classList
+        .add("hidden");
+
+    await loadActivity();
+
+};
 
 // ========================================
-// FILES
+// FILE UPLOAD
 // ========================================
 
 document.getElementById(
     "fileUpload"
 ).addEventListener(
     "change",
-    e => {
+    async e => {
 
-        [...e.target.files]
-            .forEach(file => {
+        const files =
+            [...e.target.files];
 
-                const reader =
-                    new FileReader();
+        for(const file of files){
 
-                reader.onload =
-                () => {
+            const path =
+                `${currentProject.id}/${Date.now()}_${file.name}`;
 
-                    uploadedFiles.push({
+            await supabaseClient
+                .storage
+                .from(
+                    "project-files"
+                )
+                .upload(
+                    path,
+                    file
+                );
 
-                        name:file.name,
+        }
 
-                        data:reader.result
+        await addProjectActivity({
 
-                    });
+            projectId:
+                currentProject.id,
 
-                    localStorage.setItem(
-                        `project_files_${currentProject.id}`,
-                        JSON.stringify(uploadedFiles)
-                    );
+            activity:
+                "Uploaded files"
 
-                    renderUploads();
+        });
 
-                    addActivity(
-                        `Uploaded file: ${file.name}`
-                    );
-
-                };
-
-                reader.readAsDataURL(file);
-
-            });
+        await loadActivity();
 
     }
 );
-
-function renderUploads(){
-
-    const grid =
-        document.getElementById(
-            "uploadGrid"
-        );
-
-    grid.innerHTML = "";
-
-    uploadedFiles.forEach(file => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "upload-card";
-
-        card.innerHTML = `
-
-            <img src="${file.data}">
-
-            <div class="upload-name">
-                ${file.name}
-            </div>
-
-        `;
-
-        grid.appendChild(card);
-
-    });
-
-}
 
 // ========================================
 // EXPORT
@@ -1430,17 +1635,17 @@ document.getElementById(
     lines.push("");
 
     lines.push(
-`PROJECT: ${currentProject.title}`
+`${currentProject.title}`
     );
 
     lines.push(
-`STATUS: ${document.getElementById("projectStatus").value}`
+`Status: ${document.getElementById("projectStatus").value}`
     );
 
     lines.push("");
 
     lines.push(
-`DESCRIPTION`
+`SUMMARY`
     );
 
     lines.push(
@@ -1452,7 +1657,7 @@ document.getElementById(
     lines.push("");
 
     lines.push(
-`TASKS`
+`ACTIVE TASKS`
     );
 
     attachedTasks.forEach(task => {
@@ -1493,13 +1698,44 @@ document.getElementById(
         lines.join("\n")
     );
 
-    addActivity(
-        "Generated project update"
-    );
+};
 
-    alert(
-        "Project update copied"
-    );
+// ========================================
+// EDIT DESCRIPTION
+// ========================================
+
+document.getElementById(
+    "editDescriptionBtn"
+).onclick =
+() => {
+
+    const text =
+        document.getElementById(
+            "projectDescription"
+        );
+
+    const edit =
+        document.getElementById(
+            "projectDescriptionEdit"
+        );
+
+    if(edit.style.display === "block"){
+
+        edit.style.display = "none";
+
+        text.style.display = "block";
+
+        autosave();
+
+    }
+
+    else {
+
+        edit.style.display = "block";
+
+        text.style.display = "none";
+
+    }
 
 };
 
@@ -1511,15 +1747,7 @@ document.getElementById(
     "projectStatus"
 ).addEventListener(
     "change",
-    () => {
-
-        autosave();
-
-        addActivity(
-            "Updated project status"
-        );
-
-    }
+    autosave
 );
 
 document.getElementById(
