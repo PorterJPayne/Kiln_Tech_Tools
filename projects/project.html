@@ -1374,40 +1374,7 @@ function renderAttached(){
 
     });
 
-    attachedNotes.forEach(note => {
-
-        renderAttachedItem({
-
-            icon:"📝",
-
-            title:note.title,
-
-            preview:
-                note.content ||
-                "No content",
-
-            note
-
-        });
-
-    });
-
-}
-
-function renderAttachedItem({
-
-    icon,
-    title,
-    preview,
-    task,
-    note
-
-}){
-
-    const container =
-        document.getElementById(
-            "attachedItems"
-        );
+   attachedNotes.forEach(note => {
 
     const wrapper =
         document.createElement("div");
@@ -1415,105 +1382,68 @@ function renderAttachedItem({
     wrapper.className =
         "attached-item";
 
-    if(
-        task?.completed
-    ){
-
-        wrapper.classList.add(
-            "completed-task"
-        );
-
-    }
-
-    const previewId =
-        crypto.randomUUID();
-
-    const completedTime =
-        task?.completed_at
-        ? new Date(
-            task.completed_at
-        ).toLocaleString()
-        : "";
-
     wrapper.innerHTML = `
 
         <div class="attached-header">
 
             <div class="attached-left">
 
-                <span>
-                    ${icon}
-                </span>
+                <span>📝</span>
 
                 <span>
-                    ${title}
+                    ${note.title}
                 </span>
 
             </div>
 
             <div
+                class="mini-button edit-note-btn"
+            >
+                Edit
+            </div>
+
+        </div>
+
+        <div class="attached-preview">
+
+            <div
+                class="note-display"
+            >
+                ${note.content || ""}
+            </div>
+
+            <textarea
+                class="input note-editor"
                 style="
-                    display:flex;
-                    gap:12px;
-                    align-items:center;
+                    display:none;
+                    margin-top:10px;
+                    min-height:140px;
+                "
+            >${note.content || ""}</textarea>
+
+            <div
+                class="note-actions"
+                style="
+                    display:none;
+                    margin-top:10px;
+                    justify-content:flex-end;
+                    gap:8px;
                 "
             >
 
-                ${
-                    task?.completed
-                    ?
-                    `
-                    <span class="completed-badge">
-                        Completed
-                    </span>
-                    `
-                    :
-                    task
-                    ?
-                    `
-                    <span
-                        class="complete-link"
-                    >
-                        Complete
-                    </span>
-                    `
-                    :
-                    ""
-                }
-
-                <span class="remove-link">
-                    Remove
-                </span>
+                <button
+                    class="button save-note-btn"
+                >
+                    Save
+                </button>
 
             </div>
 
         </div>
 
-        <div
-            class="attached-preview"
-            id="${previewId}"
-        >
-
-            ${preview}
-
-            ${
-                completedTime
-                ?
-                `
-                <div class="completed-time">
-                    Completed:
-                    ${completedTime}
-                </div>
-                `
-                :
-                ""
-            }
-
-        </div>
-
     `;
 
-    const previewEl =
+    const preview =
         wrapper.querySelector(
             ".attached-preview"
         );
@@ -1521,71 +1451,128 @@ function renderAttachedItem({
     wrapper.querySelector(
         ".attached-header"
     ).onclick =
-    () => {
+    e => {
 
-        previewEl.classList.toggle(
+        if(
+            e.target.classList.contains(
+                "edit-note-btn"
+            )
+        ){
+            return;
+        }
+
+        preview.classList.toggle(
             "open"
         );
 
     };
 
-    wrapper.querySelector(
-        ".remove-link"
-    ).onclick =
-    async e => {
+    const editBtn =
+        wrapper.querySelector(
+            ".edit-note-btn"
+        );
+
+    const display =
+        wrapper.querySelector(
+            ".note-display"
+        );
+
+    const editor =
+        wrapper.querySelector(
+            ".note-editor"
+        );
+
+    const actions =
+        wrapper.querySelector(
+            ".note-actions"
+        );
+
+    const saveBtn =
+        wrapper.querySelector(
+            ".save-note-btn"
+        );
+
+    // ========================================
+    // EDIT
+    // ========================================
+
+    editBtn.onclick =
+    e => {
 
         e.stopPropagation();
 
-        await removeProjectItem({
+        preview.classList.add(
+            "open"
+        );
+
+        display.style.display =
+            "none";
+
+        editor.style.display =
+            "block";
+
+        actions.style.display =
+            "flex";
+
+        editor.focus();
+
+    };
+
+    // ========================================
+    // SAVE
+    // ========================================
+
+    saveBtn.onclick =
+    async () => {
+
+        const newContent =
+            editor.value;
+
+        await updateNote({
+
+            id:
+                note.id,
+
+            title:
+                note.title,
+
+            content:
+                newContent
+
+        });
+
+        note.content =
+            newContent;
+
+        display.innerHTML =
+            newContent;
+
+        display.style.display =
+            "block";
+
+        editor.style.display =
+            "none";
+
+        actions.style.display =
+            "none";
+
+        await addProjectActivity({
 
             projectId:
                 currentProject.id,
 
-            itemType:
-                task
-                ? "task"
-                : "note",
-
-            itemId:
-                task
-                ? task.id
-                : note.id
+            activity:
+                `Updated note: ${note.title}`
 
         });
 
-        await loadLinks();
+        await loadActivity();
 
     };
 
-    const completeBtn =
-        wrapper.querySelector(
-            ".complete-link"
-        );
-
-    if(completeBtn){
-
-        completeBtn.onclick =
-        e => {
-
-            e.stopPropagation();
-
-            activeCompletionTask =
-                task;
-
-            document
-                .getElementById(
-                    "completeModal"
-                )
-                .classList
-                .remove("hidden");
-
-        };
-
-    }
-
     container.appendChild(wrapper);
 
-}
+});
 
 // ========================================
 // COMPLETE TASK

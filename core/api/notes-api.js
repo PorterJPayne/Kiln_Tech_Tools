@@ -80,3 +80,37 @@ async function deleteNoteFromDB(id){
     }
 
 }
+
+// ========================================
+// UPDATE NOTE
+// ========================================
+
+async function updateNote({
+
+    id,
+    title,
+    content
+
+}){
+
+    const { error } =
+        await supabaseClient
+            .from("notes")
+            .update({
+
+                title,
+                content
+
+            })
+            .eq(
+                "id",
+                id
+            );
+
+    if(error){
+
+        console.error(error);
+
+    }
+
+}
