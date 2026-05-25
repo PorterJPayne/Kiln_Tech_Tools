@@ -26,6 +26,8 @@
 
 <script src="/core/api/project-activity-api.js"></script>
 
+<script src="/core/api/project-files-api.js"></script>
+
 <script src="/core/api/tasks-api.js"></script>
 
 <script src="/core/api/notes-api.js"></script>
@@ -256,6 +258,8 @@
 
     border-bottom:1px solid rgba(255,255,255,0.05);
 
+    padding:4px 0;
+
 }
 
 .attached-header{
@@ -288,11 +292,11 @@
 
     display:none;
 
-    padding:0 0 10px 22px;
+    padding:8px 0 10px 22px;
 
     color:rgba(255,255,255,0.65);
 
-    line-height:1.5;
+    line-height:1.55;
 
     font-size:11px;
 
@@ -324,13 +328,43 @@
 
     cursor:pointer;
 
-    opacity:0.8;
+    opacity:0.85;
 
 }
 
 .complete-link:hover{
 
     opacity:1;
+
+}
+
+.completed-task{
+
+    opacity:0.6;
+
+}
+
+.completed-task .attached-left{
+
+    text-decoration:line-through;
+
+}
+
+.completed-badge{
+
+    font-size:10px;
+
+    color:#8ee0a7;
+
+}
+
+.completed-time{
+
+    margin-top:6px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,0.4);
 
 }
 
@@ -376,6 +410,12 @@
     font-size:10px;
 
     color:rgba(255,255,255,0.5);
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
 
 }
 
@@ -497,6 +537,8 @@ id="sidebar"
 <div id="topbar"></div>
 
 <div class="content">
+
+<!-- HEADER -->
 
 <div class="project-panel">
 
@@ -877,9 +919,26 @@ async function initProject(){
 
     await loadActivity();
 
+    await loadFiles();
+
     await loadTaskMenu();
 
     await loadNoteMenu();
+
+}
+
+// ========================================
+// LOAD FILES
+// ========================================
+
+async function loadFiles(){
+
+    uploadedFiles =
+        await fetchProjectFiles(
+            currentProject.id
+        );
+
+    renderUploads();
 
 }
 
@@ -1002,11 +1061,6 @@ function renderProject(){
 
 async function autosave(){
 
-    document.getElementById(
-        "autosaveStatus"
-    ).textContent =
-        "Saving...";
-
     await supabaseClient
         .from("projects")
         .update({
@@ -1032,51 +1086,7 @@ async function autosave(){
             currentProject.id
         );
 
-    document.getElementById(
-        "projectDescription"
-    ).textContent =
-        document.getElementById(
-            "projectDescriptionEdit"
-        ).value;
-
-    document.getElementById(
-        "autosaveStatus"
-    ).textContent =
-        "Saved";
-
 }
-
-// ========================================
-// MENUS
-// ========================================
-
-document.getElementById(
-    "tasksBtn"
-).onclick =
-() => {
-
-    document
-        .getElementById(
-            "tasksMenu"
-        )
-        .classList
-        .toggle("open");
-
-};
-
-document.getElementById(
-    "notesBtn"
-).onclick =
-() => {
-
-    document
-        .getElementById(
-            "notesMenu"
-        )
-        .classList
-        .toggle("open");
-
-};
 
 // ========================================
 // TASK MENU
@@ -1096,6 +1106,12 @@ async function loadTaskMenu(){
 
     const filtered =
         tasks.filter(task => {
+
+            if(
+                task.completed === true
+            ){
+                return false;
+            }
 
             return !attachedTasks.some(
                 t => t.id === task.id
@@ -1179,6 +1195,38 @@ async function loadNoteMenu(){
 }
 
 // ========================================
+// MENUS
+// ========================================
+
+document.getElementById(
+    "tasksBtn"
+).onclick =
+() => {
+
+    document
+        .getElementById(
+            "tasksMenu"
+        )
+        .classList
+        .toggle("open");
+
+};
+
+document.getElementById(
+    "notesBtn"
+).onclick =
+() => {
+
+    document
+        .getElementById(
+            "notesMenu"
+        )
+        .classList
+        .toggle("open");
+
+};
+
+// ========================================
 // ATTACH TASKS
 // ========================================
 
@@ -1194,7 +1242,7 @@ async () => {
             )
         ];
 
-    checked.forEach(async item => {
+    for(const item of checked){
 
         await attachProjectItem({
 
@@ -1209,7 +1257,7 @@ async () => {
 
         });
 
-    });
+    }
 
     await addProjectActivity({
 
@@ -1245,7 +1293,7 @@ async () => {
             )
         ];
 
-    checked.forEach(async item => {
+    for(const item of checked){
 
         await attachProjectItem({
 
@@ -1260,7 +1308,7 @@ async () => {
 
         });
 
-    });
+    }
 
     await addProjectActivity({
 
@@ -1352,8 +1400,25 @@ function renderAttachedItem({
     wrapper.className =
         "attached-item";
 
+    if(
+        task?.completed
+    ){
+
+        wrapper.classList.add(
+            "completed-task"
+        );
+
+    }
+
     const previewId =
         crypto.randomUUID();
+
+    const completedTime =
+        task?.completed_at
+        ? new Date(
+            task.completed_at
+        ).toLocaleString()
+        : "";
 
     wrapper.innerHTML = `
 
@@ -1380,6 +1445,14 @@ function renderAttachedItem({
             >
 
                 ${
+                    task?.completed
+                    ?
+                    `
+                    <span class="completed-badge">
+                        Completed
+                    </span>
+                    `
+                    :
                     task
                     ?
                     `
@@ -1405,7 +1478,22 @@ function renderAttachedItem({
             class="attached-preview"
             id="${previewId}"
         >
+
             ${preview}
+
+            ${
+                completedTime
+                ?
+                `
+                <div class="completed-time">
+                    Completed:
+                    ${completedTime}
+                </div>
+                `
+                :
+                ""
+            }
+
         </div>
 
     `;
@@ -1527,6 +1615,15 @@ async () => {
             "addToEmailCheckbox"
         ).checked;
 
+    await completeTask({
+
+        taskId:
+            activeCompletionTask.id,
+
+        notes
+
+    });
+
     if(addToEmail){
 
         await createEmailEntry({
@@ -1564,12 +1661,16 @@ async () => {
         .classList
         .add("hidden");
 
+    await loadLinks();
+
+    await loadTaskMenu();
+
     await loadActivity();
 
 };
 
 // ========================================
-// FILE UPLOAD
+// FILES
 // ========================================
 
 document.getElementById(
@@ -1586,15 +1687,37 @@ document.getElementById(
             const path =
                 `${currentProject.id}/${Date.now()}_${file.name}`;
 
-            await supabaseClient
-                .storage
-                .from(
-                    "project-files"
-                )
-                .upload(
-                    path,
-                    file
-                );
+            const upload =
+                await supabaseClient
+                    .storage
+                    .from(
+                        "project-files"
+                    )
+                    .upload(
+                        path,
+                        file
+                    );
+
+            const { data } =
+                supabaseClient
+                    .storage
+                    .from(
+                        "project-files"
+                    )
+                    .getPublicUrl(path);
+
+            await saveProjectFile({
+
+                projectId:
+                    currentProject.id,
+
+                fileName:
+                    file.name,
+
+                fileUrl:
+                    data.publicUrl
+
+            });
 
         }
 
@@ -1608,10 +1731,54 @@ document.getElementById(
 
         });
 
+        await loadFiles();
+
         await loadActivity();
 
     }
 );
+
+function renderUploads(){
+
+    const grid =
+        document.getElementById(
+            "uploadGrid"
+        );
+
+    grid.innerHTML = "";
+
+    uploadedFiles.forEach(file => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "upload-card";
+
+        card.innerHTML = `
+
+            <a
+                href="${file.file_url}"
+                target="_blank"
+            >
+
+                <img
+                    src="${file.file_url}"
+                >
+
+            </a>
+
+            <div class="upload-name">
+                ${file.file_name}
+            </div>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+
+}
 
 // ========================================
 // EXPORT
@@ -1622,6 +1789,16 @@ document.getElementById(
 ).onclick =
 () => {
 
+    const completed =
+        attachedTasks.filter(
+            t => t.completed
+        );
+
+    const active =
+        attachedTasks.filter(
+            t => !t.completed
+        );
+
     const lines = [];
 
     lines.push(
@@ -1629,7 +1806,7 @@ document.getElementById(
     );
 
     lines.push(
-`========================`
+`================================`
     );
 
     lines.push("");
@@ -1645,54 +1822,127 @@ document.getElementById(
     lines.push("");
 
     lines.push(
-`SUMMARY`
+`OVERVIEW`
     );
 
     lines.push(
 document.getElementById(
     "projectDescription"
-).textContent
+).textContent || "No overview provided."
     );
 
     lines.push("");
 
-    lines.push(
-`ACTIVE TASKS`
-    );
-
-    attachedTasks.forEach(task => {
+    if(
+        completed.length
+    ){
 
         lines.push(
+`RECENT COMPLETED WORK`
+        );
+
+        completed.forEach(task => {
+
+            lines.push(
 `• ${task.title}`
-        );
+            );
 
-    });
+            if(
+                task.completion_notes
+            ){
 
-    lines.push("");
+                lines.push(
+`  ${task.completion_notes}`
+                );
 
-    lines.push(
-`NOTES`
-    );
+            }
 
-    attachedNotes.forEach(note => {
+        });
+
+        lines.push("");
+
+    }
+
+    if(
+        active.length
+    ){
 
         lines.push(
-`• ${note.title}`
+`ACTIVE WORK`
         );
 
-    });
+        active.forEach(task => {
 
-    lines.push("");
+            lines.push(
+`• ${task.title}`
+            );
 
-    lines.push(
+        });
+
+        lines.push("");
+
+    }
+
+    if(
+        attachedNotes.length
+    ){
+
+        lines.push(
+`NOTES & OBSERVATIONS`
+        );
+
+        attachedNotes.forEach(note => {
+
+            lines.push(
+`• ${note.title}`
+            );
+
+        });
+
+        lines.push("");
+
+    }
+
+    if(
+        uploadedFiles.length
+    ){
+
+        lines.push(
+`FILES`
+        );
+
+        uploadedFiles.forEach(file => {
+
+            lines.push(
+`• ${file.file_name}`
+            );
+
+            lines.push(
+`${file.file_url}`
+            );
+
+        });
+
+        lines.push("");
+
+    }
+
+    const journal =
+        document.getElementById(
+            "projectJournal"
+        ).value;
+
+    if(journal){
+
+        lines.push(
 `PROJECT JOURNAL`
-    );
+        );
 
-    lines.push(
-document.getElementById(
-    "projectJournal"
-).value
-    );
+        lines.push(
+journal
+        );
+
+    }
 
     navigator.clipboard.writeText(
         lines.join("\n")

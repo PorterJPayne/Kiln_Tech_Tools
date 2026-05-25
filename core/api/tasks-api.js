@@ -95,3 +95,46 @@ async function deleteEmailEntry(id){
     }
 
 }
+
+
+// ========================================
+// COMPLETE TASK
+// ========================================
+
+async function completeTask({
+
+    taskId,
+    notes
+
+}){
+
+    const { error } =
+        await supabaseClient
+            .from("tasks")
+            .update({
+
+                completed:true,
+
+                completed_at:
+                    new Date()
+                        .toISOString(),
+
+                completion_notes:
+                    notes
+
+            })
+            .eq(
+                "id",
+                taskId
+            );
+
+    if(error){
+
+        console.error(
+            "Complete task error:",
+            error
+        );
+
+    }
+
+}
