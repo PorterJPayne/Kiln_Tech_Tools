@@ -262,10 +262,6 @@ const nextEvent =
         }
     );
 
-const dropdown =
-    document.getElementById(
-        "todayEventsDropdown"
-    );
 
 dropdown.innerHTML =
     todaysEvents.map(event => {
