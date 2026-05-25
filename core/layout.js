@@ -412,3 +412,31 @@ if(
 
     }
 );
+
+
+const todaysEvents = [
+  {
+    title: "Client Tour",
+    time: "1:30 PM"
+  },
+  {
+    title: "Vendor Call",
+    time: "3:00 PM"
+  }
+];
+
+function updateTodayEvents() {
+  const text = document.getElementById("todayEventsText");
+
+  if (!todaysEvents.length) {
+    text.textContent = "No events today";
+    return;
+  }
+
+  const nextEvent = todaysEvents[0];
+
+  text.textContent =
+    `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${nextEvent.time}`;
+}
+
+updateTodayEvents();

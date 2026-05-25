@@ -827,3 +827,35 @@ select:focus{
     margin-top:14px;
 
 }
+
+.today-events-pill{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:240px;
+  max-width:380px;
+
+  padding:8px 14px;
+
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04);
+
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:500;
+
+  color:#e7e7e7;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  backdrop-filter:blur(10px);
+}
+
+#todayEventsText{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
