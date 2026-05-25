@@ -48,42 +48,7 @@ loadTodayEvents();
 
     
 
-const textElement =
-    document.getElementById(
-        "todayEventsText"
-    );
-
-if(!textElement) return;
-
-
-
-function updateTodayEvents(){
-
-    const text =
-        document.getElementById(
-            "todayEventsText"
-        );
-
-    if(!text) return;
-
-    if(!todaysEvents.length){
-
-        text.textContent =
-            "No events today";
-
-        return;
-
-    }
-
-    const nextEvent =
-        todaysEvents[0];
-
-    text.textContent =
-        `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${nextEvent.time}`;
-
-}
-
-updateTodayEvents();
+ 
 
     const title =
         document.body.dataset.title || "";
