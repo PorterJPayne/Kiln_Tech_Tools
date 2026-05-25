@@ -380,6 +380,8 @@ const title =
 
     });
 
+}
+
     catch(error){
 
         console.error(error);
