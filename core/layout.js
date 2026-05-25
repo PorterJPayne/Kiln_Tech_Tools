@@ -44,6 +44,49 @@ async function loadTopbar(){
 
     topbar.innerHTML = html;
 
+// =========================
+// TODAY EVENTS
+// =========================
+
+const todaysEvents = [
+    {
+        title: "Client Tour",
+        time: "1:30 PM"
+    },
+    {
+        title: "Vendor Call",
+        time: "3:00 PM"
+    }
+];
+
+function updateTodayEvents(){
+
+    const text =
+        document.getElementById(
+            "todayEventsText"
+        );
+
+    if(!text) return;
+
+    if(!todaysEvents.length){
+
+        text.textContent =
+            "No events today";
+
+        return;
+
+    }
+
+    const nextEvent =
+        todaysEvents[0];
+
+    text.textContent =
+        `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${nextEvent.time}`;
+
+}
+
+updateTodayEvents();
+
     const title =
         document.body.dataset.title || "";
 
