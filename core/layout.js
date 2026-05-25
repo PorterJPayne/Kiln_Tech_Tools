@@ -203,7 +203,7 @@ const minute =
 
 const eventDate =
     new Date(
-        `${year}-${month}-${day}T${hour}:${minute}:00`
+        `${year}-${month}-${day}T${hour}:${minute}:00Z`
     );
 
 
