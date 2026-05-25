@@ -448,51 +448,54 @@ renderPreview();
 
 }
 
-function getHistory(){
 
-  return JSON.parse(
-    localStorage.getItem("kilnWeeklyHistory") || "[]"
-  );
 
-}
 
-function saveHistory(history){
+async function getWeeklyStats(){
 
-  localStorage.setItem(
-    "kilnWeeklyHistory",
-    JSON.stringify(history)
-  );
+  const history =
+    await fetchTicketHistory();
 
-}
+  const currentWeek =
+    getWeekKey();
 
-function getWeeklyStats(){
+  const weekTickets =
+    history.filter(
+      item =>
+        item.week_key === currentWeek
+    );
 
-  const history = getHistory();
+  const uniqueTickets =
+    [...new Set(
 
-  const currentWeek = getWeekKey();
+      weekTickets.map(
+        t => t.ticket
+      )
 
-  const weekTickets = history.filter(
-    item => item.weekKey === currentWeek
-  );
+    )];
 
-  const uniqueTickets = [...new Set(
-    weekTickets.map(t => t.ticket)
-  )];
+  const count =
+    uniqueTickets.length;
 
-  const count = uniqueTickets.length;
-
-  const percent = Math.round((count / WEEKLY_GOAL) * 100);
+  const percent =
+    Math.round(
+      (count / WEEKLY_GOAL)
+      * 100
+    );
 
   return {
+
     count,
     percent
+
   };
 
 }
 
-function renderProgressWidget(){
+async function renderProgressWidget(){
 
-  const stats = getWeeklyStats();
+  const stats =
+    await getWeeklyStats();
 
   const progressWidth = Math.min(stats.percent,100);
 
@@ -802,7 +805,7 @@ function renderNotesSection(){
 
 }
 
-function renderPreview(){
+async function renderPreview(){
 
   previewContent.innerHTML = `
 
@@ -840,7 +843,7 @@ function renderPreview(){
 
         <td width="160" align="right" valign="top">
 
-          ${renderProgressWidget()}
+          ${await renderProgressWidget()}
 
         </td>
 
