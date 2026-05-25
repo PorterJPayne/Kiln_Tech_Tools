@@ -135,6 +135,12 @@ async function loadTodayEvents(){
 
     try{
 
+        const {
+    data: aliases
+} = await supabase
+    .from("event_aliases")
+    .select("*");
+
         const response =
             await fetch("/api/calendar");
 
@@ -169,8 +175,17 @@ async function loadTodayEvents(){
                 !startMatch
             ) return;
 
-            const title =
-                titleMatch[1].trim();
+            const googleTitle =
+    titleMatch[1].trim();
+
+const alias =
+    aliases?.find(
+        a => a.event_id === start
+    );
+
+const title =
+    alias?.custom_title ||
+    googleTitle;
 
             const start =
                 startMatch[1].trim();
@@ -322,6 +337,49 @@ async function loadTodayEvents(){
         }
 
     }
+
+    document
+    .querySelectorAll(
+        ".edit-event-btn"
+    )
+    .forEach(button => {
+
+        button.onclick =
+            async () => {
+
+                const eventId =
+                    button.dataset.eventId;
+
+                const currentTitle =
+                    button
+                    .closest(
+                        ".today-event-row"
+                    )
+                    .querySelector(
+                        ".today-event-title"
+                    )
+                    .textContent;
+
+                const newTitle =
+                    prompt(
+                        "Rename event",
+                        currentTitle
+                    );
+
+                if(!newTitle) return;
+
+                await supabase
+                    .from("event_aliases")
+                    .upsert({
+                        event_id: eventId,
+                        custom_title: newTitle
+                    });
+
+                loadTodayEvents();
+
+            };
+
+    });
 
     catch(error){
 
