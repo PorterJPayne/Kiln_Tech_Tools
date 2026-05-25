@@ -979,11 +979,25 @@ async function loadLinks(){
             .filter(
                 l => l.item_type === "task"
             )
-            .map(link =>
-                tasks.find(
-                    t => t.id === link.item_id
-                )
-            )
+            .map(link => {
+
+    const task =
+        tasks.find(
+            t => t.id === link.item_id
+        );
+
+    if(!task) return null;
+
+    return {
+
+        ...task,
+
+        completed:
+            task.completed || false
+
+    };
+
+})
             .filter(Boolean);
 
     attachedNotes =
@@ -991,11 +1005,18 @@ async function loadLinks(){
             .filter(
                 l => l.item_type === "note"
             )
-            .map(link =>
-                notes.find(
-                    n => n.id === link.item_id
-                )
-            )
+            .map(link => {
+
+    const note =
+        notes.find(
+            n => n.id === link.item_id
+        );
+
+    if(!note) return null;
+
+    return note;
+
+})
             .filter(Boolean);
 
     renderAttached();
@@ -1395,12 +1416,10 @@ function renderAttached(){
                 </span>
 
             </div>
-
-            <div
-                class="mini-button edit-note-btn"
-            >
-                Edit
+            <div class="remove-link remove-note-btn">
+               ✕
             </div>
+            
 
         </div>
 
@@ -1431,11 +1450,27 @@ function renderAttached(){
                 "
             >
 
-                <button
-                    class="button save-note-btn"
-                >
-                    Save
-                </button>
+                <div
+    style="
+        display:flex;
+        gap:8px;
+        justify-content:flex-end;
+    "
+>
+
+    <button
+        class="button edit-note-btn"
+    >
+        Edit
+    </button>
+
+    <button
+        class="button save-note-btn"
+    >
+        Save
+    </button>
+
+</div>
 
             </div>
 
@@ -1492,35 +1527,73 @@ function renderAttached(){
             ".save-note-btn"
         );
 
+        const removeBtn =
+    wrapper.querySelector(
+        ".remove-note-btn"
+    );
+
     // ========================================
     // EDIT
     // ========================================
 
     editBtn.onclick =
-    e => {
+e => {
 
-        e.stopPropagation();
+    e.stopPropagation();
 
-        preview.classList.add(
-            "open"
-        );
+    display.style.display =
+        "none";
 
-        display.style.display =
-            "none";
+    editor.style.display =
+        "block";
 
-        editor.style.display =
-            "block";
+    editor.focus();
 
-        actions.style.display =
-            "flex";
-
-        editor.focus();
-
-    };
+};
 
     // ========================================
     // SAVE
     // ========================================
+
+// ========================================
+// REMOVE NOTE
+// ========================================
+
+removeBtn.onclick =
+async e => {
+
+    e.stopPropagation();
+
+    await removeProjectItem({
+
+        projectId:
+            currentProject.id,
+
+        itemType:
+            "note",
+
+        itemId:
+            note.id
+
+    });
+
+    await addProjectActivity({
+
+        projectId:
+            currentProject.id,
+
+        activity:
+            `Removed note: ${note.title}`
+
+    });
+
+    await loadLinks();
+
+    await loadNoteMenu();
+
+    await loadActivity();
+
+};
 
     saveBtn.onclick =
     async () => {

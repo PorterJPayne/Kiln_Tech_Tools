@@ -1728,41 +1728,46 @@ function renderProjects(){
 
     list.innerHTML = "";
 
-    projects.forEach(project => {
+    const activeProjects =
+    projects.filter(
+        p => p.status !== "Completed"
+    );
 
-        const item =
-            document.createElement("a");
+activeProjects.forEach(project => {
 
-        item.className =
-            "rail-link";
+    const item =
+        document.createElement("a");
 
-        item.href =
-            `/projects/project.html?id=${project.id}`;
+    item.className =
+        "rail-link";
 
-        item.innerHTML = `
+    item.href =
+        `/projects/project.html?id=${project.id}`;
+
+    item.innerHTML = `
+
+        <div>
 
             <div>
-
-                <div>
-                    ${project.title}
-                </div>
-
-                <div
-                    class="muted"
-                    style="font-size:10px;"
-                >
-                    ${project.status || "Active"}
-                </div>
-
+                ${project.title}
             </div>
 
-            <span>↗</span>
+            <div
+                class="muted"
+                style="font-size:10px;"
+            >
+                ${project.status || "Active"}
+            </div>
 
-        `;
+        </div>
 
-        list.appendChild(item);
+        <span>↗</span>
 
-    });
+    `;
+
+    list.appendChild(item);
+
+});
 
 }
 
