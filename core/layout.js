@@ -252,31 +252,15 @@ const nextEvent =
     upcomingEvents[0] ||
     todaysEvents[0];
 
-        const rawTime =
-            nextEvent.start.substring(
-                9,
-                13
-            );
-
-        const hours =
-            parseInt(
-                rawTime.substring(0,2)
-            );
-
-        const minutes =
-            rawTime.substring(2,4);
-
-        const formattedHour =
-            hours % 12 || 12;
-
-        const ampm =
-            hours >= 12 ? "PM" : "AM";
-
         const formattedTime =
-            `${formattedHour}:${minutes} ${ampm}`;
-
-        textElement.textContent =
-            `${todaysEvents.length} Events Today • Next: ${nextEvent.title} @ ${formattedTime}`;
+    nextEvent.eventDate
+    .toLocaleTimeString(
+        [],
+        {
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
 
     }
 
