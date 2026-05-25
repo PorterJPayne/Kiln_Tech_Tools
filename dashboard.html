@@ -1686,37 +1686,22 @@ if(newDashboardNoteBtn){
    newDashboardNoteBtn.onclick =
     async () => {
 
-        const title =
-            prompt(
-                "New note title"
-            );
+        createNewNote();
 
-        if(!title) return;
-
-        const newNote =
-            await createNote(
-                title
-            );
-
-        if(!newNote) return;
-
-        dashboardNotes.unshift(
-            newNote
-        );
+        dashboardNotes =
+            await fetchNotes();
 
         renderDashboardNoteOptions();
 
-        loadDashboardNote(
-            newNote.id
-        );
+        if(dashboardNotes.length){
 
-        noteSelect.value =
-            newNote.id;
+            loadDashboardNote(
+                dashboardNotes[0].id
+            );
 
-        noteTitle.focus();
+        }
 
     };
-
 }
 // =========================
 // EVENTS
