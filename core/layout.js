@@ -46,7 +46,7 @@ async function loadTopbar(){
 
 loadTodayEvents();
 
-    }
+    
 
 const textElement =
     document.getElementById(
