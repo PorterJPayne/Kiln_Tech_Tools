@@ -1790,16 +1790,38 @@ function renderUploads(){
 
         card.innerHTML = `
 
-            <a
-                href="${file.file_url}"
-                target="_blank"
+            <div
+                style="
+                    position:relative;
+                "
             >
 
-                <img
-                    src="${file.file_url}"
+                <button
+                    class="mini-button delete-file-btn"
+                    style="
+                        position:absolute;
+                        top:4px;
+                        right:4px;
+                        background:rgba(0,0,0,0.65);
+                        border-radius:4px;
+                        z-index:2;
+                    "
+                >
+                    ✕
+                </button>
+
+                <a
+                    href="${file.file_url}"
+                    target="_blank"
                 >
 
-            </a>
+                    <img
+                        src="${file.file_url}"
+                    >
+
+                </a>
+
+            </div>
 
             <div class="upload-name">
                 ${file.file_name}
@@ -1808,6 +1830,41 @@ function renderUploads(){
         `;
 
         grid.appendChild(card);
+
+        // ========================================
+        // DELETE FILE
+        // ========================================
+
+        card.querySelector(
+            ".delete-file-btn"
+        ).onclick =
+        async () => {
+
+            const path =
+                decodeURIComponent(
+                    file.file_url
+                        .split("/project-files/")[1]
+                        .split("?")[0]
+                );
+
+            await supabaseClient
+                .storage
+                .from("project-files")
+                .remove([
+                    path
+                ]);
+
+            await supabaseClient
+                .from("project_files")
+                .delete()
+                .eq(
+                    "id",
+                    file.id
+                );
+
+            await loadFiles();
+
+        };
 
     });
 
@@ -2030,7 +2087,48 @@ document.getElementById(
     "projectStatus"
 ).addEventListener(
     "change",
-    autosave
+    async () => {
+
+        const status =
+            document.getElementById(
+                "projectStatus"
+            ).value;
+
+        if(
+            status === "Completed"
+        ){
+
+            await supabaseClient
+                .from("projects")
+                .update({
+
+                    completed_at:
+                        new Date()
+                            .toISOString()
+
+                })
+                .eq(
+                    "id",
+                    currentProject.id
+                );
+
+            await addProjectActivity({
+
+                projectId:
+                    currentProject.id,
+
+                activity:
+                    "Project marked completed"
+
+            });
+
+        }
+
+        await autosave();
+
+        await loadActivity();
+
+    }
 );
 
 document.getElementById(
