@@ -594,7 +594,7 @@ async function createNewNote(){
         .from("notes")
         .insert([{
 
-    id: crypto.randomUUID(),
+    id: Date.now(),
 
     title,
     content: "",
