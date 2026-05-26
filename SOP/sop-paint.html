@@ -3,6 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -29,21 +30,30 @@ window.sidebarPath = "/core/sidebar.html";
 
 .sop-wrap{
 
-    max-width:1100px;
-    margin:auto;
+    width:100%;
 
 }
 
 .sop-card{
 
-    background:rgba(255,255,255,0.03);
+    width:100%;
+
+    min-height:
+        calc(100vh - 160px);
+
+    background:
+        rgba(255,255,255,0.03);
 
     border:
         1px solid rgba(255,255,255,0.06);
 
     border-radius:10px;
 
-    padding:18px;
+    padding:22px;
+
+    display:flex;
+
+    flex-direction:column;
 
 }
 
@@ -55,19 +65,31 @@ window.sidebarPath = "/core/sidebar.html";
 
     align-items:center;
 
-    margin-bottom:14px;
+    margin-bottom:18px;
 
 }
 
 .sop-editor{
 
-    min-height:600px;
+    flex:1;
+
+    width:100%;
 
     outline:none;
 
-    line-height:1.6;
+    line-height:1.7;
+
+    font-size:14px;
 
     white-space:pre-wrap;
+
+}
+
+.sop-editor a{
+
+    color:var(--accent);
+
+    text-decoration:underline;
 
 }
 
@@ -83,14 +105,22 @@ window.sidebarPath = "/core/sidebar.html";
 
 <div class="app">
 
+    <!-- SIDEBAR -->
+
     <aside
         class="sidebar"
         id="sidebar"
     ></aside>
 
+    <!-- MAIN -->
+
     <main class="main platform-page">
 
+        <!-- TOPBAR -->
+
         <div id="topbar"></div>
+
+        <!-- CONTENT -->
 
         <div class="content">
 
@@ -211,6 +241,41 @@ async function loadSOP(){
 }
 
 // ========================================
+// AUTO LINK URLs
+// ========================================
+
+function autoLinkContent(){
+
+    const urlRegex =
+        /(https?:\/\/[^\s]+)/g;
+
+    sopEditor.innerHTML =
+        sopEditor.innerHTML.replace(
+            urlRegex,
+            url => {
+
+                if(
+                    url.includes("href=")
+                ){
+                    return url;
+                }
+
+                return `
+                    <a
+                        href="${url}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        ${url}
+                    </a>
+                `;
+
+            }
+        );
+
+}
+
+// ========================================
 // SAVE SOP
 // ========================================
 
@@ -253,6 +318,8 @@ editBtn.onclick =
             : "Edit";
 
         if(!isEditing){
+
+            autoLinkContent();
 
             await saveSOP();
 
