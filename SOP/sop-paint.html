@@ -270,6 +270,13 @@ window.sidebarPath = "/core/sidebar.html";
 
                             <button
                                 class="toolbar-btn"
+                                onclick="formatDoc('formatBlock','<p>')"
+                            >
+                                Text
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
                                 onclick="formatDoc('formatBlock','<h1>')"
                             >
                                 H1
@@ -531,8 +538,6 @@ function autoLinkContent(){
 
 async function saveSOP(){
 
-    autoLinkContent();
-
     saveIndicator.textContent =
         "Saving...";
 
@@ -622,7 +627,7 @@ sopEditor.addEventListener(
 // ========================================
 
 editBtn.onclick =
-    () => {
+    async () => {
 
         isEditing =
             !isEditing;
@@ -639,6 +644,14 @@ editBtn.onclick =
             isEditing
             ? "Editing"
             : "Edit";
+
+        if(!isEditing){
+
+            autoLinkContent();
+
+            await saveSOP();
+
+        }
 
     };
 
@@ -662,6 +675,8 @@ document.addEventListener(
             event.preventDefault();
 
             if(isEditing){
+
+                autoLinkContent();
 
                 saveSOP();
 
