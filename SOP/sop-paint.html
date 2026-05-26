@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Paint SOP</title>
+
+<link
+    rel="stylesheet"
+    href="/core/platform1.css"
+>
+
+<script>
+window.sidebarPath = "/core/sidebar.html";
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<script src="/core/layout.js" defer></script>
+
+<style>
+
+.sop-wrap{
+
+    max-width:1100px;
+    margin:auto;
+
+}
+
+.sop-card{
+
+    background:rgba(255,255,255,0.03);
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius:10px;
+
+    padding:18px;
+
+}
+
+.sop-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:14px;
+
+}
+
+.sop-editor{
+
+    min-height:600px;
+
+    outline:none;
+
+    line-height:1.6;
+
+    white-space:pre-wrap;
+
+}
+
+</style>
+
+</head>
+
+<body
+    class="platform-body"
+    data-title="Paint SOP"
+    data-description="Operational SOP documentation."
+>
+
+<div class="app">
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    ></aside>
+
+    <main class="main platform-page">
+
+        <div id="topbar"></div>
+
+        <div class="content">
+
+            <div class="sop-wrap">
+
+                <div class="sop-card">
+
+                    <div class="sop-toolbar">
+
+                        <h2>
+                            Paint SOP
+                        </h2>
+
+                        <button
+                            class="button button-primary"
+                            id="editBtn"
+                        >
+                            Edit
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="sopEditor"
+                        class="sop-editor"
+                        contenteditable="false"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+// ========================================
+// CONFIG
+// ========================================
+
+const SOP_SLUG =
+    "paint-sop";
+
+const SOP_TITLE =
+    "Paint SOP";
+
+// ========================================
+// ELEMENTS
+// ========================================
+
+const sopEditor =
+    document.getElementById(
+        "sopEditor"
+    );
+
+const editBtn =
+    document.getElementById(
+        "editBtn"
+    );
+
+let isEditing =
+    false;
+
+// ========================================
+// LOAD SOP
+// ========================================
+
+async function loadSOP(){
+
+    let {
+        data
+    } = await supabaseClient
+        .from("sops")
+        .select("*")
+        .eq(
+            "slug",
+            SOP_SLUG
+        )
+        .single();
+
+    // create if missing
+
+    if(!data){
+
+        const result =
+            await supabaseClient
+                .from("sops")
+                .insert([{
+
+                    slug:
+                        SOP_SLUG,
+
+                    title:
+                        SOP_TITLE,
+
+                    content:
+                        "",
+
+                    updated_at:
+                        Date.now()
+
+                }])
+                .select()
+                .single();
+
+        data =
+            result.data;
+
+    }
+
+    sopEditor.innerHTML =
+        data.content || "";
+
+}
+
+// ========================================
+// SAVE SOP
+// ========================================
+
+async function saveSOP(){
+
+    await supabaseClient
+        .from("sops")
+        .update({
+
+            content:
+                sopEditor.innerHTML,
+
+            updated_at:
+                Date.now()
+
+        })
+        .eq(
+            "slug",
+            SOP_SLUG
+        );
+
+}
+
+// ========================================
+// TOGGLE EDIT
+// ========================================
+
+editBtn.onclick =
+    async () => {
+
+        isEditing =
+            !isEditing;
+
+        sopEditor.contentEditable =
+            isEditing;
+
+        editBtn.textContent =
+            isEditing
+            ? "Save"
+            : "Edit";
+
+        if(!isEditing){
+
+            await saveSOP();
+
+        }
+
+    };
+
+// ========================================
+// START
+// ========================================
+
+loadSOP();
+
+</script>
+
+</body>
+</html>
