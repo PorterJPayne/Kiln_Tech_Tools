@@ -140,7 +140,7 @@ window.sidebarPath = "/core/sidebar.html";
 
     outline:none;
 
-    line-height:1.7;
+    line-height:1.55;
 
     font-size:14px;
 
@@ -166,41 +166,41 @@ window.sidebarPath = "/core/sidebar.html";
 
 .sop-editor h1{
 
-    font-size:32px;
+    font-size:28px;
 
-    margin-top:30px;
+    margin-top:18px;
 
-    margin-bottom:12px;
+    margin-bottom:6px;
 
 }
 
 .sop-editor h2{
 
-    font-size:22px;
+    font-size:20px;
 
-    margin-top:24px;
+    margin-top:14px;
 
-    margin-bottom:10px;
+    margin-bottom:4px;
 
 }
 
 .sop-editor p{
 
-    margin-bottom:14px;
+    margin-bottom:6px;
 
 }
 
 .sop-editor ul{
 
-    padding-left:24px;
+    padding-left:20px;
 
-    margin-bottom:14px;
+    margin-bottom:6px;
 
 }
 
 .sop-editor li{
 
-    margin-bottom:6px;
+    margin-bottom:2px;
 
 }
 
@@ -323,9 +323,7 @@ window.sidebarPath = "/core/sidebar.html";
                             <div
                                 class="save-indicator"
                                 id="saveIndicator"
-                            >
-                                
-                            </div>
+                            ></div>
 
                         </div>
 
@@ -511,24 +509,57 @@ linkBtn.onclick =
 
 function autoLinkContent(){
 
-    const urlRegex =
-        /(https?:\/\/[^\s]+)/g;
-
-    sopEditor.innerHTML =
-        sopEditor.innerHTML.replace(
-            urlRegex,
-            url => {
-
-                if(
-                    url.includes("href=")
-                ){
-                    return url;
-                }
-
-                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-
-            }
+    const walker =
+        document.createTreeWalker(
+            sopEditor,
+            NodeFilter.SHOW_TEXT
         );
+
+    const textNodes = [];
+
+    while(walker.nextNode()){
+
+        textNodes.push(
+            walker.currentNode
+        );
+
+    }
+
+    textNodes.forEach(node => {
+
+        if(
+            node.parentNode.tagName === "A"
+        ){
+            return;
+        }
+
+        const text =
+            node.textContent;
+
+        const urlRegex =
+            /(https?:\/\/[^\s]+)/g;
+
+        if(!urlRegex.test(text))
+            return;
+
+        const span =
+            document.createElement(
+                "span"
+            );
+
+        span.innerHTML =
+            text.replace(
+                urlRegex,
+                url =>
+                    `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+            );
+
+        node.parentNode.replaceChild(
+            span,
+            node
+        );
+
+    });
 
 }
 
