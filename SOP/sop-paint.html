@@ -65,7 +65,70 @@ window.sidebarPath = "/core/sidebar.html";
 
     align-items:center;
 
-    margin-bottom:18px;
+    margin-bottom:16px;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+}
+
+.toolbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+}
+
+.toolbar-btn{
+
+    background:
+        rgba(255,255,255,0.05);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    color:white;
+
+    padding:6px 10px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+}
+
+.toolbar-btn:hover{
+
+    background:
+        rgba(255,255,255,0.09);
+
+}
+
+.sop-meta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:rgba(255,255,255,0.55);
+
+    font-size:12px;
+
+}
+
+.save-indicator{
+
+    color:var(--accent);
 
 }
 
@@ -83,11 +146,75 @@ window.sidebarPath = "/core/sidebar.html";
 
     white-space:pre-wrap;
 
+    transition:0.15s;
+
+}
+
+.sop-editor.editing{
+
+    background:
+        rgba(255,255,255,0.02);
+
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04);
+
+    border-radius:8px;
+
+    padding:10px;
+
+}
+
+.sop-editor h1{
+
+    font-size:32px;
+
+    margin-top:30px;
+
+    margin-bottom:12px;
+
+}
+
+.sop-editor h2{
+
+    font-size:22px;
+
+    margin-top:24px;
+
+    margin-bottom:10px;
+
+}
+
+.sop-editor p{
+
+    margin-bottom:14px;
+
+}
+
+.sop-editor ul{
+
+    padding-left:24px;
+
+    margin-bottom:14px;
+
+}
+
+.sop-editor li{
+
+    margin-bottom:6px;
+
 }
 
 .sop-editor a{
 
     color:var(--accent);
+
+    font-weight:500;
+
+    text-decoration:none;
+
+}
+
+.sop-editor a:hover{
 
     text-decoration:underline;
 
@@ -128,20 +255,76 @@ window.sidebarPath = "/core/sidebar.html";
 
                 <div class="sop-card">
 
+                    <!-- TOOLBAR -->
+
                     <div class="sop-toolbar">
 
-                        <h2>
-                            Paint SOP
-                        </h2>
+                        <div class="toolbar-left">
 
-                        <button
-                            class="button button-primary"
-                            id="editBtn"
-                        >
-                            Edit
-                        </button>
+                            <button
+                                class="toolbar-btn"
+                                id="editBtn"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
+                                onclick="formatDoc('formatBlock','<h1>')"
+                            >
+                                H1
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
+                                onclick="formatDoc('formatBlock','<h2>')"
+                            >
+                                H2
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
+                                onclick="formatDoc('bold')"
+                            >
+                                Bold
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
+                                onclick="formatDoc('insertUnorderedList')"
+                            >
+                                • List
+                            </button>
+
+                            <button
+                                class="toolbar-btn"
+                                id="linkBtn"
+                            >
+                                Link
+                            </button>
+
+                        </div>
+
+                        <div class="sop-meta">
+
+                            <div
+                                id="lastUpdated"
+                            >
+                                Last updated: —
+                            </div>
+
+                            <div
+                                class="save-indicator"
+                                id="saveIndicator"
+                            >
+                                
+                            </div>
+
+                        </div>
 
                     </div>
+
+                    <!-- EDITOR -->
 
                     <div
                         id="sopEditor"
@@ -185,8 +368,26 @@ const editBtn =
         "editBtn"
     );
 
+const linkBtn =
+    document.getElementById(
+        "linkBtn"
+    );
+
+const lastUpdated =
+    document.getElementById(
+        "lastUpdated"
+    );
+
+const saveIndicator =
+    document.getElementById(
+        "saveIndicator"
+    );
+
 let isEditing =
     false;
+
+let saveTimeout =
+    null;
 
 // ========================================
 // LOAD SOP
@@ -238,7 +439,64 @@ async function loadSOP(){
     sopEditor.innerHTML =
         data.content || "";
 
+    updateTimestamp(
+        data.updated_at
+    );
+
 }
+
+// ========================================
+// FORMAT
+// ========================================
+
+function formatDoc(
+    command,
+    value = null
+){
+
+    document.execCommand(
+        command,
+        false,
+        value
+    );
+
+}
+
+// ========================================
+// LINKS
+// ========================================
+
+linkBtn.onclick =
+    () => {
+
+        const url =
+            prompt(
+                "Enter URL"
+            );
+
+        if(!url) return;
+
+        document.execCommand(
+            "createLink",
+            false,
+            url
+        );
+
+        document
+            .querySelectorAll(
+                "#sopEditor a"
+            )
+            .forEach(link => {
+
+                link.target =
+                    "_blank";
+
+                link.rel =
+                    "noopener noreferrer";
+
+            });
+
+    };
 
 // ========================================
 // AUTO LINK URLs
@@ -273,6 +531,11 @@ function autoLinkContent(){
 
 async function saveSOP(){
 
+    autoLinkContent();
+
+    saveIndicator.textContent =
+        "Saving...";
+
     await supabaseClient
         .from("sops")
         .update({
@@ -289,14 +552,77 @@ async function saveSOP(){
             SOP_SLUG
         );
 
+    const now =
+        Date.now();
+
+    updateTimestamp(now);
+
+    saveIndicator.textContent =
+        "Saved";
+
+    setTimeout(() => {
+
+        saveIndicator.textContent =
+            "";
+
+    }, 1200);
+
 }
+
+// ========================================
+// TIMESTAMP
+// ========================================
+
+function updateTimestamp(
+    timestamp
+){
+
+    const formatted =
+        new Date(timestamp)
+        .toLocaleString(
+            [],
+            {
+                month:"short",
+                day:"numeric",
+                hour:"numeric",
+                minute:"2-digit"
+            }
+        );
+
+    lastUpdated.textContent =
+        `Last updated: ${formatted}`;
+
+}
+
+// ========================================
+// AUTOSAVE
+// ========================================
+
+sopEditor.addEventListener(
+    "input",
+    () => {
+
+        if(!isEditing) return;
+
+        clearTimeout(
+            saveTimeout
+        );
+
+        saveTimeout =
+            setTimeout(
+                saveSOP,
+                900
+            );
+
+    }
+);
 
 // ========================================
 // TOGGLE EDIT
 // ========================================
 
 editBtn.onclick =
-    async () => {
+    () => {
 
         isEditing =
             !isEditing;
@@ -304,20 +630,47 @@ editBtn.onclick =
         sopEditor.contentEditable =
             isEditing;
 
+        sopEditor.classList.toggle(
+            "editing",
+            isEditing
+        );
+
         editBtn.textContent =
             isEditing
-            ? "Save"
+            ? "Editing"
             : "Edit";
 
-        if(!isEditing){
+    };
 
-            autoLinkContent();
+// ========================================
+// CMD + S
+// ========================================
 
-            await saveSOP();
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            (
+                event.metaKey ||
+                event.ctrlKey
+            )
+            &&
+            event.key === "s"
+        ){
+
+            event.preventDefault();
+
+            if(isEditing){
+
+                saveSOP();
+
+            }
 
         }
 
-    };
+    }
+);
 
 // ========================================
 // START
