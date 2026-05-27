@@ -260,7 +260,7 @@ data-description="Inline task editing."
                     </div>
 
                     <div>
-                        Status
+                        Actions
                     </div>
 
                 </div>
@@ -401,13 +401,12 @@ function renderTasks(){
 
             <!-- TICKET -->
 
-            <a
-                class="task-link"
-                href="${task.link || '#'}"
-                target="_blank"
-            >
-                ${task.ticket || "-"}
-            </a>
+            <input
+    class="task-input"
+    data-field="link"
+    value="${task.link || ""}"
+    placeholder="Link"
+>
 
 
             <!-- TITLE -->
@@ -430,9 +429,25 @@ function renderTasks(){
 
             <!-- STATUS -->
 
-            <div class="save-indicator">
-                Saved
-            </div>
+            <div
+    style="
+        display:flex;
+        gap:6px;
+        align-items:center;
+    "
+>
+
+    <div class="save-indicator">
+        Saved
+    </div>
+
+    <button
+        class="button delete-task-btn"
+    >
+        Delete
+    </button>
+
+</div>
 
         `;
 
@@ -461,6 +476,11 @@ function setupRowEditing(
         row.querySelectorAll(
             "[data-field]"
         );
+
+        const deleteBtn =
+    row.querySelector(
+        ".delete-task-btn"
+    );
 
     fields.forEach(field => {
 
@@ -491,6 +511,30 @@ function setupRowEditing(
         );
 
     });
+
+    if(deleteBtn){
+
+    deleteBtn.addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+                confirm(
+                    "Delete task?"
+                );
+
+            if(!confirmed) return;
+
+            await archiveTask(
+                task.id
+            );
+
+            await loadTasks();
+
+        }
+    );
+
+}
 
 }
 

@@ -8,6 +8,10 @@ async function fetchTasks(){
         await supabaseClient
             .from("tasks")
             .select("*")
+            .eq(
+    "archived",
+    false
+)
             .order("created_at", {
                 ascending:false
             });
@@ -325,6 +329,21 @@ async function fetchTodayTasks(){
 
     return fetchTasksForDay(
         getCurrentDay()
+    );
+
+}
+
+// =========================
+// ARCHIVE TASK
+// =========================
+
+async function archiveTask(id){
+
+    return updateTask(
+        id,
+        {
+            archived:true
+        }
     );
 
 }
