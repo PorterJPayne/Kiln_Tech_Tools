@@ -1804,7 +1804,7 @@ let activeTask = null;
 async function loadTasks(){
 
     tasks =
-        await fetchTasks();
+        await fetchTodayTasks();
 
     renderTasks();
     renderSnapshot();
@@ -1829,10 +1829,7 @@ function renderTasks(){
 
     if(!taskList) return;
 
-    const activeTasks =
-        tasks.filter(
-            task => !task.completed
-        );
+    const activeTasks = tasks;
 
     taskCount.textContent =
         `${activeTasks.length} Tasks`;
