@@ -563,6 +563,8 @@ loadSidebar();
 
 loadTopbar();
 
+loadTaskModal();
+
 setTimeout(() => {
 
     initGlobalSearch();
@@ -716,3 +718,25 @@ if(
 
     }
 );
+
+
+// =========================
+// LOAD TASK MODAL
+// =========================
+
+async function loadTaskModal(){
+
+    const response =
+        await fetch(
+            "/core/tasks/task-modal.html"
+        );
+
+    const html =
+        await response.text();
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+
+}

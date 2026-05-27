@@ -29,6 +29,8 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script src="/core/layout.js" defer></script>
 
+<script src="/core/tasks/task-modal.js"></script>
+
 <link
     rel="stylesheet"
     href="/tasks/tasks.css"
@@ -74,11 +76,12 @@ id="sidebar"
             </div>
 
             <button
-                id="newTaskBtn"
-                class="button"
-            >
-                + Task
-            </button>
+    id="newTaskBtn"
+    class="button"
+    onclick="openTaskModal()"
+>
+    + Task
+</button>
 
         </div>
 
