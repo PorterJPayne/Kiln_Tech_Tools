@@ -740,3 +740,19 @@ async function loadTaskModal(){
     );
 
 }
+
+// =========================
+// LOAD TASK MODAL SCRIPT
+// =========================
+
+const taskModalScript =
+    document.createElement(
+        "script"
+    );
+
+taskModalScript.src =
+    "/core/tasks/task-modal.js";
+
+document.body.appendChild(
+    taskModalScript
+);

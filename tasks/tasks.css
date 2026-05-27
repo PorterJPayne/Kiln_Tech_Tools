@@ -350,3 +350,59 @@
     }
 
 }
+
+/* ========================================
+   BUILDING SELECTOR
+======================================== */
+
+.building-selector{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    border:
+        1px solid var(--input-border);
+
+    border-radius:var(--radius-md);
+
+    overflow:hidden;
+
+}
+
+
+.building-pill{
+
+    height:42px;
+
+    border:none;
+
+    background:var(--input-bg);
+
+    color:var(--muted);
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+
+.building-pill:hover{
+
+    background:var(--panel-light);
+
+}
+
+
+.building-pill.active{
+
+    background:var(--accent);
+
+    color:white;
+
+}

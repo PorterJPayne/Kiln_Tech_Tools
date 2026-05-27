@@ -1,3 +1,10 @@
+## FILE:
+
+```txt id="jlwm401"
+/core/tasks/task-modal.js
+```
+
+```js id="’wini402"
 // =========================
 // TASK MODAL INIT
 // =========================
@@ -14,6 +21,8 @@ function initTaskModal(){
     setupTaskModalButtons();
 
     setupSmartTicketPaste();
+
+    setupBuildingSelector();
 
 }
 
@@ -132,9 +141,9 @@ async function saveTaskFromModal(){
             ).value,
 
         building:
-            document.getElementById(
-                "taskBuilding"
-            ).value
+            document.querySelector(
+                ".building-pill.active"
+            )?.dataset.building || ""
 
     };
 
@@ -182,9 +191,30 @@ function resetTaskModal(){
         "taskPriority"
     ).value = "P3";
 
-    document.getElementById(
-        "taskBuilding"
-    ).value = "";
+    document
+        .querySelectorAll(
+            ".building-pill"
+        )
+        .forEach(pill => {
+
+            pill.classList.remove(
+                "active"
+            );
+
+        });
+
+    const defaultPill =
+        document.querySelector(
+            '[data-building="Lehi 1"]'
+        );
+
+    if(defaultPill){
+
+        defaultPill.classList.add(
+            "active"
+        );
+
+    }
 
 }
 
@@ -242,3 +272,44 @@ function setupSmartTicketPaste(){
     );
 
 }
+
+
+// =========================
+// BUILDING SELECTOR
+// =========================
+
+function setupBuildingSelector(){
+
+    document.addEventListener(
+        "click",
+        e => {
+
+            if(
+                !e.target.classList.contains(
+                    "building-pill"
+                )
+            ){
+                return;
+            }
+
+            document
+                .querySelectorAll(
+                    ".building-pill"
+                )
+                .forEach(pill => {
+
+                    pill.classList.remove(
+                        "active"
+                    );
+
+                });
+
+            e.target.classList.add(
+                "active"
+            );
+
+        }
+    );
+
+}
+```

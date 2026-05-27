@@ -15,11 +15,16 @@
 
         <div class="modal-grid">
 
+            <!-- TICKET -->
+
             <input
                 id="taskTicket"
                 class="input"
-                placeholder="Ticket #"
+                placeholder="Paste Ticket"
             >
+
+
+            <!-- TITLE -->
 
             <input
                 id="taskTitle"
@@ -27,11 +32,17 @@
                 placeholder="Title"
             >
 
+
+            <!-- DESCRIPTION -->
+
             <textarea
                 id="taskDescription"
                 class="input modal-textarea"
                 placeholder="Description"
             ></textarea>
+
+
+            <!-- PRIORITY -->
 
             <select
                 id="taskPriority"
@@ -59,11 +70,28 @@
 
             </select>
 
-            <input
-                id="taskBuilding"
-                class="input"
-                placeholder="Building"
-            >
+
+            <!-- BUILDING -->
+
+            <div class="building-selector">
+
+                <button
+                    class="building-pill active"
+                    data-building="Lehi 1"
+                    type="button"
+                >
+                    Lehi 1
+                </button>
+
+                <button
+                    class="building-pill"
+                    data-building="Lehi 2"
+                    type="button"
+                >
+                    Lehi 2
+                </button>
+
+            </div>
 
         </div>
 
