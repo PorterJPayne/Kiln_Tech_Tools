@@ -3,269 +3,234 @@
 
 <head>
 
-    <meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Tasks</title>
+<title>Tasks</title>
 
-    <link
-        rel="stylesheet"
-        href="../styles.css"
-    />
+<link
+    rel="stylesheet"
+    href="/core/platform1.css"
+>
 
-    <link
-        rel="stylesheet"
-        href="tasks.css"
-    />
+<script>
+window.sidebarPath = "/core/sidebar.html";
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<script src="/core/api/tasks-api.js"></script>
+
+<script src="/core/layout.js" defer></script>
+
+<link
+    rel="stylesheet"
+    href="/tasks/tasks.css"
+>
 
 </head>
 
-<body class="platform-body">
+<body
+class="platform-body"
+data-title="Tasks"
+data-description="Weekly operational planning."
+>
 
-    <div class="app">
+<div class="app">
 
-        <!-- SIDEBAR -->
+<!-- SIDEBAR -->
 
-        <aside class="sidebar">
+<aside
+class="sidebar"
+id="sidebar"
+></aside>
 
-            <div class="logo">
-                Kiln<span>Tech</span>
+<!-- MAIN -->
+
+<main class="main platform-page">
+
+<div id="topbar"></div>
+
+<div class="content">
+
+<div class="tasks-layout">
+
+    <!-- ========================= -->
+    <!-- INBOX -->
+    <!-- ========================= -->
+
+    <section class="tasks-panel">
+
+        <div class="tasks-panel-header">
+
+            <div class="section-title">
+                Inbox
             </div>
 
-        </aside>
+            <button
+                id="newTaskBtn"
+                class="button"
+            >
+                + Task
+            </button>
+
+        </div>
+
+        <div
+            id="inboxTable"
+            class="task-list"
+        ></div>
+
+    </section>
 
 
-        <!-- MAIN -->
+    <!-- ========================= -->
+    <!-- WEEK PLANNER -->
+    <!-- ========================= -->
 
-        <main class="main">
+    <section class="planner-layout">
 
-            <!-- TOPBAR -->
+        <div
+            class="planner-column"
+            data-day="monday"
+        >
 
-            <header class="topbar">
+            <div class="planner-column-header">
 
-                <div class="topbar-left">
-
-                    <h2>
-                        Tasks
-                    </h2>
-
-                    <p>
-                        Plan your operational week
-                    </p>
-
+                <div class="section-title">
+                    Monday
                 </div>
 
-                <div class="topbar-right">
-
-                    <button
-                        id="new-task-btn"
-                        class="button button-primary"
-                    >
-                        + Task
-                    </button>
-
-                </div>
-
-            </header>
-
-
-            <!-- CONTENT -->
-
-            <div class="content">
-
-                <div class="tasks-page">
-
-                    <!-- ========================= -->
-                    <!-- INBOX -->
-                    <!-- ========================= -->
-
-                    <section class="tasks-inbox">
-
-                        <div class="flex-between">
-
-                            <h3>
-                                Inbox
-                            </h3>
-
-                            <span
-                                id="inbox-count"
-                                class="tag tag-yellow"
-                            >
-                                0
-                            </span>
-
-                        </div>
-
-                        <div
-                            id="inbox-table"
-                            class="inbox-table"
-                        >
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- ========================= -->
-                    <!-- PLANNER -->
-                    <!-- ========================= -->
-
-                    <section class="planner">
-
-                        <!-- MONDAY -->
-
-                        <div
-                            class="planner-day panel"
-                            data-day="monday"
-                        >
-
-                            <div class="planner-header">
-
-                                <h3>
-                                    Mon
-                                </h3>
-
-                                <span
-                                    class="day-count"
-                                    id="count-monday"
-                                >
-                                    0
-                                </span>
-
-                            </div>
-
-                            <div class="planner-dropzone"></div>
-
-                        </div>
-
-
-                        <!-- TUESDAY -->
-
-                        <div
-                            class="planner-day panel"
-                            data-day="tuesday"
-                        >
-
-                            <div class="planner-header">
-
-                                <h3>
-                                    Tue
-                                </h3>
-
-                                <span
-                                    class="day-count"
-                                    id="count-tuesday"
-                                >
-                                    0
-                                </span>
-
-                            </div>
-
-                            <div class="planner-dropzone"></div>
-
-                        </div>
-
-
-                        <!-- WEDNESDAY -->
-
-                        <div
-                            class="planner-day panel"
-                            data-day="wednesday"
-                        >
-
-                            <div class="planner-header">
-
-                                <h3>
-                                    Wed
-                                </h3>
-
-                                <span
-                                    class="day-count"
-                                    id="count-wednesday"
-                                >
-                                    0
-                                </span>
-
-                            </div>
-
-                            <div class="planner-dropzone"></div>
-
-                        </div>
-
-
-                        <!-- THURSDAY -->
-
-                        <div
-                            class="planner-day panel"
-                            data-day="thursday"
-                        >
-
-                            <div class="planner-header">
-
-                                <h3>
-                                    Thu
-                                </h3>
-
-                                <span
-                                    class="day-count"
-                                    id="count-thursday"
-                                >
-                                    0
-                                </span>
-
-                            </div>
-
-                            <div class="planner-dropzone"></div>
-
-                        </div>
-
-
-                        <!-- FRIDAY -->
-
-                        <div
-                            class="planner-day panel"
-                            data-day="friday"
-                        >
-
-                            <div class="planner-header">
-
-                                <h3>
-                                    Fri
-                                </h3>
-
-                                <span
-                                    class="day-count"
-                                    id="count-friday"
-                                >
-                                    0
-                                </span>
-
-                            </div>
-
-                            <div class="planner-dropzone"></div>
-
-                        </div>
-
-                    </section>
-
+                <div
+                    id="count-monday"
+                    class="planner-count"
+                >
+                    0
                 </div>
 
             </div>
 
-        </main>
+            <div class="planner-dropzone"></div>
 
-    </div>
+        </div>
 
-    <script src="../core/supabase.js"></script>
 
-    <script src="../core/api/tasks-api.js"></script>
+        <div
+            class="planner-column"
+            data-day="tuesday"
+        >
 
-    <script src="tasks.js"></script>
+            <div class="planner-column-header">
+
+                <div class="section-title">
+                    Tuesday
+                </div>
+
+                <div
+                    id="count-tuesday"
+                    class="planner-count"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="planner-dropzone"></div>
+
+        </div>
+
+
+        <div
+            class="planner-column"
+            data-day="wednesday"
+        >
+
+            <div class="planner-column-header">
+
+                <div class="section-title">
+                    Wednesday
+                </div>
+
+                <div
+                    id="count-wednesday"
+                    class="planner-count"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="planner-dropzone"></div>
+
+        </div>
+
+
+        <div
+            class="planner-column"
+            data-day="thursday"
+        >
+
+            <div class="planner-column-header">
+
+                <div class="section-title">
+                    Thursday
+                </div>
+
+                <div
+                    id="count-thursday"
+                    class="planner-count"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="planner-dropzone"></div>
+
+        </div>
+
+
+        <div
+            class="planner-column"
+            data-day="friday"
+        >
+
+            <div class="planner-column-header">
+
+                <div class="section-title">
+                    Friday
+                </div>
+
+                <div
+                    id="count-friday"
+                    class="planner-count"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="planner-dropzone"></div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="/tasks/tasks.js"></script>
 
 </body>
-
 </html>

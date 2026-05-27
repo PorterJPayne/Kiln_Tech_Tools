@@ -1,6 +1,4 @@
-let inboxTasks = [];
-
-let plannerTasks = [];
+let allTasks = [];
 
 
 // =========================
@@ -12,35 +10,23 @@ init();
 
 async function init(){
 
-    await loadInbox();
+    await loadTasks();
 
-    await loadPlanner();
+    setupDropzones();
 
 }
 
 
 // =========================
-// LOAD INBOX
+// LOAD TASKS
 // =========================
 
-async function loadInbox(){
+async function loadTasks(){
 
-    inboxTasks =
-        await fetchInboxTasks();
+    allTasks =
+        await fetchTasks();
 
     renderInbox();
-
-}
-
-
-// =========================
-// LOAD PLANNER
-// =========================
-
-async function loadPlanner(){
-
-    plannerTasks =
-        await fetchTasks();
 
     renderPlanner();
 
@@ -48,29 +34,30 @@ async function loadPlanner(){
 
 
 // =========================
-// RENDER INBOX
+// INBOX
 // =========================
 
 function renderInbox(){
 
     const container =
         document.getElementById(
-            "inbox-table"
+            "inboxTable"
         );
 
     container.innerHTML = "";
 
-    document.getElementById(
-        "inbox-count"
-    ).textContent =
-        inboxTasks.length;
+    const inboxTasks =
+        allTasks.filter(
+            task =>
+                !task.completed &&
+                !task.scheduled_day
+        );
 
     inboxTasks.forEach(task => {
 
-        const row =
-            createTaskCard(task);
-
-        container.appendChild(row);
+        container.appendChild(
+            createTaskCard(task)
+        );
 
     });
 
@@ -78,7 +65,7 @@ function renderInbox(){
 
 
 // =========================
-// RENDER PLANNER
+// PLANNER
 // =========================
 
 function renderPlanner(){
@@ -93,102 +80,96 @@ function renderPlanner(){
 
         });
 
-    const counts = {
+    const counts = {};
 
-        monday:0,
-        tuesday:0,
-        wednesday:0,
-        thursday:0,
-        friday:0
-
-    };
-
-    plannerTasks
+    allTasks
         .filter(
-            task => task.scheduled_day
+            task =>
+                !task.completed &&
+                task.scheduled_day
         )
         .forEach(task => {
 
-            counts[
-                task.scheduled_day
-            ]++;
+            const day =
+                task.scheduled_day;
+
+            counts[day] =
+                (counts[day] || 0) + 1;
 
             const zone =
                 document.querySelector(
-                    `[data-day="${task.scheduled_day}"] .planner-dropzone`
+                    `[data-day="${day}"] .planner-dropzone`
                 );
 
             if(!zone) return;
 
-            const card =
-                createTaskCard(task);
-
-            zone.appendChild(card);
-
-        });
-
-    Object.entries(counts)
-        .forEach(([day,count]) => {
-
-            const el =
-                document.getElementById(
-                    `count-${day}`
-                );
-
-            if(el){
-
-                el.textContent =
-                    count;
-
-            }
+            zone.appendChild(
+                createTaskCard(task)
+            );
 
         });
+
+    [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+    ].forEach(day => {
+
+        const el =
+            document.getElementById(
+                `count-${day}`
+            );
+
+        if(el){
+
+            el.textContent =
+                counts[day] || 0;
+
+        }
+
+    });
 
 }
 
 
 // =========================
-// CREATE TASK CARD
+// TASK CARD
 // =========================
 
 function createTaskCard(task){
 
-    const div =
+    const card =
         document.createElement("div");
 
-    div.className =
-        "task-row card";
+    card.className =
+        "task-card";
 
-    div.draggable = true;
+    card.draggable = true;
 
-    div.dataset.id =
+    card.dataset.id =
         task.id;
 
-    div.innerHTML = `
+    card.innerHTML = `
 
-        <div class="task-card-content">
+        <div class="task-title">
+            ${task.title}
+        </div>
 
-            <div class="task-title">
-                ${task.title}
-            </div>
+        <div class="task-meta">
 
-            <div class="task-meta">
+            ${task.priority || "P3"}
 
-                <span class="tag tag-yellow">
-                    ${task.priority || "P3"}
-                </span>
+            •
 
-                <span>
-                    ${task.building || "No Building"}
-                </span>
-
-            </div>
+            ${task.building || "No Building"}
 
         </div>
 
     `;
 
-    div.addEventListener(
+    card.addEventListener(
         "dragstart",
         e => {
 
@@ -200,7 +181,7 @@ function createTaskCard(task){
         }
     );
 
-    return div;
+    return card;
 
 }
 
@@ -209,75 +190,66 @@ function createTaskCard(task){
 // DROPZONES
 // =========================
 
-document
-    .querySelectorAll(
-        ".planner-dropzone"
-    )
-    .forEach(zone => {
+function setupDropzones(){
 
-        zone.addEventListener(
-            "dragover",
-            e => {
+    document
+        .querySelectorAll(
+            ".planner-dropzone"
+        )
+        .forEach(zone => {
 
-                e.preventDefault();
+            zone.addEventListener(
+                "dragover",
+                e => {
 
-                zone.classList.add(
-                    "drag-over"
-                );
+                    e.preventDefault();
 
-            }
-        );
-
-        zone.addEventListener(
-            "dragleave",
-            () => {
-
-                zone.classList.remove(
-                    "drag-over"
-                );
-
-            }
-        );
-
-        zone.addEventListener(
-            "drop",
-            async e => {
-
-                e.preventDefault();
-
-                zone.classList.remove(
-                    "drag-over"
-                );
-
-                const taskId =
-                    e.dataTransfer.getData(
-                        "taskId"
+                    zone.classList.add(
+                        "drag-over"
                     );
 
-                const day =
-                    zone.parentElement.dataset.day;
+                }
+            );
 
-                await moveTaskToDay(
-                    taskId,
-                    day
-                );
+            zone.addEventListener(
+                "dragleave",
+                () => {
 
-                await refresh();
+                    zone.classList.remove(
+                        "drag-over"
+                    );
 
-            }
-        );
+                }
+            );
 
-    });
+            zone.addEventListener(
+                "drop",
+                async e => {
 
+                    e.preventDefault();
 
-// =========================
-// REFRESH
-// =========================
+                    zone.classList.remove(
+                        "drag-over"
+                    );
 
-async function refresh(){
+                    const taskId =
+                        e.dataTransfer.getData(
+                            "taskId"
+                        );
 
-    await loadInbox();
+                    const day =
+                        zone.parentElement.dataset.day;
 
-    await loadPlanner();
+                    await moveTaskToDay(
+                        taskId,
+                        day
+                    );
+
+                    await loadTasks();
+
+                }
+            );
+
+        });
 
 }
