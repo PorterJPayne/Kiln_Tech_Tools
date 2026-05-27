@@ -7,7 +7,6 @@ let allTasks = [];
 
 init();
 
-setupNewTaskButton();
 
 
 async function init(){
@@ -73,9 +72,9 @@ function renderInbox(){
 function renderPlanner(){
 
     document
-        .querySelectorAll(
-            ".planner-dropzone"
-        )
+    .querySelectorAll(
+        ".planner-column .planner-dropzone"
+    )
         .forEach(zone => {
 
             zone.innerHTML = "";
@@ -268,33 +267,3 @@ else{
 
 }
 
-// =========================
-// NEW TASK BUTTON
-// =========================
-
-function setupNewTaskButton(){
-
-    const btn =
-        document.getElementById(
-            "newTaskBtn"
-        );
-
-    if(!btn) return;
-
-    btn.addEventListener(
-        "click",
-        () => {
-
-            if(
-                typeof openTaskModal ===
-                "function"
-            ){
-
-                openTaskModal();
-
-            }
-
-        }
-    );
-
-}
