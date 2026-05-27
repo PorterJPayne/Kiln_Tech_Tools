@@ -7,6 +7,8 @@ let allTasks = [];
 
 init();
 
+setupNewTaskButton();
+
 
 async function init(){
 
@@ -251,5 +253,36 @@ function setupDropzones(){
             );
 
         });
+
+}
+
+// =========================
+// NEW TASK BUTTON
+// =========================
+
+function setupNewTaskButton(){
+
+    const btn =
+        document.getElementById(
+            "newTaskBtn"
+        );
+
+    if(!btn) return;
+
+    btn.addEventListener(
+        "click",
+        () => {
+
+            if(
+                typeof openTaskModal ===
+                "function"
+            ){
+
+                openTaskModal();
+
+            }
+
+        }
+    );
 
 }
