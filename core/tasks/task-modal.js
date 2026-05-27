@@ -1,10 +1,3 @@
-## FILE:
-
-```txt id="jlwm401"
-/core/tasks/task-modal.js
-```
-
-```js id="’wini402"
 // =========================
 // TASK MODAL INIT
 // =========================
@@ -87,7 +80,6 @@ function setupTaskModalButtons(){
                 closeTaskModal();
 
             }
-
 
             // SAVE
 
@@ -312,4 +304,3 @@ function setupBuildingSelector(){
     );
 
 }
-```
