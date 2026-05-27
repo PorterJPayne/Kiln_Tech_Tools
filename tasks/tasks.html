@@ -69,24 +69,40 @@ id="sidebar"
 
         <div class="tasks-panel-header">
 
-            <div class="section-title">
-                Inbox
-            </div>
+    <div class="section-title">
+        Inbox
+    </div>
 
-            <button
-    id="newTaskBtn"
-    class="button"
-    onclick="openTaskModal()"
->
-    + Task
-</button>
+    <div
+        style="
+            display:flex;
+            gap:6px;
+        "
+    >
 
-        </div>
+        <a
+            href="/tasks/manage.html"
+            class="button"
+        >
+            Manage
+        </a>
+
+        <button
+            id="newTaskBtn"
+            class="button button-primary"
+            onclick="openTaskModal()"
+        >
+            + Task
+        </button>
+
+    </div>
+
+</div>
 
         <div
-            id="inboxTable"
-            class="task-list"
-        ></div>
+    id="inboxTable"
+    class="task-list planner-dropzone"
+></div>
 
     </section>
 

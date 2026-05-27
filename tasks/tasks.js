@@ -240,12 +240,24 @@ function setupDropzones(){
                         );
 
                     const day =
-                        zone.parentElement.dataset.day;
+    zone.parentElement.dataset.day;
 
-                    await moveTaskToDay(
-                        taskId,
-                        day
-                    );
+if(day){
+
+    await moveTaskToDay(
+        taskId,
+        day
+    );
+
+}
+
+else{
+
+    await moveTaskToInbox(
+        taskId
+    );
+
+}
 
                     await loadTasks();
 
