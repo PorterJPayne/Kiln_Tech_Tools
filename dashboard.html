@@ -1216,7 +1216,29 @@ min-height:180px;
 
     </div>
 
-    <div style="height:6px;"></div>
+    <div
+    style="
+        display:flex;
+        gap:6px;
+        margin-bottom:6px;
+    "
+>
+
+    <button
+        class="button"
+        id="sortPriorityBtn"
+    >
+        Priority
+    </button>
+
+    <button
+        class="button"
+        id="sortBuildingBtn"
+    >
+        Building
+    </button>
+
+</div>
 
     <div
         id="taskList"
@@ -1795,6 +1817,9 @@ initDashboardNotes();
 
 let tasks = [];
 
+let currentTaskSort =
+    "priority";
+
 let activeTask = null;
 
 
@@ -1831,7 +1856,65 @@ function renderTasks(){
 
     if(!taskList) return;
 
-    const activeTasks = tasks;
+    let activeTasks = [...tasks];
+
+
+// =========================
+// SORTING
+// =========================
+
+if(
+    currentTaskSort ===
+    "priority"
+){
+
+    const priorityOrder = {
+
+        P1:1,
+        P2:2,
+        P3:3,
+        P4:4
+
+    };
+
+    activeTasks.sort(
+        (a,b) =>
+            (
+                priorityOrder[a.priority]
+                || 999
+            )
+            -
+            (
+                priorityOrder[b.priority]
+                || 999
+            )
+    );
+
+}
+
+
+if(
+    currentTaskSort ===
+    "building"
+){
+
+    activeTasks.sort(
+        (a,b) => {
+
+            const buildingA =
+                a.building || "";
+
+            const buildingB =
+                b.building || "";
+
+            return buildingA.localeCompare(
+                buildingB
+            );
+
+        }
+    );
+
+}
 
     taskCount.textContent =
         `${activeTasks.length} Tasks`;
@@ -1904,27 +1987,50 @@ function renderTasks(){
 
                     <div class="task-meta">
 
-                        ${
-                            task.ticket
-                            ? `
-                            <a
-                                class="task-ticket"
-                                href="${task.link || '#'}"
-                                target="_blank"
-                            >
-                                ${task.ticket}
-                            </a>
-                            `
-                            : ""
-                        }
+    ${
+        task.priority
+        ? `
+        <span class="
+            priority
+            priority-${task.priority.toLowerCase()}
+        ">
+            ${task.priority}
+        </span>
+        `
+        : ""
+    }
 
-                        <div
-                            class="task-age ${ageClass}"
-                        >
-                            ${ageLabel}
-                        </div>
+    ${
+        task.building
+        ? `
+        <span>
+            ${task.building}
+        </span>
+        `
+        : ""
+    }
 
-                    </div>
+    ${
+        task.ticket
+        ? `
+        <a
+            class="task-ticket"
+            href="${task.link || '#'}"
+            target="_blank"
+        >
+            ${task.ticket}
+        </a>
+        `
+        : ""
+    }
+
+    <div
+        class="task-age ${ageClass}"
+    >
+        ${ageLabel}
+    </div>
+
+</div>
 
                 </div>
 
@@ -2457,6 +2563,48 @@ completedTickets.filter(ticket => {
 loadTasks();
 loadProjects();
 loadTickets();
+
+
+loadTasks();
+loadProjects();
+loadTickets();
+
+
+// =========================
+// SORT BUTTONS
+// =========================
+
+document
+    .getElementById(
+        "sortPriorityBtn"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            currentTaskSort =
+                "priority";
+
+            renderTasks();
+
+        }
+    );
+
+document
+    .getElementById(
+        "sortBuildingBtn"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            currentTaskSort =
+                "building";
+
+            renderTasks();
+
+        }
+    );
 
 </script>
 

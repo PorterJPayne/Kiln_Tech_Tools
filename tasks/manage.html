@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Manage Tasks</title>
+
+<link
+    rel="stylesheet"
+    href="/core/platform1.css"
+>
+
+<script>
+window.sidebarPath =
+    "/core/sidebar.html";
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="/core/api/supabase.js"></script>
+
+<script src="/core/api/tasks-api.js"></script>
+
+<script src="/core/layout.js" defer></script>
+
+<style>
+
+/* ========================================
+   PAGE
+======================================== */
+
+.content{
+
+    padding:10px;
+
+    overflow:hidden;
+
+}
+
+
+/* ========================================
+   TABLE
+======================================== */
+
+.tasks-table{
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100%;
+
+    overflow:hidden;
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:8px;
+
+    background:
+        rgba(255,255,255,0.02);
+
+}
+
+
+.tasks-header,
+.task-row{
+
+    display:grid;
+
+    grid-template-columns:
+        90px
+        90px
+        90px
+        1.5fr
+        2fr
+        100px;
+
+    gap:8px;
+
+    align-items:center;
+
+}
+
+
+.tasks-header{
+
+    padding:10px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+    color:
+        rgba(255,255,255,0.45);
+
+}
+
+
+.tasks-body{
+
+    overflow:auto;
+
+    flex:1;
+
+}
+
+
+.task-row{
+
+    padding:8px 10px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.04);
+
+}
+
+
+.task-row:hover{
+
+    background:
+        rgba(255,255,255,0.02);
+
+}
+
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.task-input{
+
+    background:transparent;
+
+    border:none;
+
+    color:white;
+
+    font-size:11px;
+
+    min-height:28px;
+
+    outline:none;
+
+    width:100%;
+
+}
+
+
+.task-select{
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    color:white;
+
+    border-radius:5px;
+
+    min-height:28px;
+
+    font-size:11px;
+
+    padding:0 6px;
+
+}
+
+
+.task-link{
+
+    color:var(--accent);
+
+    text-decoration:none;
+
+    font-size:11px;
+
+}
+
+
+.save-indicator{
+
+    font-size:10px;
+
+    color:
+        rgba(255,255,255,0.35);
+
+}
+
+</style>
+
+</head>
+
+<body
+class="platform-body"
+data-title="Manage Tasks"
+data-description="Inline task editing."
+>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    ></aside>
+
+    <!-- MAIN -->
+
+    <main class="main platform-page">
+
+        <!-- TOPBAR -->
+
+        <div id="topbar"></div>
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+            <div class="tasks-table">
+
+                <!-- HEADER -->
+
+                <div class="tasks-header">
+
+                    <div>
+                        Priority
+                    </div>
+
+                    <div>
+                        Building
+                    </div>
+
+                    <div>
+                        Ticket
+                    </div>
+
+                    <div>
+                        Title
+                    </div>
+
+                    <div>
+                        Description
+                    </div>
+
+                    <div>
+                        Status
+                    </div>
+
+                </div>
+
+
+                <!-- BODY -->
+
+                <div
+                    class="tasks-body"
+                    id="tasksBody"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+let tasks = [];
+
+
+// ========================================
+// LOAD
+// ========================================
+
+loadTasks();
+
+
+// ========================================
+// LOAD TASKS
+// ========================================
+
+async function loadTasks(){
+
+    tasks =
+        await fetchTasks();
+
+    renderTasks();
+
+}
+
+
+// ========================================
+// RENDER
+// ========================================
+
+function renderTasks(){
+
+    const body =
+        document.getElementById(
+            "tasksBody"
+        );
+
+    body.innerHTML = "";
+
+    const openTasks =
+        tasks.filter(
+            task => !task.completed
+        );
+
+    openTasks.forEach(task => {
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+        row.className =
+            "task-row";
+
+        row.innerHTML = `
+
+            <!-- PRIORITY -->
+
+            <select
+                class="task-select"
+                data-field="priority"
+            >
+
+                <option
+                    value="P1"
+                    ${task.priority === "P1" ? "selected" : ""}
+                >
+                    P1
+                </option>
+
+                <option
+                    value="P2"
+                    ${task.priority === "P2" ? "selected" : ""}
+                >
+                    P2
+                </option>
+
+                <option
+                    value="P3"
+                    ${task.priority === "P3" ? "selected" : ""}
+                >
+                    P3
+                </option>
+
+                <option
+                    value="P4"
+                    ${task.priority === "P4" ? "selected" : ""}
+                >
+                    P4
+                </option>
+
+            </select>
+
+
+            <!-- BUILDING -->
+
+            <select
+                class="task-select"
+                data-field="building"
+            >
+
+                <option
+                    value="Lehi 1"
+                    ${task.building === "Lehi 1" ? "selected" : ""}
+                >
+                    Lehi 1
+                </option>
+
+                <option
+                    value="Lehi 2"
+                    ${task.building === "Lehi 2" ? "selected" : ""}
+                >
+                    Lehi 2
+                </option>
+
+            </select>
+
+
+            <!-- TICKET -->
+
+            <a
+                class="task-link"
+                href="${task.link || '#'}"
+                target="_blank"
+            >
+                ${task.ticket || "-"}
+            </a>
+
+
+            <!-- TITLE -->
+
+            <input
+                class="task-input"
+                data-field="title"
+                value="${task.title || ""}"
+            >
+
+
+            <!-- DESCRIPTION -->
+
+            <input
+                class="task-input"
+                data-field="description"
+                value="${task.description || ""}"
+            >
+
+
+            <!-- STATUS -->
+
+            <div class="save-indicator">
+                Saved
+            </div>
+
+        `;
+
+        setupRowEditing(
+            row,
+            task
+        );
+
+        body.appendChild(row);
+
+    });
+
+}
+
+
+// ========================================
+// INLINE EDITING
+// ========================================
+
+function setupRowEditing(
+    row,
+    task
+){
+
+    const fields =
+        row.querySelectorAll(
+            "[data-field]"
+        );
+
+    fields.forEach(field => {
+
+        field.addEventListener(
+            "change",
+            async () => {
+
+                const saveIndicator =
+                    row.querySelector(
+                        ".save-indicator"
+                    );
+
+                saveIndicator.textContent =
+                    "Saving...";
+
+                await updateTask(
+                    task.id,
+                    {
+                        [field.dataset.field]:
+                            field.value
+                    }
+                );
+
+                saveIndicator.textContent =
+                    "Saved";
+
+            }
+        );
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
