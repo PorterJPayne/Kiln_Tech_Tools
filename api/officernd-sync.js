@@ -7,24 +7,18 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
 
-    const officeRndTicket = {
-    number: 712433,
-    subject: "Lehi 1 | 1st | Pillar paint touchups",
-    message: "There are two big dents..."
-};
+    const response = await fetch(
+  "https://app.officernd.com/i/organizations/kiln/issues?status=open,new,pending&$limit=1",
+  {
+    headers: {
+      Cookie: process.env.OFFICERND_COOKIE
+    }
+  }
+);
 
-const { data, error } =
-    await supabase
-        .from("tasks")
-        .insert({
-            title: officeRndTicket.subject,
-            description: officeRndTicket.message,
-            ticket: `#${officeRndTicket.number}`,
-            completed: false,
-            archived: false,
-            priority: "P3"
-        })
-        .select();
+const data = await response.json();
+
+return res.status(200).json(data);
 
     if (error) {
 
