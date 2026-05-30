@@ -138,7 +138,7 @@ window.sidebarPath = "/core/sidebar.html";
                     id="loadOfficerndBtn"
                     class="officernd-button"
                 >
-                    Load OfficeRnD Data
+                    Sync OfficeRnD
                 </button>
 
                 <div id="officerndResults"></div>
@@ -161,83 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-async function loadOfficernd() {
+async function syncOfficeRnd() {
 
-    const container =
-        document.getElementById("officerndResults");
+    const tickets =
+        await fetch(
+            "/officernd/officernd-data.json"
+        ).then(r => r.json());
 
-    try {
-
-        container.innerHTML = `
-            <div class="officernd-summary">
-                Loading OfficeRnD data...
-            </div>
-        `;
-
-        const response =
-            await fetch("/OfficeRnD/officernd-data.json");
-
-        if (!response.ok) {
-            throw new Error(
-                `Failed to load JSON (${response.status})`
-            );
-        }
-
-        const tickets =
-            await response.json();
-
-        container.innerHTML = `
-            <div class="officernd-summary">
-                Loaded ${tickets.length} tickets
-            </div>
-        `;
-
-        tickets
-            .slice(0, 10)
-            .forEach(ticket => {
-
-                container.innerHTML += `
-                    <div class="ticket-card">
-
-                        <div class="ticket-number">
-                            #${ticket.number ?? ""}
-                        </div>
-
-                        <div class="ticket-subject">
-                            ${ticket.subject ?? "No Subject"}
-                        </div>
-
-                        <div class="ticket-message">
-                            ${ticket.message ?? ""}
-                        </div>
-
-                        <div class="ticket-status">
-                            ${ticket.status ?? "Unknown"}
-                        </div>
-
-                    </div>
-                `;
-
-            });
-
-        console.log(
-            "OfficeRnD tickets loaded:",
-            tickets.length
-        );
-
-    } catch(error) {
-
-        console.error(error);
-
-        container.innerHTML = `
-            <div class="error-box">
-                Failed to load officernd-data.json
-                <br><br>
-                ${error.message}
-            </div>
-        `;
-
-    }
+    console.log(
+        "Found",
+        tickets.length,
+        "OfficeRnD tickets"
+    );
 
 }
 
