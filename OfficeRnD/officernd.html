@@ -164,18 +164,16 @@ document.addEventListener("DOMContentLoaded", () => {
 async function syncOfficeRnd() {
 
     const tickets = await fetch(
-        "https://app.officernd.com/i/organizations/kiln/issues?status=open,new,pending&$limit=10000",
-        {
-            credentials: "include"
-        }
+        "/OfficeRnD/officernd.json"
     ).then(r => r.json());
 
     let added = 0;
     let skipped = 0;
+    let errors = 0;
 
     for (const ticket of tickets) {
 
-        const { data: existing } =
+        const { data: existing, error: lookupError } =
             await supabaseClient
                 .from("tasks")
                 .select("id")
@@ -185,7 +183,20 @@ async function syncOfficeRnd() {
                 )
                 .limit(1);
 
-        if (existing?.length) {
+        if (lookupError) {
+
+            console.error(
+                "Lookup error:",
+                lookupError
+            );
+
+            errors++;
+
+            continue;
+
+        }
+
+        if (existing.length > 0) {
 
             skipped++;
 
@@ -193,7 +204,7 @@ async function syncOfficeRnd() {
 
         }
 
-        const { error } =
+        const { error: insertError } =
             await supabaseClient
                 .from("tasks")
                 .insert({
@@ -210,7 +221,8 @@ async function syncOfficeRnd() {
                     description:
                         ticket.message || "",
 
-                    completed:false,
+                    completed:
+                        ticket.status === "resolved",
 
                     archived:false,
 
@@ -218,7 +230,17 @@ async function syncOfficeRnd() {
 
                 });
 
-        if (!error) {
+        if (insertError) {
+
+            console.error(
+                "Insert error:",
+                insertError
+            );
+
+            errors++;
+
+        }
+        else {
 
             added++;
 
@@ -227,7 +249,11 @@ async function syncOfficeRnd() {
     }
 
     alert(
-        `Sync Complete\n\nAdded: ${added}\nSkipped: ${skipped}`
+`OfficeRnD Sync Complete
+
+Added: ${added}
+Skipped: ${skipped}
+Errors: ${errors}`
     );
 
 }
