@@ -168,11 +168,24 @@ async function syncOfficeRnd() {
             "/OfficeRnD/officernd-data.json"
         ).then(r => r.json());
 
-    console.log(
-        "Found",
-        tickets.length,
-        "OfficeRnD tickets"
-    );
+    const firstTicket = tickets[0];
+
+console.log(firstTicket);
+
+const { data, error } =
+    await supabaseClient
+        .from("tasks")
+        .select("id, officernd_id")
+        .eq(
+            "officernd_id",
+            firstTicket._id
+        );
+
+console.log(
+    "Supabase result:",
+    data,
+    error
+);
 
 }
 

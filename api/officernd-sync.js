@@ -8,7 +8,7 @@ const supabase = createClient(
 export default async function handler(req, res) {
 
     const response = await fetch(
-  "https://app.officernd.com/i/organizations/kiln/issues?status=open,new,pending&$limit=1",
+  "https://app.officernd.com/i/organizations/kiln/issues?status=open,new,pending&$limit=1000",
   {
     headers: {
       Cookie: process.env.OFFICERND_COOKIE
