@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
     const { data, error } =
         await supabase
-            .from("officernd_issues")
+            .from("tasks")
             .insert({
                 title: "Sync Test",
                 ticket: "#TEST"
