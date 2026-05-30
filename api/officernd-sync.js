@@ -1,24 +1,33 @@
-import { supabase } from "../../core/api/supabase.js"; // adjust to your project
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+);
 
 export default async function handler(req, res) {
 
-    const { error } = await supabase
-        .from("officernd_issues")
-        .insert({
-            title: "OfficeRnD Sync Test",
-            description: "Created by sync route",
-            ticket: "#TEST"
-        });
+    const { data, error } =
+        await supabase
+            .from("officernd_issues")
+            .insert({
+                title: "Sync Test",
+                ticket: "#TEST"
+            })
+            .select();
 
     if (error) {
+
         return res.status(500).json({
             success: false,
             error
         });
+
     }
 
     return res.status(200).json({
-        success: true
+        success: true,
+        data
     });
 
 }
