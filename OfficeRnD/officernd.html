@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function syncOfficeRnd() {
 
     const tickets = await fetch(
-        "/OfficeRnD/officernd.json"
+        "/OfficeRnD/officernd-data.json"
     ).then(r => r.json());
 
     let added = 0;
