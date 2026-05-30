@@ -137,18 +137,17 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script>
 
-const sampleTickets = [
-    {
-        number: 712087,
-        subject: "Poor Wi-Fi in South East 2F",
-        status: "Pending"
-    },
-    {
-        number: 711321,
-        subject: "Reserving the Atrium in Lehi 2",
-        status: "Open"
-    }
-];
+async function loadOfficernd() {
+
+    const response =
+        await fetch('/officernd/officernd-data.json');
+
+    const tickets =
+        await response.json();
+
+    console.log(tickets);
+
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
