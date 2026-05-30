@@ -30,6 +30,50 @@ window.sidebarPath = "/core/sidebar.html";
 
 <style>
 
+.officernd-card{
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.officernd-actions{
+    margin-bottom: 20px;
+}
+
+.officernd-button{
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.ticket-card{
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 10px;
+    background: var(--card-bg, #fff);
+}
+
+.ticket-number{
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.ticket-subject{
+    margin-bottom: 8px;
+}
+
+.ticket-status{
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    font-size: 12px;
+    font-weight: 600;
+}
 
 </style>
 
@@ -37,8 +81,8 @@ window.sidebarPath = "/core/sidebar.html";
 
 <body
     class="platform-body"
-    data-title="OfficeRnd"
-    data-description="OfficeRnD"
+    data-title="OfficeRnD"
+    data-description="OfficeRnD Integration Testing"
 >
 
 <div class="app">
@@ -62,6 +106,29 @@ window.sidebarPath = "/core/sidebar.html";
 
         <div class="content">
 
+            <div class="officernd-card">
+
+                <h2>OfficeRnD Issues</h2>
+
+                <p>
+                    Testing page for OfficeRnD ticket integration.
+                </p>
+
+                <div class="officernd-actions">
+
+                    <button
+                        id="loadOfficerndBtn"
+                        class="officernd-button"
+                    >
+                        Load OfficeRnD Data
+                    </button>
+
+                </div>
+
+                <div id="officerndResults"></div>
+
+            </div>
+
         </div>
 
     </main>
@@ -70,6 +137,53 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script>
 
+const sampleTickets = [
+    {
+        number: 712087,
+        subject: "Poor Wi-Fi in South East 2F",
+        status: "Pending"
+    },
+    {
+        number: 711321,
+        subject: "Reserving the Atrium in Lehi 2",
+        status: "Open"
+    }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+        .getElementById("loadOfficerndBtn")
+        .addEventListener("click", loadOfficernd);
+
+});
+
+function loadOfficernd() {
+
+    const container =
+        document.getElementById("officerndResults");
+
+    container.innerHTML = sampleTickets
+        .map(ticket => `
+            <div class="ticket-card">
+
+                <div class="ticket-number">
+                    #${ticket.number}
+                </div>
+
+                <div class="ticket-subject">
+                    ${ticket.subject}
+                </div>
+
+                <div class="ticket-status">
+                    ${ticket.status}
+                </div>
+
+            </div>
+        `)
+        .join("");
+
+}
 
 </script>
 
