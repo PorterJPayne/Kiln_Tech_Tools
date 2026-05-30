@@ -7,14 +7,24 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
 
-    const { data, error } =
-        await supabase
-            .from("tasks")
-            .insert({
-                title: "Sync Test",
-                ticket: "#TEST"
-            })
-            .select();
+    const officeRndTicket = {
+    number: 712433,
+    subject: "Lehi 1 | 1st | Pillar paint touchups",
+    message: "There are two big dents..."
+};
+
+const { data, error } =
+    await supabase
+        .from("tasks")
+        .insert({
+            title: officeRndTicket.subject,
+            description: officeRndTicket.message,
+            ticket: `#${officeRndTicket.number}`,
+            completed: false,
+            archived: false,
+            priority: "P3"
+        })
+        .select();
 
     if (error) {
 
