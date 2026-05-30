@@ -44,59 +44,100 @@ export default async function handler(req, res) {
 
     for (const ticket of tickets) {
 
-        const { data: existing } =
-            await supabase
-                .from("tasks")
-                .select("id")
-                .eq(
-                    "officernd_id",
-                    ticket._id
+        try {
+
+            const { data: existing } =
+                await supabase
+                    .from("tasks")
+                    .select("id")
+                    .eq(
+                        "officernd_id",
+                        ticket._id
+                    )
+                    .limit(1);
+
+            if (existing?.length) {
+
+                skipped++;
+
+                continue;
+
+            }
+
+            let building = null;
+
+            if (
+                ticket.subject?.startsWith(
+                    "Lehi 1"
                 )
-                .limit(1);
+            ) {
 
-        if (existing?.length) {
+                building = "Lehi 1";
 
-            skipped++;
+            }
+            else if (
+                ticket.subject?.startsWith(
+                    "Lehi 2"
+                )
+            ) {
 
-            continue;
+                building = "Lehi 2";
+
+            }
+
+            const { error } =
+                await supabase
+                    .from("tasks")
+                    .insert({
+
+                        officernd_id:
+                            ticket._id,
+
+                        ticket:
+                            `#${ticket.number}`,
+
+                        title:
+                            ticket.subject || "",
+
+                        description:
+                            ticket.message || "",
+
+                        building:
+                            building,
+
+                        link:
+                            `https://app.officernd.com/admin/kiln/collaboration/issues/${ticket._id}`,
+
+                        completed:
+                            false,
+
+                        archived:
+                            false,
+
+                        priority:
+                            "P3"
+
+                    });
+
+            if (error) {
+
+                console.error(error);
+
+                errors++;
+
+            }
+            else {
+
+                added++;
+
+            }
 
         }
+        catch (err) {
 
-        const { error } =
-            await supabase
-                .from("tasks")
-                .insert({
-
-                    officernd_id:
-                        ticket._id,
-
-                    ticket:
-                        `#${ticket.number}`,
-
-                    title:
-                        ticket.subject || "",
-
-                    description:
-                        ticket.message || "",
-
-                    completed:false,
-
-                    archived:false,
-
-                    priority:"P3"
-
-                });
-
-        if (error) {
-
-            console.error(error);
+            console.error(err);
 
             errors++;
-
-        }
-        else {
-
-            added++;
 
         }
 
@@ -104,7 +145,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
 
-        success:true,
+        success: true,
         added,
         skipped,
         errors
