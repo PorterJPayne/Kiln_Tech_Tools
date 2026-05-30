@@ -163,30 +163,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function syncOfficeRnd() {
 
-    const tickets =
-    await fetch(
-        "/i/organizations/kiln/issues?status=open,new,pending&$limit=10000"
+    const tickets = await fetch(
+        "https://app.officernd.com/i/organizations/kiln/issues?status=open,new,pending&$limit=10000",
+        {
+            credentials: "include"
+        }
     ).then(r => r.json());
 
+    let added = 0;
+    let skipped = 0;
 
-    const firstTicket = tickets[0];
+    for (const ticket of tickets) {
 
-console.log(firstTicket);
+        const { data: existing } =
+            await supabaseClient
+                .from("tasks")
+                .select("id")
+                .eq(
+                    "officernd_id",
+                    ticket._id
+                )
+                .limit(1);
 
-const { data, error } =
-    await supabaseClient
-        .from("tasks")
-        .select("id, officernd_id")
-        .eq(
-            "officernd_id",
-            firstTicket._id
-        );
+        if (existing?.length) {
 
-console.log(
-    "Supabase result:",
-    data,
-    error
-);
+            skipped++;
+
+            continue;
+
+        }
+
+        const { error } =
+            await supabaseClient
+                .from("tasks")
+                .insert({
+
+                    officernd_id:
+                        ticket._id,
+
+                    ticket:
+                        `#${ticket.number}`,
+
+                    title:
+                        ticket.subject || "",
+
+                    description:
+                        ticket.message || "",
+
+                    completed:false,
+
+                    archived:false,
+
+                    priority:"P3"
+
+                });
+
+        if (!error) {
+
+            added++;
+
+        }
+
+    }
+
+    alert(
+        `Sync Complete\n\nAdded: ${added}\nSkipped: ${skipped}`
+    );
 
 }
 
