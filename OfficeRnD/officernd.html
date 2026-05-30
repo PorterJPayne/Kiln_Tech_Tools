@@ -164,9 +164,10 @@ document.addEventListener("DOMContentLoaded", () => {
 async function syncOfficeRnd() {
 
     const tickets =
-        await fetch(
-            "/OfficeRnD/officernd-data.json"
-        ).then(r => r.json());
+    await fetch(
+        "/i/organizations/kiln/issues?status=open,new,pending&$limit=10000"
+    ).then(r => r.json());
+
 
     const firstTicket = tickets[0];
 
