@@ -21,58 +21,86 @@ window.sidebarPath = "/core/sidebar.html";
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
 <script src="/core/api/supabase.js"></script>
-
 <script src="/core/layout.js" defer></script>
-
 <script src="/core/tasks/task-modal.js"></script>
 
 <style>
 
-.officernd-card{
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 12px;
-    padding: 20px;
+.officernd-panel{
+    background:#10253f;
+    color:white;
+    border-radius:12px;
+    padding:20px;
 }
 
-.officernd-actions{
-    margin-bottom: 20px;
+.officernd-panel h2,
+.officernd-panel p{
+    color:white;
 }
 
 .officernd-button{
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
+    background:#1d4ed8;
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:10px 16px;
+    font-weight:600;
+    cursor:pointer;
+    margin-bottom:20px;
+}
+
+.officernd-button:hover{
+    opacity:.9;
+}
+
+.officernd-summary{
+    background:#17314f;
+    color:white;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:15px;
 }
 
 .ticket-card{
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 10px;
-    padding: 12px;
-    margin-top: 10px;
-    background: var(--card-bg, #fff);
+    background:#17314f;
+    color:white;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
 }
 
 .ticket-number{
-    font-weight: 700;
-    margin-bottom: 4px;
+    font-weight:700;
+    margin-bottom:4px;
 }
 
 .ticket-subject{
-    margin-bottom: 8px;
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.ticket-message{
+    opacity:.9;
+    margin-bottom:10px;
 }
 
 .ticket-status{
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    background: #e5e7eb;
-    font-size: 12px;
-    font-weight: 600;
+    display:inline-block;
+    background:#2563eb;
+    color:white;
+    border-radius:6px;
+    padding:4px 8px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.error-box{
+    background:#7f1d1d;
+    color:white;
+    padding:12px;
+    border-radius:8px;
 }
 
 </style>
@@ -87,43 +115,31 @@ window.sidebarPath = "/core/sidebar.html";
 
 <div class="app">
 
-    <!-- SIDEBAR -->
-
     <aside
         class="sidebar"
         id="sidebar"
     ></aside>
 
-    <!-- MAIN -->
-
     <main class="main platform-page">
-
-        <!-- TOPBAR -->
 
         <div id="topbar"></div>
 
-        <!-- CONTENT -->
-
         <div class="content">
 
-            <div class="officernd-card">
+            <div class="officernd-panel">
 
                 <h2>OfficeRnD Issues</h2>
 
                 <p>
-                    Testing page for OfficeRnD ticket integration.
+                    Load data from officernd-data.json and display the first 10 issues.
                 </p>
 
-                <div class="officernd-actions">
-
-                    <button
-                        id="loadOfficerndBtn"
-                        class="officernd-button"
-                    >
-                        Load OfficeRnD Data
-                    </button>
-
-                </div>
+                <button
+                    id="loadOfficerndBtn"
+                    class="officernd-button"
+                >
+                    Load OfficeRnD Data
+                </button>
 
                 <div id="officerndResults"></div>
 
@@ -137,18 +153,6 @@ window.sidebarPath = "/core/sidebar.html";
 
 <script>
 
-async function loadOfficernd() {
-
-    const response =
-        await fetch('/officernd/officernd-data.json');
-
-    const tickets =
-        await response.json();
-
-    console.log(tickets);
-
-}
-
 document.addEventListener("DOMContentLoaded", () => {
 
     document
@@ -157,30 +161,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function loadOfficernd() {
+async function loadOfficernd() {
 
     const container =
         document.getElementById("officerndResults");
 
-    container.innerHTML = sampleTickets
-        .map(ticket => `
-            <div class="ticket-card">
+    try {
 
-                <div class="ticket-number">
-                    #${ticket.number}
-                </div>
-
-                <div class="ticket-subject">
-                    ${ticket.subject}
-                </div>
-
-                <div class="ticket-status">
-                    ${ticket.status}
-                </div>
-
+        container.innerHTML = `
+            <div class="officernd-summary">
+                Loading OfficeRnD data...
             </div>
-        `)
-        .join("");
+        `;
+
+        const response =
+            await fetch("/officernd/officernd-data.json");
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to load JSON (${response.status})`
+            );
+        }
+
+        const tickets =
+            await response.json();
+
+        container.innerHTML = `
+            <div class="officernd-summary">
+                Loaded ${tickets.length} tickets
+            </div>
+        `;
+
+        tickets
+            .slice(0, 10)
+            .forEach(ticket => {
+
+                container.innerHTML += `
+                    <div class="ticket-card">
+
+                        <div class="ticket-number">
+                            #${ticket.number ?? ""}
+                        </div>
+
+                        <div class="ticket-subject">
+                            ${ticket.subject ?? "No Subject"}
+                        </div>
+
+                        <div class="ticket-message">
+                            ${ticket.message ?? ""}
+                        </div>
+
+                        <div class="ticket-status">
+                            ${ticket.status ?? "Unknown"}
+                        </div>
+
+                    </div>
+                `;
+
+            });
+
+        console.log(
+            "OfficeRnD tickets loaded:",
+            tickets.length
+        );
+
+    } catch(error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="error-box">
+                Failed to load officernd-data.json
+                <br><br>
+                ${error.message}
+            </div>
+        `;
+
+    }
 
 }
 
