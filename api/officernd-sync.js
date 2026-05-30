@@ -1,4 +1,4 @@
-import { supabase } from "../../core/api/supabaseAdmin"; // adjust to your project
+import { supabase } from "../../core/api/supabase.js"; // adjust to your project
 
 export default async function handler(req, res) {
 
