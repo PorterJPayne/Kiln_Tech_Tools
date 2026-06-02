@@ -2198,14 +2198,15 @@ if(addToEmail){
             // COMPLETE TASK
             // =========================
 
-            await updateTask(
-                activeTask.id,
-                {
-                    completed: true,
-                    completed_at:
-                        new Date()
-                }
-            );
+           await completeTask({
+
+    taskId:
+        activeTask.id,
+
+    notes:
+        report
+
+});
 
             const modal =
                 document.getElementById(
