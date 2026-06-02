@@ -265,6 +265,32 @@ async function completeTask({
 
 }){
 
+    const { data: task } =
+        await supabaseClient
+            .from("tasks")
+            .select("*")
+            .eq("id", taskId)
+            .single();
+
+    if(task?.officernd_id){
+
+        await supabaseClient
+            .from("officernd_actions")
+            .insert({
+
+                action_type:
+                    "resolve",
+
+                ticket_id:
+                    task.officernd_id,
+
+                task_id:
+                    taskId
+
+            });
+
+    }
+
     const { error } =
         await supabaseClient
             .from("tasks")
