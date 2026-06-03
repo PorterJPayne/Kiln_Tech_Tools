@@ -265,55 +265,46 @@ async function completeTask({
 
 }){
 
-    const { data: task, error: taskError } =
+    const { data: task } =
         await supabaseClient
             .from("tasks")
             .select("*")
             .eq("id", taskId)
             .single();
 
-    console.log(
-        "Task loaded:",
-        task
-    );
-
     if(task?.officernd_id){
 
-        console.log(
-            "Creating OfficeRnD action..."
-        );
-
         const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("officernd_actions")
-                .insert({
+    data,
+    error
+} =
+    await supabaseClient
+        .from("officernd_actions")
+        .insert({
 
-                    action_type:
-                        "resolve",
+            action_type:
+                "resolve",
 
-                    ticket_id:
-                        task.officernd_id,
+            ticket_id:
+                task.officernd_id,
 
-                    task_id:
-                        taskId
+            task_id:
+                taskId,
 
-                })
-                .select();
+            payload: {
+
+                comment:
+                    notes || ""
+
+            }
+
+        })
+        .select();
 
         console.log(
             "OfficeRnD action result:",
             data,
             error
-        );
-
-    }
-    else{
-
-        console.log(
-            "No officernd_id found"
         );
 
     }
@@ -323,7 +314,8 @@ async function completeTask({
             .from("tasks")
             .update({
 
-                completed:true,
+                completed:
+                    true,
 
                 completed_at:
                     new Date()
